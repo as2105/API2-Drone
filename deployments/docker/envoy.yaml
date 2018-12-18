@@ -1,0 +1,121 @@
+admin:
+  access_log_path: /tmp/admin_access.log
+  address:
+    socket_address: { address: 0.0.0.0, port_value: 8001 }
+
+static_resources:
+  listeners:
+  - address:
+      socket_address: { address: 0.0.0.0, port_value: 30303 }
+    filter_chains:
+    - filters:
+      - name: envoy.tcp_proxy
+        config:
+          stat_prefix: ingress_tcp
+          cluster: parity_server
+          access_log:
+            - name: envoy.file_access_log
+              config:
+                path: /dev/stdout
+  - address:
+      socket_address: { address: 0.0.0.0, port_value: 4001 }
+    filter_chains:
+    - filters:
+      - name: envoy.tcp_proxy
+        config:
+          stat_prefix: ingress_tcp
+          cluster: ipfs_swarm
+          access_log:
+            - name: envoy.file_access_log
+              config:
+                path: /dev/stdout
+  - address:
+      socket_address: { address: 0.0.0.0, port_value: 5001 }
+    filter_chains:
+    - filters:
+      - name: envoy.tcp_proxy
+        config:
+          stat_prefix: ingress_api
+          cluster: ipfs_server
+          access_log:
+            - name: envoy.file_access_log
+              config:
+                path: /dev/stdout
+  - address: { socket_address: { address: 0.0.0.0, port_value: 8545 } }
+    filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        config:
+          codec_type: auto
+          stat_prefix: ingress_http
+          route_config:
+            name: eth_rpc
+            virtual_hosts:
+            - name: ethbackend
+              domains:
+              - "*"
+              routes:
+              - match:
+                  prefix: "/"
+                route:
+                  cluster: eth_service
+                # requires:
+                #   requires_any:
+                #     requirements:
+                #       - provider_name: provider1
+                #       - provider_name: provider2
+          http_filters:
+          - name: envoy.router
+            config: {}
+  - address: { socket_address: { address: 0.0.0.0, port_value: 8080 } }
+    filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        config:
+          codec_type: auto
+          stat_prefix: ingress_http
+          route_config:
+            name: fhir_api
+            virtual_hosts:
+            - name: fhirbackend
+              domains:
+              - "*"
+              routes:
+              - match:
+                  prefix: "/"
+                route:
+                  cluster: fhirapi
+          http_filters:
+          - name: envoy.router
+            config: {}
+  clusters:
+  - name: parity_server
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    hosts:
+    - socket_address: { address: "parity", port_value: 30303 }
+  - name: ipfs_swarm
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    hosts:
+    - socket_address: { address: "ipfs", port_value: 4001 }
+  - name: ipfs_api
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    hosts:
+    - socket_address: { address: "ipfs", port_value: 5001 }
+  - name: eth_service
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: ROUND_ROBIN
+    hosts:
+    - socket_address: { address: "parity", port_value: 8545 }
+  - name: fhirapi
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: ROUND_ROBIN
+    hosts:
+    - socket_address: { address: "fhirserver", port_value: 8000 }

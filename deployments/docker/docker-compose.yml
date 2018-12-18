@@ -1,0 +1,74 @@
+version: '3'
+services:
+  envoy:
+    image: "envoyproxy/envoy:latest"
+    ports:
+    - "8001:8001"
+    - "8080:8080"
+    - "4001:4001"
+    - "5001:5001"
+    - "8545:8545"
+    - "30303:30303"
+    volumes:
+      - "./envoy.yaml:/etc/envoy/envoy.yaml"
+    networks:
+    - hostnet
+    - nonet
+  parity:
+    image: "parity/parity:stable"
+    environment:
+      IPFS_PATH: "/mnt/data"
+    volumes:
+      - data-eth:/mnt/data
+    expose:
+    - "8545"
+    - "30303"
+    networks:
+      nonet:
+        aliases:
+         - parity
+  ipfs:
+    image: "ipfs/go-ipfs:release"
+    environment:
+      IPFS_PATH: "/data/ipfs"
+    volumes:
+      - data-ipfs:/data/ipfs
+    expose:
+    - "4001"
+    - "5001"
+    networks:
+      nonet:
+        aliases:
+         - ipfs
+
+  fhirserver:
+    build: ../../build
+    depends_on:
+    - parity
+    - ipfs
+    expose:
+    - "8000"
+    networks:
+      nonet:
+        aliases:
+         - fhirserver
+    command: ["serve"]
+
+volumes:
+  data-ipfs:
+    driver: local
+  data-eth:
+    driver: local
+
+networks:
+  hostnet:
+    driver: "bridge"
+  nonet: {}
+  
+    # command: python3 manage.py runserver 0.0.0.0:8000
+    # volumes:
+    #   - .:/code
+    # ports:
+    #   - "8000:8000"
+    # depends_on:
+    #   - db
