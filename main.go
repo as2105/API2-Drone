@@ -1,21 +1,23 @@
-// Copyright © 2018 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package main
 
-import "github.com/SynapticHealthAlliance/fhir-api/cmd"
+import (
+	"github.com/SynapticHealthAlliance/fhir-api/cmd"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/metadata"
+	"github.com/SynapticHealthAlliance/fhir-api/logging"
+)
+
+var (
+	commit, branch, version, buildTime string
+	log                                = logging.NewLogger()
+)
 
 func main() {
+	metadata.Metadata.Commit = commit
+	metadata.Metadata.Branch = branch
+	metadata.Metadata.Version = version
+	if err := metadata.Metadata.SetBuildTime(buildTime); err != nil {
+		log.WithError(err).Warn("could not parse build time")
+	}
+
 	cmd.Execute()
 }
