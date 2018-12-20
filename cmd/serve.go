@@ -13,6 +13,7 @@ import (
 	"github.com/SynapticHealthAlliance/fhir-api/handlers/resources"
 	"github.com/SynapticHealthAlliance/fhir-api/internal/metadata"
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
 	"github.com/SynapticHealthAlliance/fhir-api/utils"
 	"github.com/gorilla/mux"
 	nLog "github.com/meatballhat/negroni-logrus"
@@ -56,6 +57,8 @@ func serveRun(cmd *cobra.Command, args []string) {
 			resources.NewCapabilityConfig,
 			newRenderer,
 			newCORSMiddleware,
+			ethereum.NewConnection,
+			ethereum.NewTransactor,
 		),
 		fx.Logger(logging.NewLogger()),
 		fx.Invoke(

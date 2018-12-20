@@ -29,7 +29,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.fhir-api.yaml)")
 	rootCmd.PersistentFlags().StringP("log_level", "l", "info", "logging level (trace, debug, info, warn, error, fatal)")
 	rootCmd.PersistentFlags().StringP("log_format", "f", "default", "logging format (default or json)")
-	rootCmd.PersistentFlags().Uint64P("gas_price", "g", 0, "gas price to use for transactions")
+	rootCmd.PersistentFlags().Int64P("gas_price", "g", 0, "gas price to use for transactions")
 	rootCmd.PersistentFlags().StringP("private_key", "k", "", "private key for signing transactions")
 	rootCmd.PersistentFlags().StringP("rpc_url", "u", "localhost:8545", "ethereum node RPC URL")
 	rootCmd.PersistentFlags().StringP("org_name", "n", "", "name of your Organization, to be attached to Organization contract")

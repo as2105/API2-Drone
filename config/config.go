@@ -19,7 +19,7 @@ type Config struct {
 	CORSAllowCredentials bool              `mapstructure:"cors_allow_credentials"`
 	CORSMaxAge           int               `mapstructure:"cors_max_age"`
 	DevMode              bool              `mapstructure:"dev_mode"`
-	GasPrice             uint64            `mapstructure:"gas_price"`
+	GasPrice             int64             `mapstructure:"gas_price"`
 	LogFormat            string            `mapstructure:"log_format"`
 	LogLevel             string            `mapstructure:"log_level"`
 	PrivateKey           string            `mapstructure:"private_key"`
