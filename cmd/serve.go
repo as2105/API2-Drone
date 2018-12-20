@@ -15,7 +15,12 @@ import (
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
 	"github.com/SynapticHealthAlliance/fhir-api/utils"
 	"github.com/gorilla/mux"
+	nLog "github.com/meatballhat/negroni-logrus"
+	"github.com/phyber/negroni-gzip/gzip"
+	"github.com/rs/cors"
 	"github.com/spf13/cobra"
+	"github.com/unrolled/render"
+	"github.com/urfave/negroni"
 	"go.uber.org/fx"
 )
 
@@ -29,7 +34,13 @@ func initServe() {
 		Run:   serveRun,
 	}
 	rootCmd.AddCommand(serveCmd)
-	serveCmd.Flags().StringP("address", "a", "localhost:8080", "Interface and port on which the server will run")
+	serveCmd.Flags().StringP("address", "a", "localhost:8080", "interface and port on which the server will run")
+	serveCmd.Flags().StringArray("cors_allowed_origins", []string{"*"}, "")
+	serveCmd.Flags().StringArray("cors_allowed_methods", []string{"GET", "POST", "PUT", "PATCH", "DELETE"}, "")
+	serveCmd.Flags().StringArray("cors_allowed_headers", []string{}, "")
+	serveCmd.Flags().StringArray("cors_exposed_headers", []string{}, "")
+	serveCmd.Flags().Bool("cors_allow_credentials", false, "")
+	serveCmd.Flags().Int("cors_max_age", 0, "")
 }
 
 func serveRun(cmd *cobra.Command, args []string) {
@@ -43,6 +54,8 @@ func serveRun(cmd *cobra.Command, args []string) {
 			config.NewConfig,
 			NewRouter,
 			resources.NewCapabilityConfig,
+			newRenderer,
+			newCORSMiddleware,
 		),
 		fx.Logger(logging.NewLogger()),
 		fx.Invoke(
@@ -53,14 +66,40 @@ func serveRun(cmd *cobra.Command, args []string) {
 	app.Run()
 }
 
+func newCORSMiddleware(config *config.Config) *cors.Cors {
+	return cors.New(cors.Options{
+		AllowedOrigins:   config.CORSAllowedOrigins,
+		AllowedMethods:   config.CORSAllowedMethods,
+		AllowedHeaders:   config.CORSExposedHeaders,
+		ExposedHeaders:   config.CORSExposedHeaders,
+		AllowCredentials: config.CORSAllowCredentials,
+		MaxAge:           config.CORSMaxAge,
+		Debug:            config.DevMode,
+	})
+}
+
+func newRenderer(config *config.Config) *render.Render {
+	return render.New(render.Options{
+		IndentJSON:    true,
+		IndentXML:     true,
+		IsDevelopment: config.DevMode,
+	})
+}
+
 // NewRouter ...
-func NewRouter(lc fx.Lifecycle, log *logging.Logger, config *config.Config) *mux.Router {
+func NewRouter(lc fx.Lifecycle, log *logging.Logger, config *config.Config, corsMW *cors.Cors) *mux.Router {
 	log.Debug("executing NewRouter")
 
 	r := mux.NewRouter()
+	n := negroni.New()
+	n.Use(corsMW)
+	n.Use(negroni.NewRecovery())
+	n.Use(nLog.NewMiddlewareFromLogger(log, "web"))
+	n.Use(gzip.Gzip(gzip.DefaultCompression))
+	n.UseHandler(r)
 
 	server := &http.Server{
-		Handler:      r,
+		Handler:      n,
 		Addr:         config.Address,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
@@ -85,11 +124,15 @@ func NewRouter(lc fx.Lifecycle, log *logging.Logger, config *config.Config) *mux
 	return r
 }
 
-func configureRouter(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig) {
+func configureRouter(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig, rndr *render.Render) {
 	log.Debug("executing configureRouter")
+
 	fhirRouter := r.PathPrefix("/fhir").Subrouter()
-	handlers.RegisterFHIRCapabilityStatementRoutes(fhirRouter, log, cConfig)
-	handlers.RegisterAllFHIRResourceRoutes(fhirRouter, log)
+	handlers.RegisterFHIRCapabilityStatementRoutes(fhirRouter, log, cConfig, rndr)
+	handlers.RegisterAllFHIRResourceRoutes(fhirRouter, log, rndr)
+
+	handlers.RegisterHealthCheckRoutes(r, log)
+
 	debugRouter(r, log)
 }
 
