@@ -23,13 +23,13 @@ type EthereumAdapter struct {
 	objectCollectionCaller     contracts.ObjectCollectionCaller
 	objectCollectionTransactor contracts.ObjectCollectionTransactor
 
-	submittedTransactions chan<- *types.Transaction
+	submittedTransactions chan *types.Transaction
 }
 
 func (a *EthereumAdapter) Create(data storage.ObjectCollectionElementData) (uuid.UUID, error) {
 	newUUID := uuid.NewUUID()
 	oidxAddrs := make([]common.Address, len(a.objectIndexCollection))
-	oidxKeys := make([][32]byte, len(a.objectIndexCollection))
+	oidxKeys := make([]ObjectIndexKey, len(a.objectIndexCollection))
 	for oidxAddr, oidxFunc := range a.objectIndexCollection {
 		oidxAddrs = append(oidxAddrs, oidxAddr)
 		newKey, err := oidxFunc(data)

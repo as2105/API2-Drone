@@ -11,7 +11,7 @@ NOVENDOR := $(shell go list ./... | grep -v -e /vendor/)
 COVERAGE := 0 # TODO: raise this
 
 $(BINARY): $(SOURCES) Makefile go.mod go.sum
-	go build ${LDFLAGS} -o ${BINARY} .
+	GO111MODULE=on packr2 build ${LDFLAGS} -o ${BINARY} . && packr2 clean
 
 .PHONY: simplify
 simplify:

@@ -24,9 +24,9 @@ func RegisterFHIRCapabilityStatementRoutes(r *mux.Router, log *logging.Logger, c
 }
 
 // RegisterAllFHIRResourceRoutes ...
-func RegisterAllFHIRResourceRoutes(r *mux.Router, log *logging.Logger, rndr *render.Render) {
+func RegisterAllFHIRResourceRoutes(r *mux.Router, log *logging.Logger, rndr *render.Render, registry resources.ResourceRegistry) {
 	log.Debug("executing RegisterAllFHIRResourceRoutes")
-	for _, i := range resources.GetRegisteredResources() {
+	for _, i := range registry {
 		registerFHIRResourceRoutes(r, log, rndr, i)
 	}
 }

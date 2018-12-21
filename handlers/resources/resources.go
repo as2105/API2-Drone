@@ -2,6 +2,7 @@ package resources
 
 import (
 	"github.com/SynapticHealthAlliance/fhir-api/models"
+	"github.com/gobuffalo/packr/v2"
 )
 
 type SearchIncludes []string
@@ -12,14 +13,31 @@ type SearchParam struct {
 	Type                       models.SearchParamType
 }
 
-// Add models to this registry to expose them
-var registry = []interface{}{
-	&Practitioner{},
-	&PractitionerRole{},
-	&Location{},
-}
+type ResourceRegistry []interface{}
 
-// GetRegisteredResources ...
-func GetRegisteredResources() []interface{} {
-	return registry
+func NewResourceRegistry(box *packr.Box) (ResourceRegistry, error) {
+	registry := ResourceRegistry{}
+
+	// Practitioner
+	practitioner, err := NewPractitioner(box)
+	if err != nil {
+		return registry, err
+	}
+	registry = append(registry, practitioner)
+
+	// PractitionerRole
+	practitionerRole, err := NewPractitionerRole(box)
+	if err != nil {
+		return registry, err
+	}
+	registry = append(registry, practitionerRole)
+
+	// Location
+	location, err := NewLocation(box)
+	if err != nil {
+		return registry, err
+	}
+	registry = append(registry, location)
+
+	return registry, nil
 }

@@ -7306,7 +7306,7 @@
               }
             },
             "outcomeReference": {
-              "description": "Details of the outcome or action resulting from the activity.  The reference to an \"event\" resource, such as Procedure or Encounter or Observation, is the result/outcome of the activity itself.  The activity can be conveyed using CarePlan.activity.detail OR using the CarePlan.activity.reference (a reference to a \"request\" resource).",
+              "description": "Details of the outcome or action resulting from the activity.  The reference to an \"event\" resource, such as Procedure or Encounter or Observation, is the result/outcome of the activity itself.  The activity can be conveyed using CarePlan.activity.detail OR using the CarePlan.activity.reference (a reference to a “request” resource).",
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Reference"
@@ -10122,7 +10122,7 @@
               "$ref": "#/definitions/Reference"
             },
             "recipient": {
-              "description": "The entity (e.g. person, organization, clinical information system, or device) which was the target of the communication. If receipts need to be tracked by individual, a separate resource instance will need to be created for each recipient.  Multiple recipient communications are intended where either a receipt(s) is not tracked (e.g. a mass mail-out) or is captured in aggregate (all emails confirmed received by a particular time).",
+              "description": "The entity (e.g. person, organization, clinical information system, or device) which was the target of the communication. If receipts need to be tracked by individual, a separate resource instance will need to be created for each recipient.  Multiple recipient communications are intended where either a receipt(s) is not tracked (e.g. a mass mail-out) or is captured in aggregate (all emails confirmed received by a particular time).",
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Reference"
@@ -11585,7 +11585,7 @@
           "$ref": "#/definitions/DomainResource"
         },
         {
-          "description": "A record of a healthcare consumer's policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
+          "description": "A record of a healthcare consumer’s policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
           "properties": {
             "resourceType": {
               "description": "This is a Consent resource",
@@ -11739,7 +11739,7 @@
           "$ref": "#/definitions/BackboneElement"
         },
         {
-          "description": "A record of a healthcare consumer's policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
+          "description": "A record of a healthcare consumer’s policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
           "properties": {
             "role": {
               "description": "How the individual is involved in the resources content that is described in the consent.",
@@ -11763,10 +11763,10 @@
           "$ref": "#/definitions/BackboneElement"
         },
         {
-          "description": "A record of a healthcare consumer's policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
+          "description": "A record of a healthcare consumer’s policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
           "properties": {
             "authority": {
-              "description": "Entity or Organization having regulatory jurisdiction or accountability for  enforcing policies pertaining to Consent Directives.",
+              "description": "Entity or Organization having regulatory jurisdiction or accountability for  enforcing policies pertaining to Consent Directives.",
               "type": "string"
             },
             "_authority": {
@@ -11791,7 +11791,7 @@
           "$ref": "#/definitions/BackboneElement"
         },
         {
-          "description": "A record of a healthcare consumer's policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
+          "description": "A record of a healthcare consumer’s policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
           "properties": {
             "meaning": {
               "description": "How the resource reference is interpreted when testing consent restrictions.",
@@ -11824,7 +11824,7 @@
           "$ref": "#/definitions/BackboneElement"
         },
         {
-          "description": "A record of a healthcare consumer's policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
+          "description": "A record of a healthcare consumer’s policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
           "properties": {
             "type": {
               "description": "Action  to take - permit or deny - when the exception conditions are met.",
@@ -11905,7 +11905,7 @@
           "$ref": "#/definitions/BackboneElement"
         },
         {
-          "description": "A record of a healthcare consumer's policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
+          "description": "A record of a healthcare consumer’s policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
           "properties": {
             "role": {
               "description": "How the individual is involved in the resources content that is described in the exception.",
@@ -11929,7 +11929,7 @@
           "$ref": "#/definitions/BackboneElement"
         },
         {
-          "description": "A record of a healthcare consumer's policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
+          "description": "A record of a healthcare consumer’s policy choices, which permits or denies identified recipient(s) or recipient role(s) to perform one or more actions within a given policy context, for specific purposes and periods of time.",
           "properties": {
             "meaning": {
               "description": "How the resource reference is interpreted when testing consent restrictions.",
@@ -14946,7 +14946,7 @@
               }
             },
             "participant": {
-              "description": "The list of people responsible for providing the service.",
+              "description": "The list of people responsible for providing the service.",
               "type": "array",
               "items": {
                 "$ref": "#/definitions/Encounter_Participant"
@@ -15113,7 +15113,7 @@
               "$ref": "#/definitions/Reference"
             },
             "role": {
-              "description": "Role that this diagnosis has within the encounter (e.g. admission, billing, discharge ...).",
+              "description": "Role that this diagnosis has within the encounter (e.g. admission, billing, discharge …).",
               "$ref": "#/definitions/CodeableConcept"
             },
             "rank": {
@@ -15640,7 +15640,7 @@
               "$ref": "#/definitions/Reference"
             },
             "role": {
-              "description": "Role that this diagnosis has within the episode of care (e.g. admission, billing, discharge ...).",
+              "description": "Role that this diagnosis has within the episode of care (e.g. admission, billing, discharge …).",
               "$ref": "#/definitions/CodeableConcept"
             },
             "rank": {
@@ -20603,7 +20603,7 @@
               "$ref": "#/definitions/Element"
             },
             "operationalStatus": {
-              "description": "The Operational status covers operation values most relevant to beds (but can also apply to rooms/units/chair/etc such as an isolation unit/dialisys chair). This typically covers concepts such as contamination, housekeeping and other activities like maintenance.",
+              "description": "The Operational status covers operation values most relevant to beds (but can also apply to rooms/units/chair/etc such as an isolation unit/dialisys chair). This typically covers concepts such as contamination, housekeeping and other activities like maintenance.",
               "$ref": "#/definitions/Coding"
             },
             "name": {
@@ -20615,7 +20615,7 @@
               "$ref": "#/definitions/Element"
             },
             "alias": {
-              "description": "A list of alternate names that the location is known as, or was known as in the past.",
+              "description": "A list of alternate names that the location is known as, or was known as in the past.",
               "type": "array",
               "items": {
                 "type": "string"
@@ -21706,7 +21706,7 @@
               "$ref": "#/definitions/Reference"
             },
             "isActive": {
-              "description": "Indication of whether this ingredient affects the therapeutic action of the drug.",
+              "description": "Indication of whether this ingredient affects the therapeutic action of the drug.",
               "type": "boolean"
             },
             "_isActive": {
@@ -23448,7 +23448,7 @@
               }
             },
             "excludeFoodModifier": {
-              "description": "This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance information captured in the referenced AllergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be eliminated from the patient's diet for any reason.  This modifier applies to the entire nutrition order inclusive of the oral diet, nutritional supplements and enteral formula feedings.",
+              "description": "This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance information captured in the referenced AllergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be eliminated from the patient’s diet for any reason.  This modifier applies to the entire nutrition order inclusive of the oral diet, nutritional supplements and enteral formula feedings.",
               "type": "array",
               "items": {
                 "$ref": "#/definitions/CodeableConcept"
@@ -24658,7 +24658,7 @@
               "$ref": "#/definitions/Element"
             },
             "alias": {
-              "description": "A list of alternate names that the organization is known as, or was known as in the past.",
+              "description": "A list of alternate names that the organization is known as, or was known as in the past.",
               "type": "array",
               "items": {
                 "type": "string"
@@ -30283,7 +30283,7 @@
               "$ref": "#/definitions/Element"
             },
             "referenceSeqId": {
-              "description": "Reference identifier of reference sequence submitted to NCBI. It must match the type in the Sequence.type field. For example, the prefix, \"NG_\" identifies reference sequence for genes, \"NM_\" for messenger RNA transcripts, and \"NP_\" for amino acid sequences.",
+              "description": "Reference identifier of reference sequence submitted to NCBI. It must match the type in the Sequence.type field. For example, the prefix, “NG_” identifies reference sequence for genes, “NM_” for messenger RNA transcripts, and “NP_” for amino acid sequences.",
               "$ref": "#/definitions/CodeableConcept"
             },
             "referenceSeqPointer": {

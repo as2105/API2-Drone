@@ -87,6 +87,8 @@ func NewObjectCollectionElement(uri string, createdAt, updatedAt *big.Int) (*Obj
 	return newObj, nil
 }
 
-type ObjectIndexPopulationFunc func(storage.ObjectCollectionElementData) ([32]byte, error)
+type ObjectIndexKey = [32]byte
+
+type ObjectIndexPopulationFunc func(storage.ObjectCollectionElementData) (ObjectIndexKey, error)
 
 type ObjectIndexCollection map[common.Address]ObjectIndexPopulationFunc

@@ -87,3 +87,28 @@ const (
 	SystemRestfulInteractionSearchSystem  SystemRestfulInteraction = "search-system"
 	SystemRestfulInteractionHistorySystem SystemRestfulInteraction = "history-system"
 )
+
+type ResourceValidationMode string
+
+const (
+	ResourceValidationModeCreate ResourceValidationMode = "create"
+	ResourceValidationModeUpdate ResourceValidationMode = "update"
+	ResourceValidationModeDelete ResourceValidationMode = "delete"
+)
+
+type IssueSeverity = string
+
+const (
+	IssueSeverityFatal       IssueSeverity = "fatal"
+	IssueSeverityError       IssueSeverity = "error"
+	IssueSeverityWarning     IssueSeverity = "warning"
+	IssueSeverityInformation IssueSeverity = "information"
+)
+
+type IssueType = string
+
+// https://www.hl7.org/fhir/valueset-issue-type.html
+const (
+	IssueTypeInvalid       IssueType = "invalid"
+	IssueTypeInformational IssueType = "informational"
+)

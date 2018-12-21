@@ -77,13 +77,14 @@ func (c *CapabilityConfig) getRestfulInteractionTypes(i interface{}) []models.Ty
 	return ints
 }
 
-func NewCapabilityConfig() *CapabilityConfig {
+func NewCapabilityConfig(registry ResourceRegistry) *CapabilityConfig {
 	newCS := models.NewCapabilityStatement()
 	newCS.AcceptUnknown = string(models.UnknownContentCodeExtensions)
 	newCS.Date = metadata.Metadata.BuildTime
 	newCS.Description = metadata.Metadata.AppName
 	newCS.FhirVersion = models.FHIRVersion
 	newCS.Format = []string{string(models.MimeTypeJSON)}
+	newCS.PatchFormat = []string{"application/json-patch+json"}
 	newCS.Kind = string(models.CapabilityStatementKindInstance)
 	newCS.Name = metadata.Metadata.AppName
 	newCS.Status = string(models.PublicationStatusDraft)
@@ -94,7 +95,7 @@ func NewCapabilityConfig() *CapabilityConfig {
 
 	newConfig := &CapabilityConfig{CapabilityStatement: newCS}
 
-	for _, i := range GetRegisteredResources() {
+	for _, i := range registry {
 		newConfig.AddResource(i)
 	}
 

@@ -13,6 +13,7 @@ import (
 	"github.com/SynapticHealthAlliance/fhir-api/handlers/resources"
 	"github.com/SynapticHealthAlliance/fhir-api/internal/metadata"
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/static"
 	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
 	"github.com/SynapticHealthAlliance/fhir-api/utils"
 	"github.com/gorilla/mux"
@@ -55,10 +56,12 @@ func serveRun(cmd *cobra.Command, args []string) {
 			config.NewConfig,
 			NewRouter,
 			resources.NewCapabilityConfig,
+			resources.NewResourceRegistry,
 			newRenderer,
 			newCORSMiddleware,
 			ethereum.NewConnection,
 			ethereum.NewTransactor,
+			static.NewStaticFilesBox,
 		),
 		fx.Logger(logging.NewLogger()),
 		fx.Invoke(
@@ -95,10 +98,21 @@ func NewRouter(lc fx.Lifecycle, log *logging.Logger, config *config.Config, cors
 
 	r := mux.NewRouter()
 	n := negroni.New()
+
+	// enable CORS
 	n.Use(corsMW)
-	n.Use(negroni.NewRecovery())
+
+	// recover on panics and throw a 500
+	recovery := negroni.NewRecovery()
+	recovery.PrintStack = config.DevMode
+	n.Use(recovery)
+
+	// request logging
 	n.Use(nLog.NewMiddlewareFromLogger(log, "web"))
+
+	// response gzip
 	n.Use(gzip.Gzip(gzip.DefaultCompression))
+
 	n.UseHandler(r)
 
 	server := &http.Server{
@@ -127,12 +141,12 @@ func NewRouter(lc fx.Lifecycle, log *logging.Logger, config *config.Config, cors
 	return r
 }
 
-func configureRouter(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig, rndr *render.Render) {
+func configureRouter(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig, rndr *render.Render, registry resources.ResourceRegistry) {
 	log.Debug("executing configureRouter")
 
 	fhirRouter := r.PathPrefix("/fhir").Subrouter()
 	handlers.RegisterFHIRCapabilityStatementRoutes(fhirRouter, log, cConfig, rndr)
-	handlers.RegisterAllFHIRResourceRoutes(fhirRouter, log, rndr)
+	handlers.RegisterAllFHIRResourceRoutes(fhirRouter, log, rndr, registry)
 
 	handlers.RegisterHealthCheckRoutes(r, log)
 
