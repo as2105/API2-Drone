@@ -39,5 +39,12 @@ func NewResourceRegistry(box *packr.Box) (ResourceRegistry, error) {
 	}
 	registry = append(registry, location)
 
+	// Subscription
+	subscription, err := NewSubscription(box)
+	if err != nil {
+		return registry, err
+	}
+	registry = append(registry, subscription)
+
 	return registry, nil
 }
