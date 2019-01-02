@@ -59,4 +59,8 @@ Temporary Items
 *.out
 
 fhir-api
+
 fhirstarter
+
+*.sqlite
+

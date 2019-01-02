@@ -2,6 +2,7 @@ package resources
 
 import (
 	"github.com/SynapticHealthAlliance/fhir-api/models"
+	"github.com/SynapticHealthAlliance/fhir-api/storage/database"
 	"github.com/gobuffalo/packr/v2"
 )
 
@@ -15,7 +16,7 @@ type SearchParam struct {
 
 type ResourceRegistry []interface{}
 
-func NewResourceRegistry(box *packr.Box) (ResourceRegistry, error) {
+func NewResourceRegistry(box *packr.Box, db *database.DB) (ResourceRegistry, error) {
 	registry := ResourceRegistry{}
 
 	// Practitioner
@@ -40,7 +41,7 @@ func NewResourceRegistry(box *packr.Box) (ResourceRegistry, error) {
 	registry = append(registry, location)
 
 	// Subscription
-	subscription, err := NewSubscription(box)
+	subscription, err := NewSubscription(box, db)
 	if err != nil {
 		return registry, err
 	}

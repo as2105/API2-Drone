@@ -6,13 +6,24 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SynapticHealthAlliance/fhir-api/storage"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/pborman/uuid"
 	"github.com/pkg/errors"
 	"github.com/vincent-petithory/dataurl"
 )
 
 const FHIRJSONMediaType = "application/fhir+json"
+
+type ObjectCollectionElementData interface {
+	URI() string
+}
+
+type StorageAdapter interface {
+	Create(data ObjectCollectionElementData) (uuid.UUID, error)
+	Update(id uuid.UUID, lastUpdatedAt time.Time, data ObjectCollectionElementData, changeScore uint8) error
+	Destroy(id uuid.UUID) error
+	Read(id uuid.UUID) (ObjectCollectionElementData, error)
+}
 
 type ObjectCollectionElementBytesData struct {
 	data      []byte
@@ -55,7 +66,7 @@ func (o *ObjectCollectionElementURIData) URI() string {
 type ObjectCollectionElement struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Data      storage.ObjectCollectionElementData
+	Data      ObjectCollectionElementData
 }
 
 func NewObjectCollectionElement(uri string, createdAt, updatedAt *big.Int) (*ObjectCollectionElement, error) {
@@ -89,6 +100,6 @@ func NewObjectCollectionElement(uri string, createdAt, updatedAt *big.Int) (*Obj
 
 type ObjectIndexKey = [32]byte
 
-type ObjectIndexPopulationFunc func(storage.ObjectCollectionElementData) (ObjectIndexKey, error)
+type ObjectIndexPopulationFunc func(ObjectCollectionElementData) (ObjectIndexKey, error)
 
 type ObjectIndexCollection map[common.Address]ObjectIndexPopulationFunc

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/SynapticHealthAlliance/fhir-api/storage"
 	"github.com/SynapticHealthAlliance/pdx-contracts/go/contracts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -26,7 +25,7 @@ type EthereumAdapter struct {
 	submittedTransactions chan *types.Transaction
 }
 
-func (a *EthereumAdapter) Create(data storage.ObjectCollectionElementData) (uuid.UUID, error) {
+func (a *EthereumAdapter) Create(data ObjectCollectionElementData) (uuid.UUID, error) {
 	newUUID := uuid.NewUUID()
 	oidxAddrs := make([]common.Address, len(a.objectIndexCollection))
 	oidxKeys := make([]ObjectIndexKey, len(a.objectIndexCollection))
@@ -49,7 +48,7 @@ func (a *EthereumAdapter) handleTransaction(txn *types.Transaction, err error) e
 	return err
 }
 
-func (a *EthereumAdapter) Update(id uuid.UUID, lastUpdatedAt time.Time, data storage.ObjectCollectionElementData, changeScore uint8) error {
+func (a *EthereumAdapter) Update(id uuid.UUID, lastUpdatedAt time.Time, data ObjectCollectionElementData, changeScore uint8) error {
 	return a.handleTransaction(
 		a.objectCollectionTransactor.UpdateObject(nil, id.Array(), timeToBigint(lastUpdatedAt), data.URI(), changeScore),
 	)

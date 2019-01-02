@@ -10,21 +10,23 @@ import (
 
 // Config ...
 type Config struct {
-	Address              string            `mapstructure:"address"`
-	ContractAddresses    map[string]string `mapstructure:"contract_addresses"`
-	CORSAllowedOrigins   []string          `mapstructure:"cors_allowed_origins"`
-	CORSAllowedMethods   []string          `mapstructure:"cors_allowed_methods"`
-	CORSAllowedHeaders   []string          `mapstructure:"cors_allowed_headers"`
-	CORSExposedHeaders   []string          `mapstructure:"cors_exposed_headers"`
-	CORSAllowCredentials bool              `mapstructure:"cors_allow_credentials"`
-	CORSMaxAge           int               `mapstructure:"cors_max_age"`
-	DevMode              bool              `mapstructure:"dev_mode"`
-	GasPrice             int64             `mapstructure:"gas_price"`
-	LogFormat            string            `mapstructure:"log_format"`
-	LogLevel             string            `mapstructure:"log_level"`
-	PrivateKey           string            `mapstructure:"private_key"`
-	Profile              bool              `mapstructure:"profile"`
-	RPCURL               string            `mapstructure:"rpcurl"`
+	Address                  string            `mapstructure:"address"`
+	ContractAddresses        map[string]string `mapstructure:"contract_addresses"`
+	CORSAllowCredentials     bool              `mapstructure:"cors_allow_credentials"`
+	CORSAllowedHeaders       []string          `mapstructure:"cors_allowed_headers"`
+	CORSAllowedMethods       []string          `mapstructure:"cors_allowed_methods"`
+	CORSAllowedOrigins       []string          `mapstructure:"cors_allowed_origins"`
+	CORSExposedHeaders       []string          `mapstructure:"cors_exposed_headers"`
+	CORSMaxAge               int               `mapstructure:"cors_max_age"`
+	DatabaseConnectionString string            `mapstructure:"db_conn_str"`
+	DatabaseType             string            `mapstructure:"db_type"`
+	DevMode                  bool              `mapstructure:"dev_mode"`
+	GasPrice                 int64             `mapstructure:"gas_price"`
+	LogFormat                string            `mapstructure:"log_format"`
+	LogLevel                 string            `mapstructure:"log_level"`
+	PrivateKey               string            `mapstructure:"private_key"`
+	Profile                  bool              `mapstructure:"profile"`
+	RPCURL                   string            `mapstructure:"rpcurl"`
 }
 
 // GlobalSettings holds settings configured by global flags, that may

@@ -2,8 +2,11 @@ module github.com/SynapticHealthAlliance/fhir-api
 
 require (
 	github.com/SynapticHealthAlliance/pdx-contracts v0.0.0-20181217212122-c4c34dbad973
+	github.com/denisenkom/go-mssqldb v0.0.0-20181014144952-4e0d7dc8888f // indirect
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
+	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/ethereum/go-ethereum v1.8.12
+	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/gobuffalo/buffalo-plugins v1.9.3 // indirect
 	github.com/gobuffalo/flect v0.0.0-20181210151238-24a2b68e0316 // indirect
 	github.com/gobuffalo/packr/v2 v2.0.0-rc.13
@@ -11,6 +14,11 @@ require (
 	github.com/gorilla/mux v1.6.2
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/jinzhu/gorm v1.9.2
+	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
+	github.com/jinzhu/now v0.0.0-20181116074157-8ec929ed50c3 // indirect
+	github.com/lib/pq v1.0.0 // indirect
+	github.com/mattn/go-sqlite3 v1.10.0 // indirect
 	github.com/meatballhat/negroni-logrus v0.0.0-20170801195057-31067281800f
 	github.com/mitchellh/go-homedir v1.0.0
 	github.com/pborman/uuid v0.0.0-20170612153648-e790cca94e6c
@@ -37,5 +45,6 @@ require (
 	golang.org/x/net v0.0.0-20181220203305-927f97764cc3 // indirect
 	golang.org/x/sys v0.0.0-20181221135038-a79f1b190785 // indirect
 	golang.org/x/tools v0.0.0-20181221001348-537d06c36207 // indirect
+	google.golang.org/appengine v1.4.0 // indirect
 	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0 // indirect
 )

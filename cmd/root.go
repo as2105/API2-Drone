@@ -33,6 +33,8 @@ func init() {
 	rootCmd.PersistentFlags().StringP("private_key", "k", "", "private key for signing transactions")
 	rootCmd.PersistentFlags().StringP("rpc_url", "u", "localhost:8545", "ethereum node RPC URL")
 	rootCmd.PersistentFlags().StringP("org_name", "n", "", "name of your Organization, to be attached to Organization contract")
+	rootCmd.PersistentFlags().String("db_type", "sqlite3", "database dialect to use (sqlite3 or postgresql)")
+	rootCmd.PersistentFlags().String("db_conn_str", "data.sqlite", "database dialect-specific connection string")
 	rootCmd.PersistentFlags().StringToStringP("objcoll_addresses", "C", map[string]string{}, "address of ObjectCollection contracts")
 	rootCmd.PersistentFlags().StringToStringP("objidx_addresses", "I", map[string]string{}, "comma-delimited list of ObjectIndex contracts to be associated with each resource")
 	rootCmd.PersistentFlags().Bool("dev_mode", false, "development mode")
