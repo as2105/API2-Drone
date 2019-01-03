@@ -7,6 +7,11 @@ import (
 	"github.com/unrolled/render"
 )
 
+// ConfiguredResource ...
+type ConfiguredResource interface {
+	GetResourceConfig() *ResourceConfig
+}
+
 // CreateableResource ...
 type CreateableResource interface {
 	Create(log *logging.Logger, rndr *render.Render) http.Handler
@@ -35,8 +40,6 @@ type DeleteableResource interface {
 // SearchableResource ...
 type SearchableResource interface {
 	Search(log *logging.Logger, rndr *render.Render) http.Handler
-	SearchIncludes() SearchIncludes
-	SearchParams() []SearchParam
 }
 
 // ValidateableResource ...

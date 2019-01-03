@@ -13,6 +13,7 @@ import (
 // Location ...
 type Location struct {
 	jsonValidator *models.JSONValidator
+	config        *ResourceConfig
 }
 
 // Create ...
@@ -40,29 +41,35 @@ func (l *Location) Search(log *logging.Logger, rndr *render.Render) http.Handler
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {})
 }
 
-func (l *Location) SearchIncludes() SearchIncludes {
-	return SearchIncludes{"*"}
+// Validate ...
+func (l *Location) Validate(log *logging.Logger, rndr *render.Render) http.Handler {
+	return validateJSONResource(log, rndr, l.jsonValidator)
 }
 
-func (l *Location) SearchParams() []SearchParam {
-	return []SearchParam{
+// GetResourceConfig ...
+func (l *Location) GetResourceConfig() *ResourceConfig {
+	return l.config
+}
+
+// NewLocation ...
+func NewLocation(box *packr.Box) (*Location, error) {
+	v, err := models.NewJSONValidator(box, "Location")
+	if err != nil {
+		return nil, errors.Wrap(err, "could not create JSON validator")
+	}
+
+	config := NewResourceConfig()
+	config.SearchIncludes = searchIncludes{"*"}
+	config.SearchParams = []searchParam{
 		{Name: "_id", Type: models.SearchParamTypeToken},
 		{Name: "_lastUpdated", Type: models.SearchParamTypeDate},
 		{Name: "identifier", Type: models.SearchParamTypeToken},
 		{Name: "status", Type: models.SearchParamTypeToken},
 		{Name: "type", Type: models.SearchParamTypeToken},
 	}
-}
 
-// Validate ...
-func (l *Location) Validate(log *logging.Logger, rndr *render.Render) http.Handler {
-	return validateJSONResource(log, rndr, l.jsonValidator)
-}
-
-func NewLocation(box *packr.Box) (*Location, error) {
-	v, err := models.NewJSONValidator(box, "Location")
-	if err != nil {
-		return nil, errors.Wrap(err, "could not create JSON validator")
-	}
-	return &Location{jsonValidator: v}, nil
+	return &Location{
+		jsonValidator: v,
+		config:        config,
+	}, nil
 }

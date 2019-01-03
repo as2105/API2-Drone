@@ -28,6 +28,7 @@ type subscriptionDB struct {
 type Subscription struct {
 	jsonValidator *models.JSONValidator
 	db            *database.DB
+	config        *ResourceConfig
 }
 
 // Create ...
@@ -42,12 +43,12 @@ func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Han
 		if newSub.ID == "" {
 			newSub.ID = uuid.NewUUID().String()
 		}
-		now := time.Now()
+		now := time.Now().UTC()
 		if newSub.Meta == nil {
 			newSub.Meta = &models.Meta{}
 		}
 		newSub.Meta.VersionID = ""
-		newSub.Meta.LastUpdated = timeToFHIR(now)
+		newSub.Meta.LastUpdated = now.Format(time.RFC3339)
 		if newSub.Status == "" || newSub.Status == "active" {
 			newSub.Status = "requested" // activate subscription later
 		}
@@ -133,7 +134,7 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 			log.WithError(err).Panic("failed to unmarshal data")
 		}
 
-		now := time.Now()
+		now := time.Now().UTC()
 
 		status := http.StatusOK
 		if dbRec.DeletedAt != nil {
@@ -144,7 +145,7 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 			newSub.Meta = &models.Meta{}
 		}
 		newSub.Meta.VersionID = ""
-		newSub.Meta.LastUpdated = timeToFHIR(now)
+		newSub.Meta.LastUpdated = now.Format(time.RFC3339)
 		if newSub.Status == "" || newSub.Status == "active" {
 			newSub.Status = "requested" // activate subscription later
 		}
@@ -187,6 +188,11 @@ func (s *Subscription) Validate(log *logging.Logger, rndr *render.Render) http.H
 	return validateJSONResource(log, rndr, s.jsonValidator)
 }
 
+// GetResourceConfig ...
+func (s *Subscription) GetResourceConfig() *ResourceConfig {
+	return s.config
+}
+
 // NewSubscription ...
 func NewSubscription(box *packr.Box, db *database.DB) (*Subscription, error) {
 	v, err := models.NewJSONValidator(box, "Subscription")
@@ -194,5 +200,6 @@ func NewSubscription(box *packr.Box, db *database.DB) (*Subscription, error) {
 		return nil, errors.Wrap(err, "could not create JSON validator")
 	}
 	db.AutoMigrate(&subscriptionDB{})
-	return &Subscription{jsonValidator: v, db: db}, nil
+	config := NewResourceConfig()
+	return &Subscription{jsonValidator: v, db: db, config: config}, nil
 }

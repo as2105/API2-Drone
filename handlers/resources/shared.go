@@ -15,11 +15,8 @@ import (
 	"github.com/unrolled/render"
 )
 
-const FHIRDateTimeFormat = "2006-01-02T15:04:05.000+07:00"
-
 func getResourceID(req *http.Request) string {
-	vars := mux.Vars(req)
-	return vars["resourceID"]
+	return mux.Vars(req)["resourceID"]
 }
 
 func getRequestParameters(req *http.Request) (*models.Parameters, error) {
@@ -29,10 +26,6 @@ func getRequestParameters(req *http.Request) (*models.Parameters, error) {
 		return nil, err
 	}
 	return params, nil
-}
-
-func timeToFHIR(t time.Time) string {
-	return t.Format(FHIRDateTimeFormat)
 }
 
 // TODO: support mode, profile
@@ -70,7 +63,7 @@ func resourceCreated(rndr *render.Render, rw http.ResponseWriter, resourceID str
 		location = fmt.Sprintf("%s/_history/%s", location, versionID)
 		rw.Header().Add("Etag", fmt.Sprintf(`W/"%s"`, versionID))
 	}
-	rw.Header().Add("Last-Modified", timeToFHIR(lastModified))
+	rw.Header().Add("Last-Modified", lastModified.Format(http.TimeFormat))
 	rw.Header().Add("Location", location)
 	rndr.JSON(rw, http.StatusCreated, resource)
 }
@@ -79,12 +72,8 @@ func resourceRead(rndr *render.Render, rw http.ResponseWriter, status int, versi
 	if versionID != "" {
 		rw.Header().Add("Etag", fmt.Sprintf(`W/"%s"`, versionID))
 	}
-	rw.Header().Add("Last-Modified", timeToFHIR(lastModified))
+	rw.Header().Add("Last-Modified", lastModified.Format(http.TimeFormat))
 	rndr.JSON(rw, status, resource)
-}
-
-func parameterMissingResponse(rndr *render.Render, rw http.ResponseWriter) {
-	rw.WriteHeader(http.StatusBadRequest)
 }
 
 func validateJSONResource(log *logging.Logger, rndr *render.Render, validator *models.JSONValidator) http.Handler {

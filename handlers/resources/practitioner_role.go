@@ -13,6 +13,7 @@ import (
 // PractitionerRole ...
 type PractitionerRole struct {
 	jsonValidator *models.JSONValidator
+	config        *ResourceConfig
 }
 
 // Create ...
@@ -40,16 +41,30 @@ func (r *PractitionerRole) Search(log *logging.Logger, rndr *render.Render) http
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {})
 }
 
-func (r *PractitionerRole) SearchIncludes() SearchIncludes {
-	return SearchIncludes{
+// Validate ...
+func (r *PractitionerRole) Validate(log *logging.Logger, rndr *render.Render) http.Handler {
+	return validateJSONResource(log, rndr, r.jsonValidator)
+}
+
+// GetResourceConfig ...
+func (r *PractitionerRole) GetResourceConfig() *ResourceConfig {
+	return r.config
+}
+
+// NewPractitionerRole ...
+func NewPractitionerRole(box *packr.Box) (*PractitionerRole, error) {
+	v, err := models.NewJSONValidator(box, "PractitionerRole")
+	if err != nil {
+		return nil, errors.Wrap(err, "could not create JSON validator")
+	}
+
+	config := NewResourceConfig()
+	config.SearchIncludes = searchIncludes{
 		"PractitionerRole:location",
 		"PractitionerRole:practitioner",
 		"*",
 	}
-}
-
-func (r *PractitionerRole) SearchParams() []SearchParam {
-	return []SearchParam{
+	config.SearchParams = []searchParam{
 		{Name: "_id", Type: models.SearchParamTypeToken},
 		{Name: "_lastUpdated", Type: models.SearchParamTypeDate},
 		{Name: "identifier", Type: models.SearchParamTypeToken},
@@ -57,17 +72,6 @@ func (r *PractitionerRole) SearchParams() []SearchParam {
 		{Name: "practitioner", Type: models.SearchParamTypeReference},
 		{Name: "telecom", Type: models.SearchParamTypeToken},
 	}
-}
 
-// Validate ...
-func (r *PractitionerRole) Validate(log *logging.Logger, rndr *render.Render) http.Handler {
-	return validateJSONResource(log, rndr, r.jsonValidator)
-}
-
-func NewPractitionerRole(box *packr.Box) (*PractitionerRole, error) {
-	v, err := models.NewJSONValidator(box, "PractitionerRole")
-	if err != nil {
-		return nil, errors.Wrap(err, "could not create JSON validator")
-	}
-	return &PractitionerRole{jsonValidator: v}, nil
+	return &PractitionerRole{jsonValidator: v, config: config}, nil
 }

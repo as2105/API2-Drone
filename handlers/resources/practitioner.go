@@ -13,6 +13,7 @@ import (
 // Practitioner ...
 type Practitioner struct {
 	jsonValidator *models.JSONValidator
+	config        *ResourceConfig
 }
 
 // Create ...
@@ -40,15 +41,29 @@ func (r *Practitioner) Search(log *logging.Logger, rndr *render.Render) http.Han
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {})
 }
 
-func (r *Practitioner) SearchIncludes() SearchIncludes {
-	return SearchIncludes{
+// Validate ...
+func (r *Practitioner) Validate(log *logging.Logger, rndr *render.Render) http.Handler {
+	return validateJSONResource(log, rndr, r.jsonValidator)
+}
+
+// GetResourceConfig ...
+func (r *Practitioner) GetResourceConfig() *ResourceConfig {
+	return r.config
+}
+
+// NewPractitioner ...
+func NewPractitioner(box *packr.Box) (*Practitioner, error) {
+	v, err := models.NewJSONValidator(box, "Practitioner")
+	if err != nil {
+		return nil, errors.Wrap(err, "could not create JSON validator")
+	}
+
+	config := NewResourceConfig()
+	config.SearchIncludes = searchIncludes{
 		"Practitioner:location",
 		"*",
 	}
-}
-
-func (r *Practitioner) SearchParams() []SearchParam {
-	return []SearchParam{
+	config.SearchParams = []searchParam{
 		{Name: "_id", Type: models.SearchParamTypeToken},
 		{Name: "_lastUpdated", Type: models.SearchParamTypeDate},
 		{Name: "active", Type: models.SearchParamTypeToken},
@@ -57,17 +72,6 @@ func (r *Practitioner) SearchParams() []SearchParam {
 		{Name: "name", Type: models.SearchParamTypeString},
 		{Name: "telecom", Type: models.SearchParamTypeToken},
 	}
-}
 
-// Validate ...
-func (r *Practitioner) Validate(log *logging.Logger, rndr *render.Render) http.Handler {
-	return validateJSONResource(log, rndr, r.jsonValidator)
-}
-
-func NewPractitioner(box *packr.Box) (*Practitioner, error) {
-	v, err := models.NewJSONValidator(box, "Practitioner")
-	if err != nil {
-		return nil, errors.Wrap(err, "could not create JSON validator")
-	}
-	return &Practitioner{jsonValidator: v}, nil
+	return &Practitioner{jsonValidator: v, config: config}, nil
 }

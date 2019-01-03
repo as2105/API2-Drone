@@ -87,6 +87,7 @@ prep_release:
 	goreturns -w $(SOURCES)
 	gofmt -s -w ${SOURCES}
 	go mod tidy
+	make
 
 .PHONY: version
 version:

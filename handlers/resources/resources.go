@@ -1,21 +1,14 @@
 package resources
 
 import (
-	"github.com/SynapticHealthAlliance/fhir-api/models"
 	"github.com/SynapticHealthAlliance/fhir-api/storage/database"
 	"github.com/gobuffalo/packr/v2"
 )
 
-type SearchIncludes []string
-
-type SearchParam struct {
-	Name                       string
-	ObjectIndexContractAddress string
-	Type                       models.SearchParamType
-}
-
+// ResourceRegistry ...
 type ResourceRegistry []interface{}
 
+// NewResourceRegistry ...
 func NewResourceRegistry(box *packr.Box, db *database.DB) (ResourceRegistry, error) {
 	registry := ResourceRegistry{}
 

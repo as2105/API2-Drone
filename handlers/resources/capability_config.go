@@ -1,9 +1,14 @@
 package resources
 
 import (
+	"encoding/json"
+
 	"github.com/SynapticHealthAlliance/fhir-api/internal/metadata"
+	"github.com/SynapticHealthAlliance/fhir-api/logging"
 	"github.com/SynapticHealthAlliance/fhir-api/models"
 	"github.com/SynapticHealthAlliance/fhir-api/utils"
+	"github.com/gobuffalo/packr/v2"
+	"github.com/pkg/errors"
 )
 
 // CapabilityConfig ...
@@ -11,27 +16,35 @@ type CapabilityConfig struct {
 	*models.CapabilityStatement
 }
 
-func (c *CapabilityConfig) AddResource(i interface{}) {
+// AddResource ...
+func (c *CapabilityConfig) AddResource(typeName string, i interface{}) error {
 	newR := &models.CapabilityStatement_Resource{
-		ConditionalCreate: true,
-		ConditionalDelete: string(models.ConditionalDeleteStatusSingle),
-		ConditionalUpdate: true,
-		Type:              utils.GetBaseTypeName(i),
-		Interaction:       c.getInteractions(i),
-		Versioning:        string(models.ResourceVersionPolicyVersionedUpdate),
+		Type:        typeName,
+		Interaction: c.getInteractions(i),
 	}
 
-	if t, ok := i.(SearchableResource); ok {
-		newR.SearchInclude = t.SearchIncludes()
-		newR.SearchParam = c.getSearchParam(t)
+	if t, ok := i.(ConfiguredResource); ok {
+		config := t.GetResourceConfig()
+		if config == nil {
+			return errors.New("no resource configuration present")
+		}
+		newR.ConditionalCreate = config.ConditionalCreate
+		newR.ConditionalDelete = string(config.ConditionalDelete)
+		newR.ConditionalUpdate = config.ConditionalUpdate
+		newR.Versioning = string(config.Versioning)
+		newR.SearchInclude = config.SearchIncludes
+		newR.SearchParam = c.getSearchParams(config.SearchParams)
+	} else {
+		return errors.New("resource is not configurable")
 	}
 
 	rArr := append(c.CapabilityStatement.Rest[0].Resource, newR)
 	c.CapabilityStatement.Rest[0].Resource = rArr
+
+	return nil
 }
 
-func (c *CapabilityConfig) getSearchParam(t SearchableResource) []*models.CapabilityStatement_SearchParam {
-	params := t.SearchParams()
+func (c *CapabilityConfig) getSearchParams(params []searchParam) []*models.CapabilityStatement_SearchParam {
 	modelParams := []*models.CapabilityStatement_SearchParam{}
 	for _, p := range params {
 		modelParams = append(modelParams, &models.CapabilityStatement_SearchParam{
@@ -77,7 +90,10 @@ func (c *CapabilityConfig) getRestfulInteractionTypes(i interface{}) []models.Ty
 	return ints
 }
 
-func NewCapabilityConfig(registry ResourceRegistry) *CapabilityConfig {
+// NewCapabilityConfig ...
+func NewCapabilityConfig(registry ResourceRegistry, log *logging.Logger, box *packr.Box) *CapabilityConfig {
+	log.Debug("entering NewCapabilityConfig")
+
 	newCS := models.NewCapabilityStatement()
 	newCS.AcceptUnknown = string(models.UnknownContentCodeExtensions)
 	newCS.Date = metadata.Metadata.BuildTime
@@ -96,8 +112,33 @@ func NewCapabilityConfig(registry ResourceRegistry) *CapabilityConfig {
 	newConfig := &CapabilityConfig{CapabilityStatement: newCS}
 
 	for _, i := range registry {
-		newConfig.AddResource(i)
+		tName := utils.GetBaseTypeName(i)
+		log.Debugf("adding registered resource %q", tName)
+		if err := newConfig.AddResource(tName, i); err != nil {
+			log.WithError(err).Panicf("failed to add registered resource %q to capability config", tName)
+		}
 	}
+
+	// validate JSON
+	log.Debug("validating generated capability statement")
+	v, err := models.NewJSONValidator(box, "CapabilityStatement")
+	if err != nil {
+		log.WithError(err).Panic("could not create JSON validator")
+	}
+	jsonBytes, err := json.Marshal(newCS)
+	if err != nil {
+		log.WithError(err).Panic("could not marshal object as JSON bytes")
+	}
+	if valid, vErrs, err := v.Validate(jsonBytes); !valid {
+		if err != nil {
+			log.Error(err)
+		}
+		for _, e := range vErrs {
+			log.Error(e.String())
+		}
+		log.Panic("generated capability statement is not valid")
+	}
+	log.Debug("capability statement is valid")
 
 	return newConfig
 }
