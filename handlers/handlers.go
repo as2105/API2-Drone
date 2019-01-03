@@ -17,6 +17,7 @@ import (
 func RegisterFHIRCapabilityStatementRoutes(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig, rndr *render.Render) {
 	log.Debug("executing RegisterFHIRCapabilityStatementRoutes")
 	h := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Add("Last-Modified", cConfig.Date.Format(http.TimeFormat))
 		rndr.JSON(w, http.StatusOK, cConfig)
 	})
 	r.Handle("/", h).Methods("GET")
