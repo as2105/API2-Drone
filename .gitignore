@@ -1,3 +1,50 @@
+# Backups
+*.bak
+*.gho
+*.ori
+*.orig
+*.tmp
+
+# Diffs
+*.patch
+*.diff
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# MacOS
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -12,4 +59,8 @@
 *.out
 
 fhir-api
+
 fhirstarter
+
+*.sqlite
+
