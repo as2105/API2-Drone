@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -13,6 +14,7 @@ import (
 	"github.com/SynapticHealthAlliance/fhir-api/handlers/resources"
 	"github.com/SynapticHealthAlliance/fhir-api/internal/metadata"
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/models"
 	"github.com/SynapticHealthAlliance/fhir-api/static"
 	"github.com/SynapticHealthAlliance/fhir-api/storage/database"
 	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
@@ -87,11 +89,13 @@ func newCORSMiddleware(config *config.Config) *cors.Cors {
 }
 
 func newRenderer(config *config.Config) *render.Render {
-	return render.New(render.Options{
-		IndentJSON:    true,
-		IndentXML:     true,
-		IsDevelopment: config.DevMode,
+	r := render.New(render.Options{
+		IndentJSON:      true,
+		IndentXML:       true,
+		IsDevelopment:   config.DevMode,
+		JSONContentType: fmt.Sprintf("application/fhir+json; fhirVersion=%s", models.FHIRVersion),
 	})
+	return r
 }
 
 // NewRouter ...
