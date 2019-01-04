@@ -96,7 +96,7 @@ func NewCapabilityConfig(registry ResourceRegistry, log *logging.Logger, box *pa
 
 	newCS := models.NewCapabilityStatement()
 	newCS.AcceptUnknown = string(models.UnknownContentCodeExtensions)
-	newCS.Date = metadata.Metadata.BuildTime
+	newCS.Date = &metadata.Metadata.BuildTime
 	newCS.Description = metadata.Metadata.AppName
 	newCS.FhirVersion = models.FHIRVersion
 	newCS.Format = []string{string(models.MimeTypeJSON)}

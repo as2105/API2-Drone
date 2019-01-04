@@ -1,10 +1,9 @@
 package ethereum
 
 import (
+	"github.com/pborman/uuid"
 	"math/big"
 	"time"
-
-	"github.com/pborman/uuid"
 )
 
 func bytesToUUID(bin [16]byte) uuid.UUID {

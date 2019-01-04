@@ -40,10 +40,10 @@ func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Han
 			log.WithError(err).Panic("failed to load resource")
 		}
 
-		if newSub.ID == "" {
-			newSub.ID = uuid.NewUUID().String()
-		}
+		newUUID := uuid.NewUUID()
 		now := time.Now().UTC()
+
+		newSub.ID = newUUID.String()
 		if newSub.Meta == nil {
 			newSub.Meta = &models.Meta{}
 		}
@@ -68,7 +68,7 @@ func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Han
 			log.WithError(err).Panic("failed to save object to database")
 		}
 
-		resourceCreated(rndr, rw, newSub.ID, "", now, newSub)
+		resourceCreated(rndr, rw, newUUID, "", now, newSub)
 	})
 }
 
@@ -104,8 +104,9 @@ func (s *Subscription) Read(log *logging.Logger, rndr *render.Render) http.Handl
 // Update ...
 func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		uuid := getResourceID(req)
-		if uuid == "" {
+		resourceID, err := getResourceID(req)
+		if err != nil {
+			log.WithError(err).Error("invalid resource ID provided")
 			rw.WriteHeader(http.StatusBadRequest) // TODO: More verbose errors?
 			return
 		}
@@ -114,15 +115,15 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 		if err := loadResourceFromBody(newSub, req, s.jsonValidator); err != nil {
 			log.WithError(err).Panic("failed to load resource")
 		}
-		if newSub.ID != uuid {
-			log.Errorf("resourceID provided (%q) does not match ID inside of document (%q)", uuid, newSub.ID)
+		if newSub.ID != resourceID.String() {
+			log.Errorf("resourceID provided (%q) does not match ID inside of document (%q)", resourceID.String(), newSub.ID)
 			rw.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		scope := s.db.Unscoped()
 		dbRec := &subscriptionDB{}
-		query := scope.Where(&subscriptionDB{UUID: uuid}).First(dbRec)
+		query := scope.Where(&subscriptionDB{UUID: resourceID.String()}).First(dbRec)
 		if query.RecordNotFound() {
 			rw.WriteHeader(http.StatusNotFound)
 			return

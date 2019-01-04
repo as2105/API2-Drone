@@ -11,12 +11,23 @@ import (
 	"github.com/SynapticHealthAlliance/fhir-api/models"
 	"github.com/SynapticHealthAlliance/fhir-api/utils"
 	"github.com/gorilla/mux"
+	"github.com/pborman/uuid"
 	"github.com/pkg/errors"
 	"github.com/unrolled/render"
 )
 
-func getResourceID(req *http.Request) string {
-	return mux.Vars(req)["resourceID"]
+const initialResourceVersionID = "0:0"
+
+func getResourceID(req *http.Request) (uuid.UUID, error) {
+	uuidStr := mux.Vars(req)["resourceID"]
+	if uuidStr == "" {
+		return nil, errors.New("no resource ID was provided")
+	}
+	uuidObj := uuid.Parse(uuidStr)
+	if uuidObj == nil {
+		return nil, errors.New("unable to parse UUID from resource ID")
+	}
+	return uuidObj, nil
 }
 
 func getRequestParameters(req *http.Request) (*models.Parameters, error) {
@@ -39,7 +50,7 @@ func getValidationParameters(req *http.Request) (interface{}, error) {
 			return p.Resource, nil
 		}
 	}
-	return nil, fmt.Errorf("unable to find resource parameter")
+	return nil, errors.New("unable to find resource parameter")
 }
 
 func loadResourceFromBody(target interface{}, req *http.Request, validator *models.JSONValidator) error {
@@ -52,13 +63,13 @@ func loadResourceFromBody(target interface{}, req *http.Request, validator *mode
 		return err
 	}
 	if !valid {
-		return fmt.Errorf("resource failed FHIR validation")
+		return errors.New("resource failed FHIR validation")
 	}
 	return json.Unmarshal(bArr, target)
 }
 
-func resourceCreated(rndr *render.Render, rw http.ResponseWriter, resourceID string, versionID string, lastModified time.Time, resource interface{}) {
-	location := fmt.Sprintf("/fhir/%s/%s", utils.GetBaseTypeName(resource), resourceID)
+func resourceCreated(rndr *render.Render, rw http.ResponseWriter, resourceID uuid.UUID, versionID string, lastModified time.Time, resource interface{}) {
+	location := fmt.Sprintf("/fhir/%s/%s", utils.GetBaseTypeName(resource), resourceID.String())
 	if versionID != "" {
 		location = fmt.Sprintf("%s/_history/%s", location, versionID)
 		rw.Header().Add("Etag", fmt.Sprintf(`W/"%s"`, versionID))
@@ -68,11 +79,23 @@ func resourceCreated(rndr *render.Render, rw http.ResponseWriter, resourceID str
 	rndr.JSON(rw, http.StatusCreated, resource)
 }
 
-func resourceRead(rndr *render.Render, rw http.ResponseWriter, status int, versionID string, lastModified time.Time, resource interface{}) {
+func resourceRead(rndr *render.Render, rw http.ResponseWriter, status int, versionID string, lastModified interface{}, resource interface{}) {
 	if versionID != "" {
 		rw.Header().Add("Etag", fmt.Sprintf(`W/"%s"`, versionID))
 	}
-	rw.Header().Add("Last-Modified", lastModified.Format(http.TimeFormat))
+	var ts time.Time
+	switch t := lastModified.(type) {
+	case time.Time:
+		ts = t
+	case string:
+		parsedTS, err := time.Parse(time.RFC3339, t)
+		if err != nil {
+			ts = time.Now()
+		} else {
+			ts = parsedTS
+		}
+	}
+	rw.Header().Add("Last-Modified", ts.Format(http.TimeFormat))
 	rndr.JSON(rw, status, resource)
 }
 
@@ -110,4 +133,9 @@ func validateJSONResource(log *logging.Logger, rndr *render.Render, validator *m
 		outcome.Issue = issues
 		rndr.JSON(rw, http.StatusOK, outcome)
 	})
+}
+
+// generateResourceVersionID creates a version string for a resource based on an update nonce and the block number of the previous version
+func generateResourceVersionID(updateCount uint, previousBlockNumber uint) string {
+	return fmt.Sprintf("%d:%d", updateCount, previousBlockNumber)
 }

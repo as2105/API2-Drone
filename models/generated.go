@@ -115,7 +115,7 @@ type ExplanationOfBenefit struct {
 	SubType []*CodeableConcept `json:"subType,omitempty"`
 	// The date when the EOB was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Original prescription which has been superceded by this prescription to support the dispensing of pharmacy services, medications or products. For example, a physician may prescribe a medication which the pharmacy determines is contraindicated, or for which the patient has an intolerance, and therefor issues a new precription for an alternate medication which has the same theraputic intent. The prescription from the pharmacy becomes the 'prescription' and that from the physician becomes the 'original prescription'.
 	OriginalPrescription *Reference `json:"originalPrescription,omitempty"`
 	// The total cost of the services reported.
@@ -175,7 +175,7 @@ type ExplanationOfBenefit_Accident struct {
 	LocationReference *Reference `json:"locationReference,omitempty"`
 	// Date of an accident which these services are addressing.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Type of accident: work, auto, etc.
@@ -236,7 +236,7 @@ type ClinicalImpression struct {
 	ResourceType string `json:"resourceType,omitempty,omitempty"`
 	// Indicates when the documentation of the assessment was complete.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// The clinician performing the assessment.
 	Assessor *Reference `json:"assessor,omitempty"`
 	// Reference to a specific published clinical protocol that was followed during this assessment, and/or that provides evidence in support of the diagnosis.
@@ -257,7 +257,7 @@ type ClinicalImpression struct {
 	Subject *Reference `json:"subject,omitempty,omitempty"`
 	// The point in time or period over which the subject was assessed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EffectiveDateTime time.Time `json:"effectiveDateTime,omitempty"`
+	EffectiveDateTime *time.Time `json:"effectiveDateTime,omitempty"`
 	// Categorizes the type of clinical assessment performed.
 	Code *CodeableConcept `json:"code,omitempty"`
 	// The point in time or period over which the subject was assessed.
@@ -454,7 +454,7 @@ type MedicationRequest struct {
 	Category *CodeableConcept `json:"category,omitempty"`
 	// The date (and perhaps time) when the prescription was initially written or authored on.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoredOn time.Time `json:"authoredOn,omitempty"`
+	AuthoredOn *time.Time `json:"authoredOn,omitempty"`
 	// Condition or observation that supports why the medication was ordered.
 	ReasonReference []*Reference `json:"reasonReference,omitempty"`
 	// Extra information about the prescription that could not be conveyed by the other attributes.
@@ -531,7 +531,7 @@ type Substance_Instance struct {
 	Identifier *Identifier `json:"identifier,omitempty"`
 	// When the substance is no longer valid to use. For some substances, a single arbitrary date is used for expiry.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Expiry time.Time `json:"expiry,omitempty"`
+	Expiry *time.Time `json:"expiry,omitempty"`
 	// Extensions for expiry
 	ExpiryExt *Element `json:"_expiry,omitempty"`
 	// The amount of the substance.
@@ -780,7 +780,7 @@ type Claim_Information struct {
 	Category *CodeableConcept `json:"category,omitempty,omitempty"`
 	// The date when or period to which this information refers.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	TimingDate time.Time `json:"timingDate,omitempty"`
+	TimingDate *time.Time `json:"timingDate,omitempty"`
 	// The date when or period to which this information refers.
 	TimingPeriod *Period `json:"timingPeriod,omitempty"`
 	// Additional data or information such as resources, documents, images etc. including references to the data or the actual inclusion of the data.
@@ -865,7 +865,7 @@ type Timing struct {
 	// A code for the timing schedule. Some codes such as BID are ubiquitous, but many institutions define their own additional codes. If a code is provided, the code is understood to be a complete statement of whatever is specified in the structured timing data, and either the code or the data may be used to interpret the Timing, with the exception that .repeat.bounds still applies over the code (and is not contained in the code).
 	Code *CodeableConcept `json:"code,omitempty"`
 	// Identifies specific times when the event occurs.
-	Event []time.Time `json:"event,omitempty"`
+	Event []*time.Time `json:"event,omitempty"`
 	// Extensions for event
 	EventExt []*Element `json:"_event,omitempty"`
 }
@@ -934,12 +934,12 @@ type CommunicationRequest struct {
 	Payload []*CommunicationRequest_Payload `json:"payload,omitempty"`
 	// The time when this communication is to occur.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// The time when this communication is to occur.
 	OccurrencePeriod *Period `json:"occurrencePeriod,omitempty"`
 	// For draft requests, indicates the date of initial creation.  For requests with other statuses, indicates the date of activation.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoredOn time.Time `json:"authoredOn,omitempty"`
+	AuthoredOn *time.Time `json:"authoredOn,omitempty"`
 	// Extensions for authoredOn
 	AuthoredOnExt *Element `json:"_authoredOn,omitempty"`
 	// Indicates another resource whose existence justifies this request.
@@ -973,7 +973,7 @@ type AllergyIntolerance struct {
 	Code *CodeableConcept `json:"code,omitempty"`
 	// The date on which the existance of the AllergyIntolerance was first asserted or acknowledged.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AssertedDate time.Time `json:"assertedDate,omitempty"`
+	AssertedDate *time.Time `json:"assertedDate,omitempty"`
 	// Extensions for assertedDate
 	AssertedDateExt *Element `json:"_assertedDate,omitempty"`
 	// The source of the information about the allergy that is recorded.
@@ -1014,12 +1014,12 @@ type AllergyIntolerance struct {
 	VerificationStatusExt *Element `json:"_verificationStatus,omitempty"`
 	// Estimated or actual date,  date-time, or age when allergy or intolerance was identified.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OnsetDateTime time.Time `json:"onsetDateTime,omitempty"`
+	OnsetDateTime *time.Time `json:"onsetDateTime,omitempty"`
 	// Extensions for onsetString
 	OnsetStringExt *Element `json:"_onsetString,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	LastOccurrence time.Time `json:"lastOccurrence,omitempty"`
+	LastOccurrence *time.Time `json:"lastOccurrence,omitempty"`
 	// This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).
 	Identifier []*Identifier `json:"identifier,omitempty"`
 	// Estimate of the potential clinical harm, or seriousness, of the reaction to the identified substance.
@@ -1049,7 +1049,7 @@ type CapabilityStatement_Software struct {
 	VersionExt *Element `json:"_version,omitempty"`
 	// Date this version of the software was released.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ReleaseDate time.Time `json:"releaseDate,omitempty"`
+	ReleaseDate *time.Time `json:"releaseDate,omitempty"`
 	// Extensions for releaseDate
 	ReleaseDateExt *Element `json:"_releaseDate,omitempty"`
 }
@@ -1121,14 +1121,14 @@ type PaymentNotice struct {
 	Response *Reference `json:"response,omitempty"`
 	// The date when this resource was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Extensions for status
 	StatusExt *Element `json:"_status,omitempty"`
 	// Reference of resource for which payment is being made.
 	Request *Reference `json:"request,omitempty"`
 	// The date when the above payment action occurrred.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	StatusDate time.Time `json:"statusDate,omitempty"`
+	StatusDate *time.Time `json:"statusDate,omitempty"`
 	// The Insurer who is target  of the request.
 	Target *Reference `json:"target,omitempty"`
 	// This is a PaymentNotice resource
@@ -1174,7 +1174,7 @@ type ValueSet struct {
 	Experimental bool `json:"experimental,omitempty"`
 	// The date  (and optionally time) when the value set was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the value set changes. (e.g. the 'content logical definition').
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for purpose
 	PurposeExt *Element `json:"_purpose,omitempty"`
 	// Extensions for url
@@ -1242,7 +1242,7 @@ type AdverseEvent struct {
 	Category string `json:"category,omitempty"`
 	// The date (and perhaps time) when the adverse event occurred.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Extensions for category
@@ -1427,7 +1427,7 @@ type Claim_Item struct {
 	CareTeamLinkIDExt []*Element `json:"_careTeamLinkId,omitempty"`
 	// The date or dates when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ServicedDate time.Time `json:"servicedDate,omitempty"`
+	ServicedDate *time.Time `json:"servicedDate,omitempty"`
 	// A billed item may include goods or services provided in multiple encounters.
 	Encounter []*Reference `json:"encounter,omitempty"`
 	// Extensions for sequence
@@ -1651,7 +1651,7 @@ type TestReport struct {
 	Tester string `json:"tester,omitempty"`
 	// When the TestScript was executed and this TestReport was generated.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Issued time.Time `json:"issued,omitempty"`
+	Issued *time.Time `json:"issued,omitempty"`
 	// This is a TestReport resource
 	ResourceType string `json:"resourceType,omitempty,omitempty"`
 	// Extensions for result
@@ -1748,7 +1748,7 @@ type ConceptMap struct {
 	Identifier *Identifier `json:"identifier,omitempty"`
 	// The date  (and optionally time) when the concept map was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the concept map changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// The name of the individual or organization that published the concept map.
 	Publisher string `json:"publisher,omitempty"`
 	// Extensions for publisher
@@ -1802,7 +1802,7 @@ type EligibilityResponse struct {
 	DomainResource
 	// The date when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// The practitioner who is responsible for the services rendered to the patient.
 	RequestProvider *Reference `json:"requestProvider,omitempty"`
 	// A description of the status of the adjudication.
@@ -1899,7 +1899,7 @@ type FamilyMemberHistory struct {
 	NotDoneReason *CodeableConcept `json:"notDoneReason,omitempty"`
 	// The date (and possibly time) when the family member history was taken.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Administrative Gender - the gender that the relative is considered to have for administration and record keeping purposes.
 	Gender string `json:"gender,omitempty"`
 	// Deceased flag or the actual or approximate age of the relative at the time of death for the family member history record.
@@ -1916,12 +1916,12 @@ type FamilyMemberHistory struct {
 	AgeRange *Range `json:"ageRange,omitempty"`
 	// Deceased flag or the actual or approximate age of the relative at the time of death for the family member history record.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	DeceasedDate time.Time `json:"deceasedDate,omitempty"`
+	DeceasedDate *time.Time `json:"deceasedDate,omitempty"`
 	// The type of relationship this person has to the patient (father, mother, brother etc.).
 	Relationship *CodeableConcept `json:"relationship,omitempty,omitempty"`
 	// The actual or approximate date of birth of the relative.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	BornDate time.Time `json:"bornDate,omitempty"`
+	BornDate *time.Time `json:"bornDate,omitempty"`
 	// Deceased flag or the actual or approximate age of the relative at the time of death for the family member history record.
 	DeceasedBoolean bool `json:"deceasedBoolean,omitempty"`
 	// Extensions for gender
@@ -1977,7 +1977,7 @@ type Immunization struct {
 	Patient *Reference `json:"patient,omitempty,omitempty"`
 	// Date vaccine administered or was to be administered.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for expirationDate
 	ExpirationDateExt *Element `json:"_expirationDate,omitempty"`
 	// Reasons why a vaccine was or was not administered.
@@ -2013,7 +2013,7 @@ type Immunization struct {
 	Status string `json:"status,omitempty"`
 	// Date vaccine batch expires.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ExpirationDate time.Time `json:"expirationDate,omitempty"`
+	ExpirationDate *time.Time `json:"expirationDate,omitempty"`
 }
 
 func NewImmunization() *Immunization { return &Immunization{ResourceType: "Immunization"} }
@@ -2058,7 +2058,7 @@ type MedicationAdministration struct {
 	SupportingInformation []*Reference `json:"supportingInformation,omitempty"`
 	// A specific date/time or interval of time during which the administration took place (or did not take place, when the 'notGiven' attribute is true). For many administrations, such as swallowing a tablet the use of dateTime is more appropriate.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EffectiveDateTime time.Time `json:"effectiveDateTime,omitempty"`
+	EffectiveDateTime *time.Time `json:"effectiveDateTime,omitempty"`
 	// A specific date/time or interval of time during which the administration took place (or did not take place, when the 'notGiven' attribute is true). For many administrations, such as swallowing a tablet the use of dateTime is more appropriate.
 	EffectivePeriod *Period `json:"effectivePeriod,omitempty"`
 	// The device used in administering the medication to the patient.  For example, a particular infusion pump.
@@ -2249,7 +2249,7 @@ type Timing_Repeat struct {
 	// The units of time for the period in UCUM units.
 	PeriodUnit string `json:"periodUnit,omitempty"`
 	// Specified time of day for action to take place.
-	TimeOfDay []time.Time `json:"timeOfDay,omitempty"`
+	TimeOfDay []*time.Time `json:"timeOfDay,omitempty"`
 	// Real world events that the occurrence of the event should be tied to.
 	When []string `json:"when,omitempty"`
 	// Either a duration for the length of the timing schedule, a range of possible length, or outer bounds for start and/or end limits of the timing schedule.
@@ -2288,7 +2288,7 @@ type ActivityDefinition struct {
 	LastReviewDateExt *Element `json:"_lastReviewDate,omitempty"`
 	// The date  (and optionally time) when the activity definition was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the activity definition changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Detailed description of the type of activity; e.g. What lab test, what procedure, what kind of encounter.
 	Code *CodeableConcept `json:"code,omitempty"`
 	// Dynamic values that will be evaluated to produce values for elements of the resulting resource. For example, if the dosage of a medication must be computed based on the patient's weight, a dynamic value would be used to specify an expression that calculated the weight, and the path on the intent resource that would contain the result.
@@ -2332,7 +2332,7 @@ type ActivityDefinition struct {
 	RelatedArtifact []*RelatedArtifact `json:"relatedArtifact,omitempty"`
 	// The period, timing or frequency upon which the described activity is to occur.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	TimingDateTime time.Time `json:"timingDateTime,omitempty"`
+	TimingDateTime *time.Time `json:"timingDateTime,omitempty"`
 	// The period during which the activity definition content was or is planned to be in active use.
 	EffectivePeriod *Period `json:"effectivePeriod,omitempty"`
 	// Extensions for description
@@ -2341,7 +2341,7 @@ type ActivityDefinition struct {
 	PurposeExt *Element `json:"_purpose,omitempty"`
 	// The date on which the resource content was approved by the publisher. Approval happens once when the content is officially approved for usage.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ApprovalDate time.Time `json:"approvalDate,omitempty"`
+	ApprovalDate *time.Time `json:"approvalDate,omitempty"`
 	// A contributor to the content of the asset, including authors, editors, reviewers, and endorsers.
 	Contributor []*Contributor `json:"contributor,omitempty"`
 	// Identifies the food, drug or other product being consumed or supplied in the activity.
@@ -2360,7 +2360,7 @@ type ActivityDefinition struct {
 	URLExt *Element `json:"_url,omitempty"`
 	// The date on which the resource content was last reviewed. Review happens periodically after approval, but doesn't change the original approval date.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	LastReviewDate time.Time `json:"lastReviewDate,omitempty"`
+	LastReviewDate *time.Time `json:"lastReviewDate,omitempty"`
 	// Identifies the facility where the activity will occur; e.g. home, hospital, specific clinic, etc.
 	Location *Reference `json:"location,omitempty"`
 	// Identifies the quantity expected to be consumed at once (per dose, per meal, etc.).
@@ -2491,7 +2491,7 @@ type Practitioner struct {
 	Address []*Address `json:"address,omitempty"`
 	// The date of birth for the practitioner.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	BirthDate time.Time `json:"birthDate,omitempty"`
+	BirthDate *time.Time `json:"birthDate,omitempty"`
 	// Image of the person.
 	Photo []*Attachment `json:"photo,omitempty"`
 	// This is a Practitioner resource
@@ -2599,7 +2599,7 @@ type OperationDefinition struct {
 	Experimental bool `json:"experimental,omitempty"`
 	// The date  (and optionally time) when the operation definition was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the operation definition changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching for appropriate operation definition instances.
 	UseContext []*UsageContext `json:"useContext,omitempty"`
 	// Explaination of why this operation definition is needed and why it has been designed as it has.
@@ -2633,12 +2633,12 @@ type Questionnaire_Option struct {
 	ValueInteger int64 `json:"valueInteger,omitempty"`
 	// A potential answer that's allowed as the answer to this question.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ValueDate time.Time `json:"valueDate,omitempty"`
+	ValueDate *time.Time `json:"valueDate,omitempty"`
 	// Extensions for valueDate
 	ValueDateExt *Element `json:"_valueDate,omitempty"`
 	// A potential answer that's allowed as the answer to this question.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// A potential answer that's allowed as the answer to this question.
 	ValueString string `json:"valueString,omitempty"`
 }
@@ -2671,7 +2671,7 @@ type ValueSet_Expansion struct {
 	IdentifierExt *Element `json:"_identifier,omitempty"`
 	// The time at which the expansion was produced by the expanding system.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Timestamp time.Time `json:"timestamp,omitempty"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 	// Extensions for timestamp
 	TimestampExt *Element `json:"_timestamp,omitempty"`
 	// The total number of concepts in the expansion. If the number of concept nodes in this resource is less than the stated number, then the server can return more using the offset parameter.
@@ -2707,7 +2707,7 @@ type Contract struct {
 	Identifier *Identifier `json:"identifier,omitempty"`
 	// When this  Contract was issued.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Issued time.Time `json:"issued,omitempty"`
+	Issued *time.Time `json:"issued,omitempty"`
 	// The matter of concern in the context of this agreement.
 	Topic []*Reference `json:"topic,omitempty"`
 	// Type of Contract such as an insurance policy, real estate contract, a will, power of attorny, Privacy or Security policy , trust framework agreement, etc.
@@ -2811,7 +2811,7 @@ type ElementDefinition_Example struct {
 	ValueUsageContext *UsageContext `json:"valueUsageContext,omitempty"`
 	// The actual value for the element, which must be one of the types allowed for this element.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// Extensions for valueMarkdown
 	ValueMarkdownExt *Element `json:"_valueMarkdown,omitempty"`
 	// The actual value for the element, which must be one of the types allowed for this element.
@@ -2859,7 +2859,7 @@ type ElementDefinition_Example struct {
 	ValueMoney *Money `json:"valueMoney,omitempty"`
 	// The actual value for the element, which must be one of the types allowed for this element.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// Extensions for valueInstant
 	ValueInstantExt *Element `json:"_valueInstant,omitempty"`
 	// Extensions for valueUri
@@ -2894,7 +2894,7 @@ type ElementDefinition_Example struct {
 	ValueInstant string `json:"valueInstant,omitempty"`
 	// The actual value for the element, which must be one of the types allowed for this element.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ValueDate time.Time `json:"valueDate,omitempty"`
+	ValueDate *time.Time `json:"valueDate,omitempty"`
 	// The actual value for the element, which must be one of the types allowed for this element.
 	// pattern [A-Za-z0-9\-\.]{1,64}
 	ValueID string `json:"valueId,omitempty"`
@@ -3006,7 +3006,7 @@ type RelatedPerson struct {
 	ActiveExt *Element `json:"_active,omitempty"`
 	// The date on which the related person was born.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	BirthDate time.Time `json:"birthDate,omitempty"`
+	BirthDate *time.Time `json:"birthDate,omitempty"`
 	// Address where the related person can be contacted or visited.
 	Address []*Address `json:"address,omitempty"`
 }
@@ -3103,12 +3103,12 @@ type PractitionerRole_AvailableTime struct {
 	AllDayExt *Element `json:"_allDay,omitempty"`
 	// The opening time of day. Note: If the AllDay flag is set, then this time is ignored.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	AvailableStartTime time.Time `json:"availableStartTime,omitempty"`
+	AvailableStartTime *time.Time `json:"availableStartTime,omitempty"`
 	// Extensions for availableStartTime
 	AvailableStartTimeExt *Element `json:"_availableStartTime,omitempty"`
 	// The closing time of day. Note: If the AllDay flag is set, then this time is ignored.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	AvailableEndTime time.Time `json:"availableEndTime,omitempty"`
+	AvailableEndTime *time.Time `json:"availableEndTime,omitempty"`
 	// Extensions for availableEndTime
 	AvailableEndTimeExt *Element `json:"_availableEndTime,omitempty"`
 	// Indicates which days of the week are available between the start and end Times.
@@ -3184,7 +3184,7 @@ type Medication_Batch struct {
 	BackboneElement
 	// When this specific batch of product will expire.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ExpirationDate time.Time `json:"expirationDate,omitempty"`
+	ExpirationDate *time.Time `json:"expirationDate,omitempty"`
 	// Extensions for expirationDate
 	ExpirationDateExt *Element `json:"_expirationDate,omitempty"`
 	// The assigned lot number of a batch of the specified product.
@@ -3224,12 +3224,12 @@ type HealthcareService_AvailableTime struct {
 	AllDayExt *Element `json:"_allDay,omitempty"`
 	// The opening time of day. Note: If the AllDay flag is set, then this time is ignored.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	AvailableStartTime time.Time `json:"availableStartTime,omitempty"`
+	AvailableStartTime *time.Time `json:"availableStartTime,omitempty"`
 	// Extensions for availableStartTime
 	AvailableStartTimeExt *Element `json:"_availableStartTime,omitempty"`
 	// The closing time of day. Note: If the AllDay flag is set, then this time is ignored.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	AvailableEndTime time.Time `json:"availableEndTime,omitempty"`
+	AvailableEndTime *time.Time `json:"availableEndTime,omitempty"`
 	// Extensions for availableEndTime
 	AvailableEndTimeExt *Element `json:"_availableEndTime,omitempty"`
 	// Indicates which days of the week are available between the start and end Times.
@@ -3320,7 +3320,7 @@ type Device struct {
 	LotNumberExt *Element `json:"_lotNumber,omitempty"`
 	// The date and time when the device was manufactured.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ManufactureDate time.Time `json:"manufactureDate,omitempty"`
+	ManufactureDate *time.Time `json:"manufactureDate,omitempty"`
 	// Extensions for manufactureDate
 	ManufactureDateExt *Element `json:"_manufactureDate,omitempty"`
 	// Extensions for expirationDate
@@ -3335,7 +3335,7 @@ type Device struct {
 	Udi *Device_Udi `json:"udi,omitempty"`
 	// The date and time beyond which this device is no longer valid or should not be used (if applicable).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ExpirationDate time.Time `json:"expirationDate,omitempty"`
+	ExpirationDate *time.Time `json:"expirationDate,omitempty"`
 	// The "model" is an identifier assigned by the manufacturer to identify the product by its type. This number is shared by the all devices sold as the same type.
 	Model string `json:"model,omitempty"`
 	// Extensions for version
@@ -3460,7 +3460,7 @@ type ProcessResponse struct {
 	Status string `json:"status,omitempty"`
 	// The date when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// The organization which is responsible for the services rendered to the patient.
 	RequestOrganization *Reference `json:"requestOrganization,omitempty"`
 	// Extensions for status
@@ -3597,7 +3597,7 @@ type Consent struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// When this  Consent was issued / created / indexed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	DateTime time.Time `json:"dateTime,omitempty"`
+	DateTime *time.Time `json:"dateTime,omitempty"`
 	// A referece to the specific computable policy.
 	PolicyRule string `json:"policyRule,omitempty"`
 }
@@ -3629,7 +3629,7 @@ type List struct {
 	Encounter *Reference `json:"encounter,omitempty"`
 	// The date that the list was prepared.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// How this list was prepared - whether it is a working list that is suitable for being maintained on an ongoing basis, or if it represents a snapshot of a list of items from another source, or whether it is a prepared list where items may be marked as added, modified or deleted.
 	Mode string `json:"mode,omitempty"`
 	// Extensions for mode
@@ -3671,7 +3671,7 @@ type DetectedIssue_Mitigation struct {
 	Action *CodeableConcept `json:"action,omitempty,omitempty"`
 	// Indicates when the mitigating action was documented.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Identifies the practitioner who determined the mitigation and takes responsibility for the mitigation step occurring.
@@ -3693,7 +3693,7 @@ type GraphDefinition struct {
 	ExperimentalExt *Element `json:"_experimental,omitempty"`
 	// The date  (and optionally time) when the graph definition was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the graph definition changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// A free text natural language description of the graph definition from a consumer's perspective.
 	Description string `json:"description,omitempty"`
 	// Extensions for description
@@ -3754,7 +3754,7 @@ type NutritionOrder struct {
 	Encounter *Reference `json:"encounter,omitempty"`
 	// The date and time that this nutrition order was requested.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	DateTime time.Time `json:"dateTime,omitempty"`
+	DateTime *time.Time `json:"dateTime,omitempty"`
 	// Oral nutritional products given in order to add further nutritional value to the patient's diet.
 	Supplement []*NutritionOrder_Supplement `json:"supplement,omitempty"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
@@ -3809,7 +3809,7 @@ type CompartmentDefinition struct {
 	CodeExt *Element `json:"_code,omitempty"`
 	// The date  (and optionally time) when the compartment definition was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the compartment definition changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for purpose
 	PurposeExt *Element `json:"_purpose,omitempty"`
 	// An absolute URI that is used to identify this compartment definition when it is referenced in a specification, model, design or an instance. This SHALL be a URL, SHOULD be globally unique, and SHOULD be an address at which this compartment definition is (or will be) published. The URL SHOULD include the major version of the compartment definition. For more information see [Technical and Business Versions](resource.html#versions).
@@ -3878,7 +3878,7 @@ type ExplanationOfBenefit_Item struct {
 	InformationLinkIDExt []*Element `json:"_informationLinkId,omitempty"`
 	// The date or dates when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ServicedDate time.Time `json:"servicedDate,omitempty"`
+	ServicedDate *time.Time `json:"servicedDate,omitempty"`
 	// Extensions for sequence
 	SequenceExt *Element `json:"_sequence,omitempty"`
 	// Extensions for diagnosisLinkId
@@ -4045,7 +4045,7 @@ type CapabilityStatement struct {
 	Experimental bool `json:"experimental,omitempty"`
 	// The date  (and optionally time) when the capability statement was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the capability statement changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Contact details to assist a user in finding and communicating with the publisher.
 	Contact []*ContactDetail `json:"contact,omitempty"`
 	// A list of profiles that represent different use cases supported by the system. For a server, "supported by the system" means the system hosts/produces a set of resources that are conformant to a particular profile, and allows clients that use its services to search using this profile and to find appropriate data. For a client, it means the system will search by this profile and process data according to the guidance implicit in the profile. See further discussion in [Using Profiles](profiling.html#profile-uses).
@@ -4152,7 +4152,7 @@ type ImagingManifest struct {
 	Patient *Reference `json:"patient,omitempty,omitempty"`
 	// Date and time when the selection of the referenced instances were made. It is (typically) different from the creation date of the selection resource, and from dates associated with the referenced instances (e.g. capture time of the referenced image).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoringTime time.Time `json:"authoringTime,omitempty"`
+	AuthoringTime *time.Time `json:"authoringTime,omitempty"`
 	// Extensions for authoringTime
 	AuthoringTimeExt *Element `json:"_authoringTime,omitempty"`
 	// Author of ImagingManifest. It can be a human author or a device which made the decision of the SOP instances selected. For example, a radiologist selected a set of imaging SOP instances to attach in a diagnostic report, and a CAD application may author a selection to describe SOP instances it used to generate a detection conclusion.
@@ -4198,7 +4198,7 @@ type Basic struct {
 	Subject *Reference `json:"subject,omitempty"`
 	// Identifies when the resource was first created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Extensions for created
 	CreatedExt *Element `json:"_created,omitempty"`
 	// Indicates who was responsible for creating the resource instance.
@@ -4284,7 +4284,7 @@ type QuestionnaireResponse_Answer struct {
 	ValueIntegerExt *Element `json:"_valueInteger,omitempty"`
 	// The answer (or one of the answers) provided by the respondent to the question.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// Extensions for valueDateTime
 	ValueDateTimeExt *Element `json:"_valueDateTime,omitempty"`
 	// The answer (or one of the answers) provided by the respondent to the question.
@@ -4298,7 +4298,7 @@ type QuestionnaireResponse_Answer struct {
 	ValueURI string `json:"valueUri,omitempty"`
 	// The answer (or one of the answers) provided by the respondent to the question.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// Extensions for valueString
 	ValueStringExt *Element `json:"_valueString,omitempty"`
 	// Extensions for valueUri
@@ -4314,7 +4314,7 @@ type QuestionnaireResponse_Answer struct {
 	ValueInteger int64 `json:"valueInteger,omitempty"`
 	// The answer (or one of the answers) provided by the respondent to the question.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ValueDate time.Time `json:"valueDate,omitempty"`
+	ValueDate *time.Time `json:"valueDate,omitempty"`
 }
 
 // Sequence_Quality is Raw data describing a biological sequence.
@@ -4445,7 +4445,7 @@ type Claim_Procedure struct {
 	SequenceExt *Element `json:"_sequence,omitempty"`
 	// Date and optionally time the procedure was performed .
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 }
@@ -4477,7 +4477,7 @@ type CodeSystem_Property1 struct {
 	ValueBoolean bool `json:"valueBoolean,omitempty"`
 	// The value of this property.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// Extensions for valueDateTime
 	ValueDateTimeExt *Element `json:"_valueDateTime,omitempty"`
 	// A code that is a reference to CodeSystem.property.code.
@@ -4544,7 +4544,7 @@ type Patient struct {
 	ResourceType string `json:"resourceType,omitempty,omitempty"`
 	// The date of birth for the individual.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	BirthDate time.Time `json:"birthDate,omitempty"`
+	BirthDate *time.Time `json:"birthDate,omitempty"`
 	// Indicates if the individual is deceased or not.
 	DeceasedBoolean bool `json:"deceasedBoolean,omitempty"`
 	// Indicates whether the patient is part of a multiple (bool) or indicates the actual birth order (integer).
@@ -4563,7 +4563,7 @@ type Patient struct {
 	BirthDateExt *Element `json:"_birthDate,omitempty"`
 	// Indicates if the individual is deceased or not.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	DeceasedDateTime time.Time `json:"deceasedDateTime,omitempty"`
+	DeceasedDateTime *time.Time `json:"deceasedDateTime,omitempty"`
 }
 
 func NewPatient() *Patient { return &Patient{ResourceType: "Patient"} }
@@ -4577,7 +4577,7 @@ type PaymentReconciliation_Detail struct {
 	Payee *Reference `json:"payee,omitempty"`
 	// The date of the invoice or financial resource.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Amount paid for this detail.
@@ -4630,7 +4630,7 @@ type DetectedIssue struct {
 	Patient *Reference `json:"patient,omitempty"`
 	// The date or date-time when the detected issue was initially identified.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// A textual explanation of the detected issue.
@@ -4778,12 +4778,12 @@ type Period struct {
 	Element
 	// The start of the period. The boundary is inclusive.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Start time.Time `json:"start,omitempty"`
+	Start *time.Time `json:"start,omitempty"`
 	// Extensions for start
 	StartExt *Element `json:"_start,omitempty"`
 	// The end of the period. If the end of the period is missing, it means that the period is ongoing. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	End time.Time `json:"end,omitempty"`
+	End *time.Time `json:"end,omitempty"`
 	// Extensions for end
 	EndExt *Element `json:"_end,omitempty"`
 }
@@ -4908,7 +4908,7 @@ type ImagingStudy struct {
 	Identifier []*Identifier `json:"identifier,omitempty"`
 	// Date and time the study started.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Started time.Time `json:"started,omitempty"`
+	Started *time.Time `json:"started,omitempty"`
 	// The code for the performed procedure type.
 	ProcedureCode []*CodeableConcept `json:"procedureCode,omitempty"`
 }
@@ -4943,7 +4943,7 @@ type Task_Output struct {
 	ValueUUIDExt *Element `json:"_valueUuid,omitempty"`
 	// The value of the Output parameter as a basic type.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// Extensions for valueBoolean
 	ValueBooleanExt *Element `json:"_valueBoolean,omitempty"`
 	// The value of the Output parameter as a basic type.
@@ -5015,7 +5015,7 @@ type Task_Output struct {
 	ValueDateTimeExt *Element `json:"_valueDateTime,omitempty"`
 	// The value of the Output parameter as a basic type.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// The value of the Output parameter as a basic type.
 	// pattern [^\s]+([\s]?[^\s]+)*
 	ValueCode string `json:"valueCode,omitempty"`
@@ -5075,7 +5075,7 @@ type Task_Output struct {
 	ValueCodeableConcept *CodeableConcept `json:"valueCodeableConcept,omitempty"`
 	// The value of the Output parameter as a basic type.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ValueDate time.Time `json:"valueDate,omitempty"`
+	ValueDate *time.Time `json:"valueDate,omitempty"`
 	// Extensions for valueId
 	ValueIDExt *Element `json:"_valueId,omitempty"`
 	// The value of the Output parameter as a basic type.
@@ -5105,7 +5105,7 @@ type Annotation struct {
 	AuthorStringExt *Element `json:"_authorString,omitempty"`
 	// Indicates when this particular annotation was made.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Time time.Time `json:"time,omitempty"`
+	Time *time.Time `json:"time,omitempty"`
 }
 
 // Bundle_Search is A container for a collection of resources.
@@ -5171,7 +5171,7 @@ type EnrollmentRequest struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// The date when this resource was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// The status of the resource instance.
 	// pattern [^\s]+([\s]?[^\s]+)*
 	Status string `json:"status,omitempty"`
@@ -5284,10 +5284,10 @@ type Questionnaire_Item struct {
 	InitialInteger int64 `json:"initialInteger,omitempty"`
 	// The value that should be defaulted when initially rendering the questionnaire for user input.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	InitialDate time.Time `json:"initialDate,omitempty"`
+	InitialDate *time.Time `json:"initialDate,omitempty"`
 	// The value that should be defaulted when initially rendering the questionnaire for user input.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	InitialDateTime time.Time `json:"initialDateTime,omitempty"`
+	InitialDateTime *time.Time `json:"initialDateTime,omitempty"`
 	// Extensions for initialTime
 	InitialTimeExt *Element `json:"_initialTime,omitempty"`
 	// A reference to an [[[ElementDefinition]]] that provides the details for the item. If a definition is provided, then the following element values can be inferred from the definition:
@@ -5315,7 +5315,7 @@ type Questionnaire_Item struct {
 	EnableWhen []*Questionnaire_EnableWhen `json:"enableWhen,omitempty"`
 	// The value that should be defaulted when initially rendering the questionnaire for user input.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	InitialTime time.Time `json:"initialTime,omitempty"`
+	InitialTime *time.Time `json:"initialTime,omitempty"`
 	// Extensions for initialUri
 	InitialURIExt *Element `json:"_initialUri,omitempty"`
 	// The value that should be defaulted when initially rendering the questionnaire for user input.
@@ -5331,7 +5331,7 @@ type Specimen_Collection struct {
 	BackboneElement
 	// Time when specimen was collected from subject - the physiologically relevant time.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	CollectedDateTime time.Time `json:"collectedDateTime,omitempty"`
+	CollectedDateTime *time.Time `json:"collectedDateTime,omitempty"`
 	// Extensions for collectedDateTime
 	CollectedDateTimeExt *Element `json:"_collectedDateTime,omitempty"`
 	// Time when specimen was collected from subject - the physiologically relevant time.
@@ -5369,7 +5369,7 @@ type Questionnaire_EnableWhen struct {
 	AnswerIntegerExt *Element `json:"_answerInteger,omitempty"`
 	// An answer that the referenced question must match in order for the item to be enabled.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	AnswerDate time.Time `json:"answerDate,omitempty"`
+	AnswerDate *time.Time `json:"answerDate,omitempty"`
 	// An answer that the referenced question must match in order for the item to be enabled.
 	AnswerCoding *Coding `json:"answerCoding,omitempty"`
 	// The linkID for the question whose answer (or lack of answer) governs whether this item is enabled.
@@ -5380,7 +5380,7 @@ type Questionnaire_EnableWhen struct {
 	AnswerBooleanExt *Element `json:"_answerBoolean,omitempty"`
 	// An answer that the referenced question must match in order for the item to be enabled.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	AnswerTime time.Time `json:"answerTime,omitempty"`
+	AnswerTime *time.Time `json:"answerTime,omitempty"`
 	// An answer that the referenced question must match in order for the item to be enabled.
 	AnswerString string `json:"answerString,omitempty"`
 	// An answer that the referenced question must match in order for the item to be enabled.
@@ -5389,7 +5389,7 @@ type Questionnaire_EnableWhen struct {
 	HasAnswer bool `json:"hasAnswer,omitempty"`
 	// An answer that the referenced question must match in order for the item to be enabled.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AnswerDateTime time.Time `json:"answerDateTime,omitempty"`
+	AnswerDateTime *time.Time `json:"answerDateTime,omitempty"`
 	// Extensions for answerTime
 	AnswerTimeExt *Element `json:"_answerTime,omitempty"`
 	// An answer that the referenced question must match in order for the item to be enabled.
@@ -5492,7 +5492,7 @@ type CodeSystem struct {
 	ContentExt *Element `json:"_content,omitempty"`
 	// The date  (and optionally time) when the code system was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the code system changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for description
 	DescriptionExt *Element `json:"_description,omitempty"`
 	// Explaination of why this code system is needed and why it has been designed as it has.
@@ -5564,7 +5564,7 @@ type EligibilityRequest struct {
 	Priority *CodeableConcept `json:"priority,omitempty"`
 	// The date when this resource was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Extensions for created
 	CreatedExt *Element `json:"_created,omitempty"`
 	// Dental, Vision, Medical, Pharmacy, Rehab etc.
@@ -5596,7 +5596,7 @@ type EligibilityRequest struct {
 	Status string `json:"status,omitempty"`
 	// The date or dates when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ServicedDate time.Time `json:"servicedDate,omitempty"`
+	ServicedDate *time.Time `json:"servicedDate,omitempty"`
 	// The organization which is responsible for the services rendered to the patient.
 	Organization *Reference `json:"organization,omitempty"`
 	// The Insurer who is target  of the request.
@@ -5776,7 +5776,7 @@ type Specimen_Processing struct {
 	Additive []*Reference `json:"additive,omitempty"`
 	// A record of the time or period when the specimen processing occurred.  For example the time of sample fixation or the period of time the sample was in formalin.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	TimeDateTime time.Time `json:"timeDateTime,omitempty"`
+	TimeDateTime *time.Time `json:"timeDateTime,omitempty"`
 }
 
 // Encounter_StatusHistory is An interaction between a patient and healthcare provider(s) for the purpose of providing healthcare service(s) or assessing the health status of a patient.
@@ -5835,7 +5835,7 @@ type TriggerDefinition struct {
 	EventNameExt *Element `json:"_eventName,omitempty"`
 	// The timing of the event (if this is a period trigger).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	EventTimingDate time.Time `json:"eventTimingDate,omitempty"`
+	EventTimingDate *time.Time `json:"eventTimingDate,omitempty"`
 	// Extensions for eventTimingDateTime
 	EventTimingDateTimeExt *Element `json:"_eventTimingDateTime,omitempty"`
 	// The triggering data of the event (if this is a data trigger).
@@ -5852,7 +5852,7 @@ type TriggerDefinition struct {
 	EventTimingDateExt *Element `json:"_eventTimingDate,omitempty"`
 	// The timing of the event (if this is a period trigger).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EventTimingDateTime time.Time `json:"eventTimingDateTime,omitempty"`
+	EventTimingDateTime *time.Time `json:"eventTimingDateTime,omitempty"`
 	// Extensions for type
 	TypeExt *Element `json:"_type,omitempty"`
 }
@@ -5997,7 +5997,7 @@ type Contract_ValuedItem struct {
 	EntityReference *Reference `json:"entityReference,omitempty"`
 	// Indicates the time during which this Contract ValuedItem information is effective.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EffectiveTime time.Time `json:"effectiveTime,omitempty"`
+	EffectiveTime *time.Time `json:"effectiveTime,omitempty"`
 	// A real number that represents a multiplier used in determining the overall value of the Contract Valued Item delivered. The concept of a Factor allows for a discount or surcharge multiplier to be applied to a monetary amount.
 	// pattern -?([0]|([1-9][0-9]*))(\.[0-9]+)?
 	Factor float64 `json:"factor,omitempty"`
@@ -6041,7 +6041,7 @@ type Communication struct {
 	Recipient []*Reference `json:"recipient,omitempty"`
 	// The time when this communication arrived at the destination.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Received time.Time `json:"received,omitempty"`
+	Received *time.Time `json:"received,omitempty"`
 	// Extensions for received
 	ReceivedExt *Element `json:"_received,omitempty"`
 	// Extensions for sent
@@ -6069,7 +6069,7 @@ type Communication struct {
 	Topic []*Reference `json:"topic,omitempty"`
 	// The time when this communication was sent.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Sent time.Time `json:"sent,omitempty"`
+	Sent *time.Time `json:"sent,omitempty"`
 	// The entity (e.g. person, organization, clinical information system, or device) which was the source of the communication.
 	Sender *Reference `json:"sender,omitempty"`
 	// Additional notes or commentary about the communication by the sender, receiver or other interested parties.
@@ -6239,7 +6239,7 @@ type RequestGroup_Action struct {
 	RelatedAction []*RequestGroup_RelatedAction `json:"relatedAction,omitempty"`
 	// An optional value describing when the action should be performed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	TimingDateTime time.Time `json:"timingDateTime,omitempty"`
+	TimingDateTime *time.Time `json:"timingDateTime,omitempty"`
 	// Defines the selection behavior for the action and its children.
 	// pattern [^\s]+([\s]?[^\s]+)*
 	SelectionBehavior string `json:"selectionBehavior,omitempty"`
@@ -6535,7 +6535,7 @@ type SupplyRequest struct {
 	Priority string `json:"priority,omitempty"`
 	// When the request should be fulfilled.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// When the request should be fulfilled.
 	OccurrencePeriod *Period `json:"occurrencePeriod,omitempty"`
 	// The individual who initiated the request and has responsibility for its activation.
@@ -6546,7 +6546,7 @@ type SupplyRequest struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// When the request was made.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoredOn time.Time `json:"authoredOn,omitempty"`
+	AuthoredOn *time.Time `json:"authoredOn,omitempty"`
 	// Why the supply item was requested.
 	ReasonCodeableConcept *CodeableConcept `json:"reasonCodeableConcept,omitempty"`
 	// Why the supply item was requested.
@@ -6729,7 +6729,7 @@ type SearchParameter struct {
 	XpathUsage string `json:"xpathUsage,omitempty"`
 	// The date  (and optionally time) when the search parameter was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the search parameter changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Types of resource (if a resource is referenced).
@@ -6810,7 +6810,7 @@ type Specimen struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// Time when specimen was received for processing or testing.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ReceivedTime time.Time `json:"receivedTime,omitempty"`
+	ReceivedTime *time.Time `json:"receivedTime,omitempty"`
 }
 
 func NewSpecimen() *Specimen { return &Specimen{ResourceType: "Specimen"} }
@@ -6897,7 +6897,7 @@ type QuestionnaireResponse struct {
 	Identifier *Identifier `json:"identifier,omitempty"`
 	// The date and/or time that this set of answers were last changed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Authored time.Time `json:"authored,omitempty"`
+	Authored *time.Time `json:"authored,omitempty"`
 	// The Questionnaire that defines and organizes the questions for which answers are being provided.
 	Questionnaire *Reference `json:"questionnaire,omitempty"`
 	// A group or question item from the original questionnaire for which answers are provided.
@@ -7067,7 +7067,7 @@ type DeviceUseStatement struct {
 	TimingPeriod *Period `json:"timingPeriod,omitempty"`
 	// The time at which the statement was made/recorded.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	RecordedOn time.Time `json:"recordedOn,omitempty"`
+	RecordedOn *time.Time `json:"recordedOn,omitempty"`
 	// Extensions for recordedOn
 	RecordedOnExt *Element `json:"_recordedOn,omitempty"`
 	// Who reported the device was being used by the patient.
@@ -7078,7 +7078,7 @@ type DeviceUseStatement struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// How often the device was used.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	TimingDateTime time.Time `json:"timingDateTime,omitempty"`
+	TimingDateTime *time.Time `json:"timingDateTime,omitempty"`
 	// Reason or justification for the use of the device.
 	Indication []*CodeableConcept `json:"indication,omitempty"`
 	// This is a DeviceUseStatement resource
@@ -7201,10 +7201,10 @@ type Parameters_Parameter struct {
 	Resource interface{} `json:"resource,omitempty"`
 	// If the parameter is a data type.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// If the parameter is a data type.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// If the parameter is a data type.
 	ValueDuration *Duration `json:"valueDuration,omitempty"`
 	// If the parameter is a data type.
@@ -7284,7 +7284,7 @@ type Parameters_Parameter struct {
 	ValueAddress *Address `json:"valueAddress,omitempty"`
 	// If the parameter is a data type.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ValueDate time.Time `json:"valueDate,omitempty"`
+	ValueDate *time.Time `json:"valueDate,omitempty"`
 	// If the parameter is a data type.
 	ValueMoney *Money `json:"valueMoney,omitempty"`
 }
@@ -7340,7 +7340,7 @@ type ImmunizationRecommendation_Recommendation struct {
 	SupportingPatientInformation []*Reference `json:"supportingPatientInformation,omitempty"`
 	// The date the immunization recommendation was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Vaccine that pertains to the recommendation.
@@ -7401,7 +7401,7 @@ type DiagnosticReport struct {
 	PresentedForm []*Attachment `json:"presentedForm,omitempty"`
 	// The time or time-period the observed values are related to. When the subject of the report is a patient, this is usually either the time of the procedure or of specimen collection(s), but very often the source of the date/time is not known, only the date/time itself.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EffectiveDateTime time.Time `json:"effectiveDateTime,omitempty"`
+	EffectiveDateTime *time.Time `json:"effectiveDateTime,omitempty"`
 	// The time or time-period the observed values are related to. When the subject of the report is a patient, this is usually either the time of the procedure or of specimen collection(s), but very often the source of the date/time is not known, only the date/time itself.
 	EffectivePeriod *Period `json:"effectivePeriod,omitempty"`
 	// Extensions for conclusion
@@ -7495,7 +7495,7 @@ type Attachment struct {
 	HashExt *Element `json:"_hash,omitempty"`
 	// The date that the attachment was first created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Creation time.Time `json:"creation,omitempty"`
+	Creation *time.Time `json:"creation,omitempty"`
 }
 
 // CodeSystem_Filter is A code system resource specifies a set of codes drawn from one or more code systems.
@@ -7587,7 +7587,7 @@ type Task struct {
 	PriorityExt *Element `json:"_priority,omitempty"`
 	// The date and time of last modification to this task.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	LastModified time.Time `json:"lastModified,omitempty"`
+	LastModified *time.Time `json:"lastModified,omitempty"`
 	// Extensions for lastModified
 	LastModifiedExt *Element `json:"_lastModified,omitempty"`
 	// Individual organization or Device currently responsible for task execution.
@@ -7640,7 +7640,7 @@ type Task struct {
 	Priority string `json:"priority,omitempty"`
 	// The date and time this task was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoredOn time.Time `json:"authoredOn,omitempty"`
+	AuthoredOn *time.Time `json:"authoredOn,omitempty"`
 	// This is a Task resource
 	ResourceType string `json:"resourceType,omitempty,omitempty"`
 	// The business identifier for this task.
@@ -7863,7 +7863,7 @@ type MessageDefinition struct {
 	Identifier *Identifier `json:"identifier,omitempty"`
 	// The date  (and optionally time) when the message definition was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the message definition changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// A copyright statement relating to the message definition and/or its contents. Copyright statements are generally legal restrictions on the use and publishing of the message definition.
 	Copyright string `json:"copyright,omitempty"`
 	// The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching for appropriate message definition instances.
@@ -8214,7 +8214,7 @@ type Claim struct {
 	Type *CodeableConcept `json:"type,omitempty"`
 	// The date when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// The Insurer who is target of the request.
 	Insurer *Reference `json:"insurer,omitempty"`
 	// The provider which is responsible for the bill, claim pre-determination, pre-authorization.
@@ -8285,7 +8285,7 @@ type ExplanationOfBenefit_Payment struct {
 	AdjustmentReason *CodeableConcept `json:"adjustmentReason,omitempty"`
 	// Estimated payment date.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Payable less any payment adjustment.
@@ -8355,7 +8355,7 @@ type ReferralRequest struct {
 	Recipient []*Reference `json:"recipient,omitempty"`
 	// The period of time within which the services identified in the referral/transfer of care is specified or required to occur.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// Any additional (administrative, financial or clinical) information required to support request for referral or transfer of care.  For example: Presenting problems/chief complaints Medical History Family History Alerts Allergy/Intolerance and Adverse Reactions Medications Observations/Assessments (may include cognitive and fundtional assessments) Diagnostic Reports Care Plan.
 	SupportingInfo []*Reference `json:"supportingInfo,omitempty"`
 	// Business identifier that uniquely identifies the referral/care transfer request instance.
@@ -8404,7 +8404,7 @@ type ReferralRequest struct {
 	OccurrencePeriod *Period `json:"occurrencePeriod,omitempty"`
 	// Date/DateTime of creation for draft requests and date of activation for active requests.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoredOn time.Time `json:"authoredOn,omitempty"`
+	AuthoredOn *time.Time `json:"authoredOn,omitempty"`
 	// Extensions for description
 	DescriptionExt *Element `json:"_description,omitempty"`
 }
@@ -8451,7 +8451,7 @@ type RequestGroup struct {
 	IntentExt *Element `json:"_intent,omitempty"`
 	// Indicates when the request group was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoredOn time.Time `json:"authoredOn,omitempty"`
+	AuthoredOn *time.Time `json:"authoredOn,omitempty"`
 	// This is a RequestGroup resource
 	ResourceType string `json:"resourceType,omitempty,omitempty"`
 	// Extensions for status
@@ -8534,7 +8534,7 @@ type Claim_Accident struct {
 	LocationReference *Reference `json:"locationReference,omitempty"`
 	// Date of an accident which these services are addressing.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 }
 
 // Condition_Stage is A clinical condition, problem, diagnosis, or other event, situation, issue, or clinical concept that has risen to a level of concern.
@@ -8595,7 +8595,7 @@ type DocumentReference struct {
 	Type *CodeableConcept `json:"type,omitempty,omitempty"`
 	// When the document was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Extensions for created
 	CreatedExt *Element `json:"_created,omitempty"`
 	// When the document reference was created.
@@ -8663,7 +8663,7 @@ type Immunization_Reaction struct {
 	BackboneElement
 	// Date of reaction to the immunization.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Details of the reaction.
@@ -8702,7 +8702,7 @@ type ProcessRequest struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// The date when this resource was created.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Extensions for nullify
 	NullifyExt *Element `json:"_nullify,omitempty"`
 	// Extensions for include
@@ -8871,14 +8871,14 @@ type MedicationDispense struct {
 	EventHistory []*Reference `json:"eventHistory,omitempty"`
 	// The time when the dispensed product was packaged and reviewed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	WhenPrepared time.Time `json:"whenPrepared,omitempty"`
+	WhenPrepared *time.Time `json:"whenPrepared,omitempty"`
 	// Extensions for whenHandedOver
 	WhenHandedOverExt *Element `json:"_whenHandedOver,omitempty"`
 	// Indicates an actual or potential clinical issue with or between one or more active or proposed clinical actions for a patient; e.g. Drug-drug interaction, duplicate therapy, dosage alert etc.
 	DetectedIssue []*Reference `json:"detectedIssue,omitempty"`
 	// The time the dispensed product was provided to the patient or their representative.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	WhenHandedOver time.Time `json:"whenHandedOver,omitempty"`
+	WhenHandedOver *time.Time `json:"whenHandedOver,omitempty"`
 	// Indicates how the medication is to be used by the patient.
 	DosageInstruction []*Dosage `json:"dosageInstruction,omitempty"`
 	// True if the dispense was not performed for some reason.
@@ -8956,7 +8956,7 @@ type Extension struct {
 	URLExt *Element `json:"_url,omitempty"`
 	// Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// Extensions for valueString
 	ValueStringExt *Element `json:"_valueString,omitempty"`
 	// Extensions for valueUri
@@ -9007,7 +9007,7 @@ type Extension struct {
 	ValueAddress *Address `json:"valueAddress,omitempty"`
 	// Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).
 	ValueRatio *Ratio `json:"valueRatio,omitempty"`
 	// Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).
@@ -9036,7 +9036,7 @@ type Extension struct {
 	ValueParameterDefinition *ParameterDefinition `json:"valueParameterDefinition,omitempty"`
 	// Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ValueDate time.Time `json:"valueDate,omitempty"`
+	ValueDate *time.Time `json:"valueDate,omitempty"`
 	// Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).
 	ValueQuantity *Quantity `json:"valueQuantity,omitempty"`
 	// Value of extension - may be a resource or one of a constrained set of the data types (see Extensibility in the spec for list).
@@ -9140,7 +9140,7 @@ type AllergyIntolerance_Reaction struct {
 	DescriptionExt *Element `json:"_description,omitempty"`
 	// Record of the date and/or time of the onset of the Reaction.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Onset time.Time `json:"onset,omitempty"`
+	Onset *time.Time `json:"onset,omitempty"`
 	// Extensions for onset
 	OnsetExt *Element `json:"_onset,omitempty"`
 	// Clinical assessment of the severity of the reaction event as a whole, potentially considering multiple different manifestations.
@@ -9164,7 +9164,7 @@ type Person struct {
 	GenderExt *Element `json:"_gender,omitempty"`
 	// The birth date for the person.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	BirthDate time.Time `json:"birthDate,omitempty"`
+	BirthDate *time.Time `json:"birthDate,omitempty"`
 	// A name associated with the person.
 	Name []*HumanName `json:"name,omitempty"`
 	// Administrative Gender.
@@ -9215,7 +9215,7 @@ type GuidanceResponse struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// Indicates when the guidance response was processed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// Indicates the reason the request was initiated. This is typically provided as a parameter to the evaluation and echoed by the service, although for some use cases, such as subscription- or event-based scenarios, it may provide an indication of the cause for the response.
 	ReasonCodeableConcept *CodeableConcept `json:"reasonCodeableConcept,omitempty"`
 	// If the evaluation could not be completed due to lack of information, or additional information would potentially result in a more accurate response, this element will a description of the data required in order to proceed with the evaluation. A subsequent request to the service should include this data.
@@ -9326,7 +9326,7 @@ type StructureDefinition struct {
 	Name string `json:"name,omitempty"`
 	// The date  (and optionally time) when the structure definition was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the structure definition changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for abstract
 	AbstractExt *Element `json:"_abstract,omitempty"`
 	// A legal or geographic region in which the structure definition is intended to be used.
@@ -9565,14 +9565,14 @@ type PlanDefinition struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// The date  (and optionally time) when the plan definition was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the plan definition changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// A copyright statement relating to the plan definition and/or its contents. Copyright statements are generally legal restrictions on the use and publishing of the plan definition.
 	Copyright string `json:"copyright,omitempty"`
 	// Extensions for copyright
 	CopyrightExt *Element `json:"_copyright,omitempty"`
 	// The date on which the resource content was last reviewed. Review happens periodically after approval, but doesn't change the original approval date.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	LastReviewDate time.Time `json:"lastReviewDate,omitempty"`
+	LastReviewDate *time.Time `json:"lastReviewDate,omitempty"`
 	// Descriptive topics related to the content of the plan definition. Topics provide a high-level categorization of the definition that can be useful for filtering and searching.
 	Topic []*CodeableConcept `json:"topic,omitempty"`
 	// This is a PlanDefinition resource
@@ -9629,7 +9629,7 @@ type PlanDefinition struct {
 	PurposeExt *Element `json:"_purpose,omitempty"`
 	// The date on which the resource content was approved by the publisher. Approval happens once when the content is officially approved for usage.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ApprovalDate time.Time `json:"approvalDate,omitempty"`
+	ApprovalDate *time.Time `json:"approvalDate,omitempty"`
 }
 
 func NewPlanDefinition() *PlanDefinition { return &PlanDefinition{ResourceType: "PlanDefinition"} }
@@ -9683,7 +9683,7 @@ type PlanDefinition_Action struct {
 	TriggerDefinition []*TriggerDefinition `json:"triggerDefinition,omitempty"`
 	// An optional value describing when the action should be performed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	TimingDateTime time.Time `json:"timingDateTime,omitempty"`
+	TimingDateTime *time.Time `json:"timingDateTime,omitempty"`
 	// An optional value describing when the action should be performed.
 	TimingDuration *Duration `json:"timingDuration,omitempty"`
 	// Extensions for cardinalityBehavior
@@ -9805,7 +9805,7 @@ type ClaimResponse_Payment struct {
 	AdjustmentReason *CodeableConcept `json:"adjustmentReason,omitempty"`
 	// Estimated payment data.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// Payable less any payment adjustment.
@@ -9889,7 +9889,7 @@ type Procedure struct {
 	NotDone bool `json:"notDone,omitempty"`
 	// The date(time)/period over which the procedure was performed. Allows a period to support complex procedures that span more than one date, and also allows for the length of the procedure to be captured.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	PerformedDateTime time.Time `json:"performedDateTime,omitempty"`
+	PerformedDateTime *time.Time `json:"performedDateTime,omitempty"`
 	// A reference to a resource that contains details of the request for this procedure.
 	BasedOn []*Reference `json:"basedOn,omitempty"`
 	// A code specifying the state of the procedure. Generally this will be in-progress or completed state.
@@ -10122,7 +10122,7 @@ type Contract_ValuedItem1 struct {
 	Identifier *Identifier `json:"identifier,omitempty"`
 	// Indicates the time during which this Contract Term ValuedItem information is effective.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EffectiveTime time.Time `json:"effectiveTime,omitempty"`
+	EffectiveTime *time.Time `json:"effectiveTime,omitempty"`
 	// Specifies the units by which the Contract Provision Valued Item is measured or counted, and quantifies the countable or measurable Contract Term Valued Item instances.
 	Quantity *Quantity `json:"quantity,omitempty"`
 	// Extensions for points
@@ -10267,7 +10267,7 @@ type VisionPrescription struct {
 	Status string `json:"status,omitempty"`
 	// The date (and perhaps time) when the prescription was written.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	DateWritten time.Time `json:"dateWritten,omitempty"`
+	DateWritten *time.Time `json:"dateWritten,omitempty"`
 	// The healthcare professional responsible for authorizing the prescription.
 	Prescriber *Reference `json:"prescriber,omitempty"`
 	// This is a VisionPrescription resource
@@ -10331,12 +10331,12 @@ type Observation_Component struct {
 	ValueTimeExt *Element `json:"_valueTime,omitempty"`
 	// The information determined as a result of making the observation, if the information has a simple value.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// The information determined as a result of making the observation, if the information has a simple value.
 	ValueString string `json:"valueString,omitempty"`
 	// The information determined as a result of making the observation, if the information has a simple value.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// The information determined as a result of making the observation, if the information has a simple value.
 	ValueSampledData *SampledData `json:"valueSampledData,omitempty"`
 	// The information determined as a result of making the observation, if the information has a simple value.
@@ -10485,7 +10485,7 @@ type Measure struct {
 	UsageExt *Element `json:"_usage,omitempty"`
 	// The date on which the resource content was approved by the publisher. Approval happens once when the content is officially approved for usage.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ApprovalDate time.Time `json:"approvalDate,omitempty"`
+	ApprovalDate *time.Time `json:"approvalDate,omitempty"`
 	// Notices and disclaimers regarding the use of the measure, or related to intellectual property (such as code systems) referenced by the measure.
 	Disclaimer string `json:"disclaimer,omitempty"`
 	// Extensions for approvalDate
@@ -10498,7 +10498,7 @@ type Measure struct {
 	Publisher string `json:"publisher,omitempty"`
 	// The date  (and optionally time) when the measure was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the measure changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// A group of population criteria for the measure.
 	Group []*Measure_Group `json:"group,omitempty"`
 	// Extensions for lastReviewDate
@@ -10511,7 +10511,7 @@ type Measure struct {
 	Purpose string `json:"purpose,omitempty"`
 	// The date on which the resource content was last reviewed. Review happens periodically after approval, but doesn't change the original approval date.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	LastReviewDate time.Time `json:"lastReviewDate,omitempty"`
+	LastReviewDate *time.Time `json:"lastReviewDate,omitempty"`
 	// A legal or geographic region in which the measure is intended to be used.
 	Jurisdiction []*CodeableConcept `json:"jurisdiction,omitempty"`
 	// Extensions for set
@@ -10674,7 +10674,7 @@ type StructureMap struct {
 	ExperimentalExt *Element `json:"_experimental,omitempty"`
 	// The date  (and optionally time) when the structure map was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the structure map changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for version
 	VersionExt *Element `json:"_version,omitempty"`
 	// Extensions for name
@@ -10882,7 +10882,7 @@ type ServiceDefinition struct {
 	ApprovalDateExt *Element `json:"_approvalDate,omitempty"`
 	// The date on which the resource content was last reviewed. Review happens periodically after approval, but doesn't change the original approval date.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	LastReviewDate time.Time `json:"lastReviewDate,omitempty"`
+	LastReviewDate *time.Time `json:"lastReviewDate,omitempty"`
 	// Extensions for experimental
 	ExperimentalExt *Element `json:"_experimental,omitempty"`
 	// The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching for appropriate service definition instances.
@@ -10901,7 +10901,7 @@ type ServiceDefinition struct {
 	VersionExt *Element `json:"_version,omitempty"`
 	// The date  (and optionally time) when the service definition was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the service definition changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Explaination of why this service definition is needed and why it has been designed as it has.
 	Purpose string `json:"purpose,omitempty"`
 	// Extensions for purpose
@@ -10910,7 +10910,7 @@ type ServiceDefinition struct {
 	Usage string `json:"usage,omitempty"`
 	// The date on which the resource content was approved by the publisher. Approval happens once when the content is officially approved for usage.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ApprovalDate time.Time `json:"approvalDate,omitempty"`
+	ApprovalDate *time.Time `json:"approvalDate,omitempty"`
 	// Data requirements are a machine processable description of the data required by the module in order to perform a successful evaluation.
 	DataRequirement []*DataRequirement `json:"dataRequirement,omitempty"`
 	// Extensions for url
@@ -10970,7 +10970,7 @@ type PaymentReconciliation struct {
 	Disposition string `json:"disposition,omitempty"`
 	// The date when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Original request resource reference.
 	Request *Reference `json:"request,omitempty"`
 	// The practitioner who is responsible for the services rendered to the patient.
@@ -11012,7 +11012,7 @@ type ElementDefinition struct {
 	Constraint []*ElementDefinition_Constraint `json:"constraint,omitempty"`
 	// The minimum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	MinValueTime time.Time `json:"minValueTime,omitempty"`
+	MinValueTime *time.Time `json:"minValueTime,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
 	DefaultValueElement *Element `json:"defaultValueElement,omitempty"`
 	// Extensions for fixedBoolean
@@ -11021,7 +11021,7 @@ type ElementDefinition struct {
 	PatternDateTimeExt *Element `json:"_patternDateTime,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	PatternTime time.Time `json:"patternTime,omitempty"`
+	PatternTime *time.Time `json:"patternTime,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
 	PatternPeriod *Period `json:"patternPeriod,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
@@ -11062,12 +11062,12 @@ type ElementDefinition struct {
 	OrderMeaning string `json:"orderMeaning,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	PatternDate time.Time `json:"patternDate,omitempty"`
+	PatternDate *time.Time `json:"patternDate,omitempty"`
 	// Extensions for minValueDecimal
 	MinValueDecimalExt *Element `json:"_minValueDecimal,omitempty"`
 	// The maximum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	MaxValueDateTime time.Time `json:"maxValueDateTime,omitempty"`
+	MaxValueDateTime *time.Time `json:"maxValueDateTime,omitempty"`
 	// Extensions for alias
 	AliasExt []*Element `json:"_alias,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
@@ -11091,7 +11091,7 @@ type ElementDefinition struct {
 	ConditionExt []*Element `json:"_condition,omitempty"`
 	// Specifies a value that SHALL be exactly the value  for this element in the instance. For purposes of comparison, non-significant whitespace is ignored, and all values must be an exact match (case and accent sensitive). Missing elements/attributes must also be missing.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	FixedDate time.Time `json:"fixedDate,omitempty"`
+	FixedDate *time.Time `json:"fixedDate,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
 	PatternQuantity *Quantity `json:"patternQuantity,omitempty"`
 	// The minimum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
@@ -11206,7 +11206,7 @@ type ElementDefinition struct {
 	DefaultValueSampledData *SampledData `json:"defaultValueSampledData,omitempty"`
 	// Specifies a value that SHALL be exactly the value  for this element in the instance. For purposes of comparison, non-significant whitespace is ignored, and all values must be an exact match (case and accent sensitive). Missing elements/attributes must also be missing.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	FixedDateTime time.Time `json:"fixedDateTime,omitempty"`
+	FixedDateTime *time.Time `json:"fixedDateTime,omitempty"`
 	// Specifies a value that SHALL be exactly the value  for this element in the instance. For purposes of comparison, non-significant whitespace is ignored, and all values must be an exact match (case and accent sensitive). Missing elements/attributes must also be missing.
 	FixedCoding *Coding `json:"fixedCoding,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
@@ -11261,7 +11261,7 @@ type ElementDefinition struct {
 	MaxValueInstantExt *Element `json:"_maxValueInstant,omitempty"`
 	// The maximum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	MaxValueTime time.Time `json:"maxValueTime,omitempty"`
+	MaxValueTime *time.Time `json:"maxValueTime,omitempty"`
 	// Extensions for defaultValueUri
 	DefaultValueURIExt *Element `json:"_defaultValueUri,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
@@ -11359,7 +11359,7 @@ type ElementDefinition struct {
 	DefaultValueParameterDefinition *ParameterDefinition `json:"defaultValueParameterDefinition,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	PatternDateTime time.Time `json:"patternDateTime,omitempty"`
+	PatternDateTime *time.Time `json:"patternDateTime,omitempty"`
 	// The minimum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
 	// pattern [0]|([1-9][0-9]*)
 	MinValueUnsignedInt uint64 `json:"minValueUnsignedInt,omitempty"`
@@ -11384,7 +11384,7 @@ type ElementDefinition struct {
 	DefaultValueTimeExt *Element `json:"_defaultValueTime,omitempty"`
 	// The minimum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	MinValueDateTime time.Time `json:"minValueDateTime,omitempty"`
+	MinValueDateTime *time.Time `json:"minValueDateTime,omitempty"`
 	// Extensions for defaultValueInstant
 	DefaultValueInstantExt *Element `json:"_defaultValueInstant,omitempty"`
 	// Extensions for orderMeaning
@@ -11403,7 +11403,7 @@ type ElementDefinition struct {
 	PatternCoding *Coding `json:"patternCoding,omitempty"`
 	// The maximum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	MaxValueDate time.Time `json:"maxValueDate,omitempty"`
+	MaxValueDate *time.Time `json:"maxValueDate,omitempty"`
 	// Extensions for maxValueDateTime
 	MaxValueDateTimeExt *Element `json:"_maxValueDateTime,omitempty"`
 	// A concise description of what this element means (e.g. for use in autogenerated summaries).
@@ -11471,7 +11471,7 @@ type ElementDefinition struct {
 	Max string `json:"max,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	DefaultValueDate time.Time `json:"defaultValueDate,omitempty"`
+	DefaultValueDate *time.Time `json:"defaultValueDate,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
 	// pattern [A-Za-z0-9\-\.]{1,64}
 	DefaultValueID string `json:"defaultValueId,omitempty"`
@@ -11479,7 +11479,7 @@ type ElementDefinition struct {
 	Condition []string `json:"condition,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	DefaultValueTime time.Time `json:"defaultValueTime,omitempty"`
+	DefaultValueTime *time.Time `json:"defaultValueTime,omitempty"`
 	// Extensions for fixedPositiveInt
 	FixedPositiveIntExt *Element `json:"_fixedPositiveInt,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
@@ -11530,7 +11530,7 @@ type ElementDefinition struct {
 	DefaultValueUsageContext *UsageContext `json:"defaultValueUsageContext,omitempty"`
 	// Specifies a value that SHALL be exactly the value  for this element in the instance. For purposes of comparison, non-significant whitespace is ignored, and all values must be an exact match (case and accent sensitive). Missing elements/attributes must also be missing.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	FixedTime time.Time `json:"fixedTime,omitempty"`
+	FixedTime *time.Time `json:"fixedTime,omitempty"`
 	// Specifies a value that SHALL be exactly the value  for this element in the instance. For purposes of comparison, non-significant whitespace is ignored, and all values must be an exact match (case and accent sensitive). Missing elements/attributes must also be missing.
 	FixedTiming *Timing `json:"fixedTiming,omitempty"`
 	// Specifies a value that SHALL be exactly the value  for this element in the instance. For purposes of comparison, non-significant whitespace is ignored, and all values must be an exact match (case and accent sensitive). Missing elements/attributes must also be missing.
@@ -11590,7 +11590,7 @@ type ElementDefinition struct {
 	FixedCode string `json:"fixedCode,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	DefaultValueDateTime time.Time `json:"defaultValueDateTime,omitempty"`
+	DefaultValueDateTime *time.Time `json:"defaultValueDateTime,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
 	DefaultValueTriggerDefinition *TriggerDefinition `json:"defaultValueTriggerDefinition,omitempty"`
 	// Extensions for label
@@ -11605,7 +11605,7 @@ type ElementDefinition struct {
 	Label string `json:"label,omitempty"`
 	// The minimum allowed value for the element. The value is inclusive. This is allowed for the types date, dateTime, instant, time, decimal, integer, and Quantity.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	MinValueDate time.Time `json:"minValueDate,omitempty"`
+	MinValueDate *time.Time `json:"minValueDate,omitempty"`
 	// The value that should be used if there is no value stated in the instance (e.g. 'if not otherwise specified, the abstract is false').
 	DefaultValueIdentifier *Identifier `json:"defaultValueIdentifier,omitempty"`
 	// Specifies a value that the value in the instance SHALL follow - that is, any value in the pattern must be found in the instance. Other additional values may be found too. This is effectively constraint by example.  The values of elements present in the pattern must match exactly (case-sensitive, accent-sensitive, etc.).
@@ -11675,10 +11675,10 @@ type Library struct {
 	DomainResource
 	// The date on which the resource content was approved by the publisher. Approval happens once when the content is officially approved for usage.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ApprovalDate time.Time `json:"approvalDate,omitempty"`
+	ApprovalDate *time.Time `json:"approvalDate,omitempty"`
 	// The date on which the resource content was last reviewed. Review happens periodically after approval, but doesn't change the original approval date.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	LastReviewDate time.Time `json:"lastReviewDate,omitempty"`
+	LastReviewDate *time.Time `json:"lastReviewDate,omitempty"`
 	// The content was developed with a focus and intent of supporting the contexts that are listed. These terms may be used to assist with indexing and searching for appropriate library instances.
 	UseContext []*UsageContext `json:"useContext,omitempty"`
 	// Descriptive topics related to the content of the library. Topics provide a high-level categorization of the library that can be useful for filtering and searching.
@@ -11729,7 +11729,7 @@ type Library struct {
 	URL string `json:"url,omitempty"`
 	// The date  (and optionally time) when the library was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the library changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for usage
 	UsageExt *Element `json:"_usage,omitempty"`
 	// Explaination of why this library is needed and why it has been designed as it has.
@@ -11798,7 +11798,7 @@ type ChargeItem struct {
 	EnteredDateExt *Element `json:"_enteredDate,omitempty"`
 	// Date/time(s) or duration when the charged service was applied.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// The encounter or episode of care that establishes the context for this event.
 	Context *Reference `json:"context,omitempty"`
 	// Date/time(s) or duration when the charged service was applied.
@@ -11832,7 +11832,7 @@ type ChargeItem struct {
 	OverrideReasonExt *Element `json:"_overrideReason,omitempty"`
 	// Date the charge item was entered.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EnteredDate time.Time `json:"enteredDate,omitempty"`
+	EnteredDate *time.Time `json:"enteredDate,omitempty"`
 	// Describes why the event occurred in coded or textual form.
 	Reason []*CodeableConcept `json:"reason,omitempty"`
 	// Indicated the rendered service that caused this charge.
@@ -11993,7 +11993,7 @@ type ImagingStudy_Series struct {
 	AvailabilityExt *Element `json:"_availability,omitempty"`
 	// The date and time the series was started.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Started time.Time `json:"started,omitempty"`
+	Started *time.Time `json:"started,omitempty"`
 }
 
 // Bundle_Response is A container for a collection of resources.
@@ -12086,7 +12086,7 @@ type SupplyDelivery struct {
 	SuppliedItem *SupplyDelivery_SuppliedItem `json:"suppliedItem,omitempty"`
 	// The date or time(s) the activity occurred.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 }
 
 func NewSupplyDelivery() *SupplyDelivery { return &SupplyDelivery{ResourceType: "SupplyDelivery"} }
@@ -12170,7 +12170,7 @@ type ExplanationOfBenefit_Procedure struct {
 	SequenceExt *Element `json:"_sequence,omitempty"`
 	// Date and optionally time the procedure was performed .
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// The procedure code.
@@ -12188,7 +12188,7 @@ type Goal struct {
 	Subject *Reference `json:"subject,omitempty"`
 	// The date or event after which the goal should begin being pursued.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	StartDate time.Time `json:"startDate,omitempty"`
+	StartDate *time.Time `json:"startDate,omitempty"`
 	// Extensions for statusDate
 	StatusDateExt *Element `json:"_statusDate,omitempty"`
 	// Identifies the change (or lack of change) at the point when the status of the goal is assessed.
@@ -12221,7 +12221,7 @@ type Goal struct {
 	Description *CodeableConcept `json:"description,omitempty,omitempty"`
 	// Identifies when the current status.  I.e. When initially created, when achieved, when cancelled, etc.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	StatusDate time.Time `json:"statusDate,omitempty"`
+	StatusDate *time.Time `json:"statusDate,omitempty"`
 	// Indicates whose goal this is - patient goal, practitioner goal, etc.
 	ExpressedBy *Reference `json:"expressedBy,omitempty"`
 }
@@ -12522,7 +12522,7 @@ type DeviceRequest struct {
 	CodeCodeableConcept *CodeableConcept `json:"codeCodeableConcept,omitempty"`
 	// The timing schedule for the use of the device. The Schedule data type allows many different expressions, for example. "Every 8 hours"; "Three times a day"; "1/2 an hour before breakfast for 10 days from 23-Dec 2011:"; "15 Oct 2013, 17 Oct 2013 and 1 Nov 2013".
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// Plan/proposal/order fulfilled by this request.
 	BasedOn []*Reference `json:"basedOn,omitempty"`
 	// Indicates how quickly the {{title}} should be addressed with respect to other requests.
@@ -12536,7 +12536,7 @@ type DeviceRequest struct {
 	Identifier []*Identifier `json:"identifier,omitempty"`
 	// When the request transitioned to being actionable.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoredOn time.Time `json:"authoredOn,omitempty"`
+	AuthoredOn *time.Time `json:"authoredOn,omitempty"`
 	// The patient who will use the device.
 	Subject *Reference `json:"subject,omitempty,omitempty"`
 	// The details of the device to be used.
@@ -12578,7 +12578,7 @@ type ExplanationOfBenefit_Information struct {
 	Category *CodeableConcept `json:"category,omitempty,omitempty"`
 	// The date when or period to which this information refers.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	TimingDate time.Time `json:"timingDate,omitempty"`
+	TimingDate *time.Time `json:"timingDate,omitempty"`
 	// Extensions for timingDate
 	TimingDateExt *Element `json:"_timingDate,omitempty"`
 	// The date when or period to which this information refers.
@@ -12649,7 +12649,7 @@ type DataRequirement_DateFilter struct {
 	PathExt *Element `json:"_path,omitempty"`
 	// The value of the filter. If period is specified, the filter will return only those data items that fall within the bounds determined by the Period, inclusive of the period boundaries. If dateTime is specified, the filter will return only those data items that are equal to the specified dateTime. If a Duration is specified, the filter will return only those data items that fall within Duration from now.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// Extensions for valueDateTime
 	ValueDateTimeExt *Element `json:"_valueDateTime,omitempty"`
 	// The value of the filter. If period is specified, the filter will return only those data items that fall within the bounds determined by the Period, inclusive of the period boundaries. If dateTime is specified, the filter will return only those data items that are equal to the specified dateTime. If a Duration is specified, the filter will return only those data items that fall within Duration from now.
@@ -12673,7 +12673,7 @@ type Contract_Term struct {
 	Group []*Contract_Term `json:"group,omitempty"`
 	// When this Contract Provision was issued.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Issued time.Time `json:"issued,omitempty"`
+	Issued *time.Time `json:"issued,omitempty"`
 	// Action stipulated by this Contract Provision.
 	Action []*CodeableConcept `json:"action,omitempty"`
 	// A set of security labels that define which terms are controlled by this condition.
@@ -12699,7 +12699,7 @@ type ImmunizationRecommendation_DateCriterion struct {
 	Code *CodeableConcept `json:"code,omitempty,omitempty"`
 	// The date whose meaning is specified by dateCriterion.code.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Value time.Time `json:"value,omitempty"`
+	Value *time.Time `json:"value,omitempty"`
 	// Extensions for value
 	ValueExt *Element `json:"_value,omitempty"`
 }
@@ -12830,7 +12830,7 @@ type Questionnaire struct {
 	PurposeExt *Element `json:"_purpose,omitempty"`
 	// The date on which the resource content was approved by the publisher. Approval happens once when the content is officially approved for usage.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ApprovalDate time.Time `json:"approvalDate,omitempty"`
+	ApprovalDate *time.Time `json:"approvalDate,omitempty"`
 	// A particular question, question grouping or display text that is part of the questionnaire.
 	Item []*Questionnaire_Item `json:"item,omitempty"`
 	// Extensions for name
@@ -12839,7 +12839,7 @@ type Questionnaire struct {
 	Status string `json:"status,omitempty"`
 	// The date  (and optionally time) when the questionnaire was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the questionnaire changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// The period during which the questionnaire content was or is planned to be in active use.
 	EffectivePeriod *Period `json:"effectivePeriod,omitempty"`
 	// Contact details to assist a user in finding and communicating with the publisher.
@@ -12854,7 +12854,7 @@ type Questionnaire struct {
 	ApprovalDateExt *Element `json:"_approvalDate,omitempty"`
 	// The date on which the resource content was last reviewed. Review happens periodically after approval, but doesn't change the original approval date.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	LastReviewDate time.Time `json:"lastReviewDate,omitempty"`
+	LastReviewDate *time.Time `json:"lastReviewDate,omitempty"`
 	// A legal or geographic region in which the questionnaire is intended to be used.
 	Jurisdiction []*CodeableConcept `json:"jurisdiction,omitempty"`
 	// An identifier for this question or group of questions in a particular terminology such as LOINC.
@@ -12932,7 +12932,7 @@ type Appointment struct {
 	ServiceCategory *CodeableConcept `json:"serviceCategory,omitempty"`
 	// The date that this appointment was initially created. This could be different to the meta.lastModified value on the initial entry, as this could have been before the resource was created on the FHIR server, and should remain unchanged over the lifespan of the appointment.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Additional comments about the appointment.
 	Comment string `json:"comment,omitempty"`
 	// Extensions for comment
@@ -12994,7 +12994,7 @@ type Goal_Target struct {
 	DetailCodeableConcept *CodeableConcept `json:"detailCodeableConcept,omitempty"`
 	// Indicates either the date or the duration after start by which the goal should be met.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	DueDate time.Time `json:"dueDate,omitempty"`
+	DueDate *time.Time `json:"dueDate,omitempty"`
 	// Extensions for dueDate
 	DueDateExt *Element `json:"_dueDate,omitempty"`
 	// Indicates either the date or the duration after start by which the goal should be met.
@@ -13022,7 +13022,7 @@ type List_Entry struct {
 	DeletedExt *Element `json:"_deleted,omitempty"`
 	// When this item was added to the list.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for date
 	DateExt *Element `json:"_date,omitempty"`
 	// A reference to the actual resource from which data was derived.
@@ -13194,7 +13194,7 @@ type ClaimResponse struct {
 	Patient *Reference `json:"patient,omitempty"`
 	// The date when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Original request resource referrence.
 	Request *Reference `json:"request,omitempty"`
 	// Request for additional supporting or authorizing information, such as: documents, images or resources.
@@ -13299,10 +13299,10 @@ type Task_Input struct {
 	BackboneElement
 	// The value of the input parameter as a basic type.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// The value of the input parameter as a basic type.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// Extensions for valueUnsignedInt
 	ValueUnsignedIntExt *Element `json:"_valueUnsignedInt,omitempty"`
 	// The value of the input parameter as a basic type.
@@ -13330,7 +13330,7 @@ type Task_Input struct {
 	ValueContactDetail *ContactDetail `json:"valueContactDetail,omitempty"`
 	// The value of the input parameter as a basic type.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	ValueDate time.Time `json:"valueDate,omitempty"`
+	ValueDate *time.Time `json:"valueDate,omitempty"`
 	// Extensions for valueId
 	ValueIDExt *Element `json:"_valueId,omitempty"`
 	// The value of the input parameter as a basic type.
@@ -13504,7 +13504,7 @@ type Composition_Attester struct {
 	BackboneElement
 	// When the composition was attested by the party.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Time time.Time `json:"time,omitempty"`
+	Time *time.Time `json:"time,omitempty"`
 	// Extensions for time
 	TimeExt *Element `json:"_time,omitempty"`
 	// Who attested the composition in the specified way.
@@ -13588,7 +13588,7 @@ type ExpansionProfile struct {
 	Status string `json:"status,omitempty"`
 	// The date  (and optionally time) when the expansion profile was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the expansion profile changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// A legal or geographic region in which the expansion profile is intended to be used.
 	Jurisdiction []*CodeableConcept `json:"jurisdiction,omitempty"`
 	// Code system, or a particular version of a code system to be excluded from value set expansions.
@@ -13771,7 +13771,7 @@ type TestScript struct {
 	TitleExt *Element `json:"_title,omitempty"`
 	// The date  (and optionally time) when the test script was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the test script changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Contact details to assist a user in finding and communicating with the publisher.
 	Contact []*ContactDetail `json:"contact,omitempty"`
 	// Extensions for purpose
@@ -13791,7 +13791,7 @@ type ImplementationGuide struct {
 	VersionExt *Element `json:"_version,omitempty"`
 	// The date  (and optionally time) when the implementation guide was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the implementation guide changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for publisher
 	PublisherExt *Element `json:"_publisher,omitempty"`
 	// Extensions for experimental
@@ -13872,7 +13872,7 @@ type MeasureReport struct {
 	Patient *Reference `json:"patient,omitempty"`
 	// The date this measure report was generated.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// The reporting period for which the report was calculated.
 	Period *Period `json:"period,omitempty,omitempty"`
 	// The results of the calculation, one for each population group in the measure.
@@ -13947,7 +13947,7 @@ type MedicationStatement struct {
 	Identifier []*Identifier `json:"identifier,omitempty"`
 	// The interval of time during which it is being asserted that the patient was taking the medication (or was not taking, when the wasNotGiven element is true).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EffectiveDateTime time.Time `json:"effectiveDateTime,omitempty"`
+	EffectiveDateTime *time.Time `json:"effectiveDateTime,omitempty"`
 	// The interval of time during which it is being asserted that the patient was taking the medication (or was not taking, when the wasNotGiven element is true).
 	EffectivePeriod *Period `json:"effectivePeriod,omitempty"`
 	// Allows linking the MedicationStatement to the underlying MedicationRequest, or to other information that supports or is used to derive the MedicationStatement.
@@ -13966,7 +13966,7 @@ type MedicationStatement struct {
 	EffectiveDateTimeExt *Element `json:"_effectiveDateTime,omitempty"`
 	// The date when the medication statement was asserted by the information source.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	DateAsserted time.Time `json:"dateAsserted,omitempty"`
+	DateAsserted *time.Time `json:"dateAsserted,omitempty"`
 	// The person, animal or group who is/was taking the medication.
 	Subject *Reference `json:"subject,omitempty,omitempty"`
 	// The encounter or episode of care that establishes the context for this MedicationStatement.
@@ -14009,12 +14009,12 @@ type ProcedureRequest struct {
 	Context *Reference `json:"context,omitempty"`
 	// The date/time at which the diagnostic testing should occur.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// Key events in the history of the request.
 	RelevantHistory []*Reference `json:"relevantHistory,omitempty"`
 	// When the request transitioned to being actionable.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AuthoredOn time.Time `json:"authoredOn,omitempty"`
+	AuthoredOn *time.Time `json:"authoredOn,omitempty"`
 	// Extensions for status
 	StatusExt *Element `json:"_status,omitempty"`
 	// Set this to true if the record is saying that the procedure should NOT be performed.
@@ -14082,7 +14082,7 @@ type ValueSet_Compose struct {
 	BackboneElement
 	// If a locked date is defined, then the Content Logical Definition must be evaluated using the current version as of the locked date for referenced code system(s) and value set instances where ValueSet.compose.include.version is not defined.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	LockedDate time.Time `json:"lockedDate,omitempty"`
+	LockedDate *time.Time `json:"lockedDate,omitempty"`
 	// Extensions for lockedDate
 	LockedDateExt *Element `json:"_lockedDate,omitempty"`
 	// Whether inactive codes - codes that are not approved for current use - are in the value set. If inactive = true, inactive codes are to be included in the expansion, if inactive = false, the inactive codes will not be included in the expansion. If absent, the behavior is determined by the implementation, or by the applicable ExpansionProfile (but generally, inactive codes would be expected to be included).
@@ -14145,7 +14145,7 @@ type Composition struct {
 	Class *CodeableConcept `json:"class,omitempty"`
 	// The composition editing time, when the composition was last logically changed by the author.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Identifies who is responsible for the information in the composition, not necessarily who typed it in.
 	Author []*Reference `json:"author,omitempty,omitempty"`
 	// The code specifying the level of confidentiality of the Composition.
@@ -14223,7 +14223,7 @@ type Media struct {
 	Context *Reference `json:"context,omitempty"`
 	// The date and time(s) at which the media was collected.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// Height of the image in pixels (photo/video).
 	// pattern [1-9][0-9]*
 	Height uint64 `json:"height,omitempty"`
@@ -14295,7 +14295,7 @@ type EnrollmentResponse struct {
 	DispositionExt *Element `json:"_disposition,omitempty"`
 	// The date when the enclosed suite of services were performed or completed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// The practitioner who is responsible for the services rendered to the patient.
 	RequestProvider *Reference `json:"requestProvider,omitempty"`
 	// This is a EnrollmentResponse resource
@@ -14392,7 +14392,7 @@ type RiskAssessment struct {
 	Subject *Reference `json:"subject,omitempty"`
 	// The date (and possibly time) the risk assessment was performed.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OccurrenceDateTime time.Time `json:"occurrenceDateTime,omitempty"`
+	OccurrenceDateTime *time.Time `json:"occurrenceDateTime,omitempty"`
 	// For assessments or prognosis specific to a particular condition, indicates the condition being assessed.
 	Condition *Reference `json:"condition,omitempty"`
 	// The reason the risk assessment was performed.
@@ -14556,7 +14556,7 @@ type DataElement struct {
 	StatusExt *Element `json:"_status,omitempty"`
 	// The date  (and optionally time) when the data element was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the data element changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Extensions for name
 	NameExt *Element `json:"_name,omitempty"`
 	// A legal or geographic region in which the data element is intended to be used.
@@ -14610,14 +14610,14 @@ type StructureMap_Source struct {
 	DefaultValueInstantExt *Element `json:"_defaultValueInstant,omitempty"`
 	// A value to use if there is no existing value in the source object.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?
-	DefaultValueDate time.Time `json:"defaultValueDate,omitempty"`
+	DefaultValueDate *time.Time `json:"defaultValueDate,omitempty"`
 	// Extensions for element
 	ElementExt *Element `json:"_element,omitempty"`
 	// A value to use if there is no existing value in the source object.
 	DefaultValueString string `json:"defaultValueString,omitempty"`
 	// A value to use if there is no existing value in the source object.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	DefaultValueDateTime time.Time `json:"defaultValueDateTime,omitempty"`
+	DefaultValueDateTime *time.Time `json:"defaultValueDateTime,omitempty"`
 	// Extensions for defaultValuePositiveInt
 	DefaultValuePositiveIntExt *Element `json:"_defaultValuePositiveInt,omitempty"`
 	// A value to use if there is no existing value in the source object.
@@ -14700,7 +14700,7 @@ type StructureMap_Source struct {
 	DefaultValueBoolean bool `json:"defaultValueBoolean,omitempty"`
 	// A value to use if there is no existing value in the source object.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	DefaultValueTime time.Time `json:"defaultValueTime,omitempty"`
+	DefaultValueTime *time.Time `json:"defaultValueTime,omitempty"`
 	// A value to use if there is no existing value in the source object.
 	// pattern urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}
 	DefaultValueUUID string `json:"defaultValueUuid,omitempty"`
@@ -14939,7 +14939,7 @@ type NamingSystem struct {
 	Status string `json:"status,omitempty"`
 	// The date  (and optionally time) when the naming system was published. The date must change if and when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the naming system changes.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Date time.Time `json:"date,omitempty"`
+	Date *time.Time `json:"date,omitempty"`
 	// Categorizes a naming system for easier search by grouping related naming systems.
 	Type *CodeableConcept `json:"type,omitempty"`
 	// A free text natural language description of the naming system from a consumer's perspective. Details about what the namespace identifies including scope, granularity, version labeling, etc.
@@ -15014,7 +15014,7 @@ type Condition struct {
 	OnsetDateTimeExt *Element `json:"_onsetDateTime,omitempty"`
 	// The date on which the existance of the Condition was first asserted or acknowledged.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AssertedDate time.Time `json:"assertedDate,omitempty"`
+	AssertedDate *time.Time `json:"assertedDate,omitempty"`
 	// Extensions for clinicalStatus
 	ClinicalStatusExt *Element `json:"_clinicalStatus,omitempty"`
 	// Identification of the condition, problem or diagnosis.
@@ -15023,7 +15023,7 @@ type Condition struct {
 	OnsetRange *Range `json:"onsetRange,omitempty"`
 	// The date or estimated date that the condition resolved or went into remission. This is called "abatement" because of the many overloaded connotations associated with "remission" or "resolution" - Conditions are never really resolved, but they can abate.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	AbatementDateTime time.Time `json:"abatementDateTime,omitempty"`
+	AbatementDateTime *time.Time `json:"abatementDateTime,omitempty"`
 	// The date or estimated date that the condition resolved or went into remission. This is called "abatement" because of the many overloaded connotations associated with "remission" or "resolution" - Conditions are never really resolved, but they can abate.
 	AbatementBoolean bool `json:"abatementBoolean,omitempty"`
 	// Extensions for abatementBoolean
@@ -15037,7 +15037,7 @@ type Condition struct {
 	ClinicalStatus string `json:"clinicalStatus,omitempty"`
 	// Estimated or actual date or date-time  the condition began, in the opinion of the clinician.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	OnsetDateTime time.Time `json:"onsetDateTime,omitempty"`
+	OnsetDateTime *time.Time `json:"onsetDateTime,omitempty"`
 }
 
 func NewCondition() *Condition { return &Condition{ResourceType: "Condition"} }
@@ -15199,7 +15199,7 @@ type DocumentManifest struct {
 	DomainResource
 	// When the document manifest was created for submission to the server (not necessarily the same thing as the actual resource last modified time, since it may be modified, replicated, etc.).
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	Created time.Time `json:"created,omitempty"`
+	Created *time.Time `json:"created,omitempty"`
 	// Identifies the source system, application, or software that produced the document manifest.
 	Source string `json:"source,omitempty"`
 	// Extensions for source
@@ -15343,7 +15343,7 @@ type Observation struct {
 	ValueStringExt *Element `json:"_valueString,omitempty"`
 	// The information determined as a result of making the observation, if the information has a simple value.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	ValueDateTime time.Time `json:"valueDateTime,omitempty"`
+	ValueDateTime *time.Time `json:"valueDateTime,omitempty"`
 	// Extensions for comment
 	CommentExt *Element `json:"_comment,omitempty"`
 	// A code that classifies the general type of observation being made.
@@ -15366,7 +15366,7 @@ type Observation struct {
 	ValueSampledData *SampledData `json:"valueSampledData,omitempty"`
 	// The information determined as a result of making the observation, if the information has a simple value.
 	// pattern ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?
-	ValueTime time.Time `json:"valueTime,omitempty"`
+	ValueTime *time.Time `json:"valueTime,omitempty"`
 	// A  reference to another resource (usually another Observation) whose relationship is defined by the relationship type code.
 	Related []*Observation_Related `json:"related,omitempty"`
 	// The patient, or group of patients, location, or device whose characteristics (direct or indirect) are described by the observation and into whose record the observation is placed.  Comments: Indirect characteristics may be those of a specimen, fetus, donor,  other observer (for example a relative or EMT), or any observation made about the subject.
@@ -15403,7 +15403,7 @@ type Observation struct {
 	ValueCodeableConcept *CodeableConcept `json:"valueCodeableConcept,omitempty"`
 	// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients - this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection, but very often the source of the date/time is not known, only the date/time itself.
 	// pattern -?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?
-	EffectiveDateTime time.Time `json:"effectiveDateTime,omitempty"`
+	EffectiveDateTime *time.Time `json:"effectiveDateTime,omitempty"`
 	// Extensions for valueTime
 	ValueTimeExt *Element `json:"_valueTime,omitempty"`
 	// Extensions for status
