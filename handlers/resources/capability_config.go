@@ -29,9 +29,9 @@ func (c *CapabilityConfig) AddResource(typeName string, i interface{}) error {
 			return errors.New("no resource configuration present")
 		}
 		newR.ConditionalCreate = config.ConditionalCreate
-		newR.ConditionalDelete = string(config.ConditionalDelete)
+		newR.ConditionalDelete = config.ConditionalDelete
 		newR.ConditionalUpdate = config.ConditionalUpdate
-		newR.Versioning = string(config.Versioning)
+		newR.Versioning = config.Versioning
 		newR.SearchInclude = config.SearchIncludes
 		newR.SearchParam = c.getSearchParams(config.SearchParams)
 	} else {
@@ -49,7 +49,7 @@ func (c *CapabilityConfig) getSearchParams(params []searchParam) []*models.Capab
 	for _, p := range params {
 		modelParams = append(modelParams, &models.CapabilityStatement_SearchParam{
 			Name: p.Name,
-			Type: string(p.Type),
+			Type: models.CapabilityStatement_SearchParamType(p.Type),
 		})
 	}
 	return modelParams
@@ -59,33 +59,33 @@ func (c *CapabilityConfig) getInteractions(i interface{}) []*models.CapabilitySt
 	ints := c.getRestfulInteractionTypes(i)
 	mods := []*models.CapabilityStatement_Interaction{}
 	for _, i := range ints {
-		mods = append(mods, &models.CapabilityStatement_Interaction{Code: string(i)})
+		mods = append(mods, &models.CapabilityStatement_Interaction{Code: i})
 	}
 	return mods
 }
 
-func (c *CapabilityConfig) getRestfulInteractionTypes(i interface{}) []models.TypeRestfulInteraction {
-	ints := []models.TypeRestfulInteraction{}
+func (c *CapabilityConfig) getRestfulInteractionTypes(i interface{}) []models.CapabilityStatement_InteractionCode {
+	ints := []models.CapabilityStatement_InteractionCode{}
 	if _, ok := i.(CreateableResource); ok {
-		ints = append(ints, models.TypeRestfulInteractionCreate)
+		ints = append(ints, models.CapabilityStatement_InteractionCodeCreate)
 	}
 	if _, ok := i.(SearchableResource); ok {
-		ints = append(ints, models.TypeRestfulInteractionSearchType)
+		ints = append(ints, models.CapabilityStatement_InteractionCodeSearchType)
 	}
 	if _, ok := i.(UpdateableResource); ok {
-		ints = append(ints, models.TypeRestfulInteractionUpdate)
+		ints = append(ints, models.CapabilityStatement_InteractionCodeUpdate)
 	}
 	if _, ok := i.(DeleteableResource); ok {
-		ints = append(ints, models.TypeRestfulInteractionDelete)
+		ints = append(ints, models.CapabilityStatement_InteractionCodeDelete)
 	}
 	if _, ok := i.(ReadableResource); ok {
-		ints = append(ints, models.TypeRestfulInteractionRead)
+		ints = append(ints, models.CapabilityStatement_InteractionCodeRead)
 	}
 	if _, ok := i.(PatchableResource); ok {
-		ints = append(ints, models.TypeRestfulInteractionPatch)
+		ints = append(ints, models.CapabilityStatement_InteractionCodePatch)
 	}
 	if _, ok := i.(VersionReadableResource); ok {
-		ints = append(ints, models.TypeRestfulInteractionVRead)
+		ints = append(ints, models.CapabilityStatement_InteractionCodeVread)
 	}
 	return ints
 }
@@ -94,19 +94,18 @@ func (c *CapabilityConfig) getRestfulInteractionTypes(i interface{}) []models.Ty
 func NewCapabilityConfig(registry ResourceRegistry, log *logging.Logger, box *packr.Box) *CapabilityConfig {
 	log.Debug("entering NewCapabilityConfig")
 
-	newCS := models.NewCapabilityStatement()
-	newCS.AcceptUnknown = string(models.UnknownContentCodeExtensions)
+	newCS := &models.CapabilityStatement{}
 	newCS.Date = metadata.Metadata.BuildTime
 	newCS.Description = metadata.Metadata.AppName
 	newCS.FhirVersion = models.FHIRVersion
-	newCS.Format = []string{string(models.MimeTypeJSON)}
+	newCS.Format = []string{"json"}
 	newCS.PatchFormat = []string{"application/json-patch+json"}
-	newCS.Kind = string(models.CapabilityStatementKindInstance)
+	newCS.Kind = models.CapabilityStatementKindInstance
 	newCS.Name = metadata.Metadata.AppName
-	newCS.Status = string(models.PublicationStatusDraft)
+	newCS.Status = models.CapabilityStatementStatusDraft
 	newCS.Version = metadata.Metadata.Version
 	newCS.Rest = []*models.CapabilityStatement_Rest{
-		{Mode: string(models.RestfulCapabilityModeServer)},
+		{Mode: models.CapabilityStatement_RestModeServer},
 	}
 
 	newConfig := &CapabilityConfig{CapabilityStatement: newCS}

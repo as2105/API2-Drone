@@ -34,20 +34,20 @@ type Subscription struct {
 // Create ...
 func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		newSub := models.NewSubscription()
+		newSub := &models.Subscription{}
 		err := loadResourceFromBody(newSub, req, s.jsonValidator)
 		if err != nil {
 			log.WithError(err).Panic("failed to load resource")
 		}
 
-		if newSub.ID == "" {
-			newSub.ID = uuid.NewUUID().String()
+		if newSub.Id == "" {
+			newSub.Id = uuid.NewUUID().String()
 		}
 		now := time.Now().UTC()
 		if newSub.Meta == nil {
 			newSub.Meta = &models.Meta{}
 		}
-		newSub.Meta.VersionID = ""
+		newSub.Meta.VersionId = ""
 		newSub.Meta.LastUpdated = now.Format(time.RFC3339)
 		if newSub.Status == "" || newSub.Status == "active" {
 			newSub.Status = "requested" // activate subscription later
@@ -59,7 +59,7 @@ func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Han
 		}
 
 		newDBRec := &subscriptionDB{
-			UUID:      newSub.ID,
+			UUID:      newSub.Id,
 			Data:      jsonBytes,
 			CreatedAt: now,
 			UpdatedAt: now,
@@ -68,7 +68,7 @@ func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Han
 			log.WithError(err).Panic("failed to save object to database")
 		}
 
-		resourceCreated(rndr, rw, newSub.ID, "", now, newSub)
+		resourceCreated(rndr, rw, newSub.Id, "", now, newSub)
 	})
 }
 
@@ -93,7 +93,7 @@ func (s *Subscription) Read(log *logging.Logger, rndr *render.Render) http.Handl
 			rw.WriteHeader(http.StatusGone)
 			return
 		}
-		newSub := models.NewSubscription()
+		newSub := &models.Subscription{}
 		if err := json.Unmarshal(dbRec.Data, newSub); err != nil {
 			log.WithError(err).Panic("failed to unmarshal data")
 		}
@@ -110,12 +110,12 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 			return
 		}
 
-		newSub := models.NewSubscription()
+		newSub := &models.Subscription{}
 		if err := loadResourceFromBody(newSub, req, s.jsonValidator); err != nil {
 			log.WithError(err).Panic("failed to load resource")
 		}
-		if newSub.ID != uuid {
-			log.Errorf("resourceID provided (%q) does not match ID inside of document (%q)", uuid, newSub.ID)
+		if newSub.Id != uuid {
+			log.Errorf("resourceID provided (%q) does not match ID inside of document (%q)", uuid, newSub.Id)
 			rw.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -129,7 +129,7 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 		} else if err := query.Error; err != nil {
 			log.WithError(err).Panic("failed to query database")
 		}
-		oldSub := models.NewSubscription()
+		oldSub := &models.Subscription{}
 		if err := json.Unmarshal(dbRec.Data, oldSub); err != nil {
 			log.WithError(err).Panic("failed to unmarshal data")
 		}
@@ -144,7 +144,7 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 		if newSub.Meta == nil {
 			newSub.Meta = &models.Meta{}
 		}
-		newSub.Meta.VersionID = ""
+		newSub.Meta.VersionId = ""
 		newSub.Meta.LastUpdated = now.Format(time.RFC3339)
 		if newSub.Status == "" || newSub.Status == "active" {
 			newSub.Status = "requested" // activate subscription later
