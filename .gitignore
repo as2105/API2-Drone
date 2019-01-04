@@ -60,7 +60,6 @@ Temporary Items
 
 fhir-api
 
-fhirstarter
-
 *.sqlite
 
+**/fhirstarter/fhirstarter
