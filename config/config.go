@@ -27,6 +27,7 @@ type Config struct {
 	PrivateKey               string            `mapstructure:"private_key"`
 	Profile                  bool              `mapstructure:"profile"`
 	RPCURL                   string            `mapstructure:"rpcurl"`
+	Pprof                    bool              `mapstructure:"pprof"`
 }
 
 // GlobalSettings holds settings configured by global flags, that may
