@@ -19,7 +19,10 @@ import (
 	"github.com/unrolled/render"
 )
 
-const initialResourceVersionID = "0:0"
+const (
+	versionDelimiter         = "-"
+	initialResourceVersionID = "0" + versionDelimiter + "0"
+)
 
 func getResourceID(req *http.Request) (uuid.UUID, error) {
 	uuidStr := mux.Vars(req)["resourceID"]
@@ -180,12 +183,13 @@ func validateJSONResource(log *logging.Logger, rndr *render.Render, validator *m
 }
 
 // generateResourceVersionID creates a version string for a resource based on an update nonce and the block number of the previous version
+// must adhere to "id" regexp: https://www.hl7.org/fhir/datatypes.html#id
 func generateResourceVersionID(updateCount uint, previousBlockNumber *big.Int) string {
-	return fmt.Sprintf("%d:%s", updateCount, previousBlockNumber.String())
+	return fmt.Sprintf("%d%s%s", updateCount, versionDelimiter, previousBlockNumber.String())
 }
 
 func getUpdateCountFromVersionID(versionID string) (uint, error) {
-	c, err := strconv.ParseUint(strings.Split(versionID, ":")[0], 10, 64)
+	c, err := strconv.ParseUint(strings.Split(versionID, versionDelimiter)[0], 10, 64)
 	if err != nil {
 		return 0, errors.Wrapf(err, "failed to parse update count from version string %q", versionID)
 	}
