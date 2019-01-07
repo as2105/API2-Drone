@@ -160,23 +160,23 @@ func validateJSONResource(log *logging.Logger, rndr *render.Render, validator *m
 		if err != nil {
 			log.WithError(err).Panic("could not validate resource")
 		}
-		issues := []*models.OperationOutcome_Issue{}
+		issues := []*models.OperationOutcomeIssue{}
 		if valid {
-			issues = append(issues, &models.OperationOutcome_Issue{
-				Severity:    models.IssueSeverityInformation,
-				Code:        models.IssueTypeInformational,
+			issues = append(issues, &models.OperationOutcomeIssue{
+				Severity:    models.OperationOutcomeIssueSeverityInformation,
+				Code:        models.OperationOutcomeIssueCodeInformational,
 				Diagnostics: "no issues detected",
 			})
 		} else {
 			for _, e := range vErrs {
-				issues = append(issues, &models.OperationOutcome_Issue{
-					Severity:    models.IssueSeverityError,
-					Code:        models.IssueTypeInvalid,
+				issues = append(issues, &models.OperationOutcomeIssue{
+					Severity:    models.OperationOutcomeIssueSeverityError,
+					Code:        models.OperationOutcomeIssueCodeInvalid,
 					Diagnostics: e.String(),
 				})
 			}
 		}
-		outcome := models.NewOperationOutcome()
+		outcome := &models.OperationOutcome{}
 		outcome.Issue = issues
 		rndr.JSON(rw, http.StatusOK, outcome)
 	})

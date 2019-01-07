@@ -34,16 +34,15 @@ type Subscription struct {
 // Create ...
 func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		newSub := models.NewSubscription()
+		newSub := &models.Subscription{}
 		err := loadResourceFromBody(newSub, req, s.jsonValidator)
 		if err != nil {
 			log.WithError(err).Panic("failed to load resource")
 		}
-
-		newUUID := uuid.NewUUID()
+		if newSub.ID == "" {
+			newSub.ID = uuid.NewUUID().String()
+		}
 		now := time.Now().UTC()
-
-		newSub.ID = newUUID.String()
 		if newSub.Meta == nil {
 			newSub.Meta = &models.Meta{}
 		}
@@ -52,12 +51,10 @@ func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Han
 		if newSub.Status == "" || newSub.Status == "active" {
 			newSub.Status = "requested" // activate subscription later
 		}
-
 		jsonBytes, err := json.Marshal(newSub)
 		if err != nil {
 			log.WithError(err).Panic("failed to marshal object as JSON")
 		}
-
 		newDBRec := &subscriptionDB{
 			UUID:      newSub.ID,
 			Data:      jsonBytes,
@@ -67,8 +64,7 @@ func (s *Subscription) Create(log *logging.Logger, rndr *render.Render) http.Han
 		if err := s.db.Create(newDBRec).Error; err != nil {
 			log.WithError(err).Panic("failed to save object to database")
 		}
-
-		resourceCreated(rndr, rw, newUUID, "", now, newSub)
+		resourceCreated(rndr, rw, uuid.Parse(newSub.ID), "", now, newSub)
 	})
 }
 
@@ -93,7 +89,7 @@ func (s *Subscription) Read(log *logging.Logger, rndr *render.Render) http.Handl
 			rw.WriteHeader(http.StatusGone)
 			return
 		}
-		newSub := models.NewSubscription()
+		newSub := &models.Subscription{}
 		if err := json.Unmarshal(dbRec.Data, newSub); err != nil {
 			log.WithError(err).Panic("failed to unmarshal data")
 		}
@@ -111,7 +107,7 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 			return
 		}
 
-		newSub := models.NewSubscription()
+		newSub := &models.Subscription{}
 		if err := loadResourceFromBody(newSub, req, s.jsonValidator); err != nil {
 			log.WithError(err).Panic("failed to load resource")
 		}
@@ -130,7 +126,7 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 		} else if err := query.Error; err != nil {
 			log.WithError(err).Panic("failed to query database")
 		}
-		oldSub := models.NewSubscription()
+		oldSub := &models.Subscription{}
 		if err := json.Unmarshal(dbRec.Data, oldSub); err != nil {
 			log.WithError(err).Panic("failed to unmarshal data")
 		}

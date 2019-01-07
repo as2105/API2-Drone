@@ -8,12 +8,15 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
+// JSONValidationError ...
 type JSONValidationError = gojsonschema.ResultError
 
+// JSONValidator ...
 type JSONValidator struct {
 	schema *gojsonschema.Schema
 }
 
+// Validate ...
 func (v *JSONValidator) Validate(doc []byte) (bool, []JSONValidationError, error) {
 	docLoader := gojsonschema.NewBytesLoader(doc)
 	result, err := v.schema.Validate(docLoader)
@@ -26,6 +29,7 @@ func (v *JSONValidator) Validate(doc []byte) (bool, []JSONValidationError, error
 	return false, result.Errors(), nil
 }
 
+// NewJSONValidator ...
 func NewJSONValidator(box *packr.Box, resourceType string) (*JSONValidator, error) {
 	refName := fmt.Sprintf("file:///fhir.schema.json#/definitions/%s", resourceType)
 	sl := gojsonschema.NewSchemaLoader()

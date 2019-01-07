@@ -46,6 +46,7 @@ func initServe() {
 	serveCmd.Flags().StringArray("cors_exposed_headers", []string{}, "")
 	serveCmd.Flags().Bool("cors_allow_credentials", false, "")
 	serveCmd.Flags().Int("cors_max_age", 0, "")
+	serveCmd.Flags().Bool("pprof", false, "enable pprof runtime profiling")
 }
 
 func serveRun(cmd *cobra.Command, args []string) {
@@ -150,7 +151,7 @@ func NewRouter(lc fx.Lifecycle, log *logging.Logger, config *config.Config, cors
 	return r
 }
 
-func configureRouter(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig, rndr *render.Render, registry resources.ResourceRegistry) {
+func configureRouter(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig, rndr *render.Render, registry resources.ResourceRegistry, config *config.Config) {
 	log.Debug("executing configureRouter")
 
 	fhirRouter := r.PathPrefix("/fhir").Subrouter()
@@ -158,6 +159,10 @@ func configureRouter(r *mux.Router, log *logging.Logger, cConfig *resources.Capa
 	handlers.RegisterAllFHIRResourceRoutes(fhirRouter, log, rndr, registry)
 
 	handlers.RegisterHealthCheckRoutes(r, log)
+
+	if config.Pprof {
+		handlers.RegisterPProfRoutes(r, log)
+	}
 
 	debugRouter(r, log)
 }

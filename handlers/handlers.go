@@ -4,6 +4,7 @@ package handlers
 
 import (
 	"net/http"
+	"net/http/pprof"
 
 	"github.com/SynapticHealthAlliance/fhir-api/handlers/resources"
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
@@ -17,7 +18,7 @@ import (
 func RegisterFHIRCapabilityStatementRoutes(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig, rndr *render.Render) {
 	log.Debug("executing RegisterFHIRCapabilityStatementRoutes")
 	h := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		w.Header().Add("Last-Modified", cConfig.Date.Format(http.TimeFormat))
+		w.Header().Add("Last-Modified", cConfig.Date)
 		rndr.JSON(w, http.StatusOK, cConfig)
 	})
 	r.Handle("/", h).Methods("GET")
@@ -38,6 +39,17 @@ func RegisterHealthCheckRoutes(r *mux.Router, log *logging.Logger) {
 	hc := healthcheck.NewHandler()
 	r.HandleFunc("/live", hc.LiveEndpoint)
 	r.HandleFunc("/ready", hc.ReadyEndpoint)
+}
+
+// RegisterPProfRoutes ...
+func RegisterPProfRoutes(r *mux.Router, log *logging.Logger) {
+	log.Debug("executing RegisterPProfRoutes")
+
+	r.HandleFunc("/debug/pprof/", pprof.Index)
+	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	r.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	r.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	r.HandleFunc("/debug/pprof/trace", pprof.Trace)
 }
 
 func registerFHIRResourceRoutes(r *mux.Router, log *logging.Logger, rndr *render.Render, i interface{}) {

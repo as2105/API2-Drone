@@ -28,7 +28,7 @@ type Practitioner struct {
 // Create ...
 func (r *Practitioner) Create(log *logging.Logger, rndr *render.Render) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		p := models.NewPractitioner()
+		p := &models.Practitioner{}
 
 		err := loadResourceFromBody(p, req, r.jsonValidator)
 		if err != nil {
@@ -68,7 +68,7 @@ func (r *Practitioner) Read(log *logging.Logger, rndr *render.Render) http.Handl
 			rw.WriteHeader(http.StatusBadRequest) // TODO: More verbose errors?
 			return
 		}
-		p := models.NewPractitioner()
+		p := &models.Practitioner{}
 		if err := r.adapter.ReadJSONResource(req.Context(), resourceID, p); err != nil {
 			log.WithError(err).Panic("failed to read record")
 		}
@@ -87,7 +87,7 @@ func (r *Practitioner) Update(log *logging.Logger, rndr *render.Render) http.Han
 			return
 		}
 
-		oldP := models.NewPractitioner()
+		oldP := &models.Practitioner{}
 		if err := r.adapter.ReadJSONResource(req.Context(), resourceID, oldP); err != nil {
 			log.WithError(err).Panic("failed to read record")
 		}
@@ -107,7 +107,7 @@ func (r *Practitioner) Update(log *logging.Logger, rndr *render.Render) http.Han
 			return
 		}
 
-		newP := models.NewPractitioner()
+		newP := &models.Practitioner{}
 		if err := loadResourceFromBody(newP, req, r.jsonValidator); err != nil {
 			log.WithError(err).Panic("failed to load resource")
 		}
@@ -175,7 +175,7 @@ func (r *Practitioner) getAdapter() *ethereum.Adapter {
 }
 
 func (r *Practitioner) getModel() interface{} {
-	return models.NewPractitioner()
+	return &models.Practitioner{}
 }
 
 // NewPractitioner ...
@@ -193,19 +193,19 @@ func NewPractitioner(
 	}
 
 	rConfig := NewResourceConfig()
-	rConfig.Versioning = models.ResourceVersionPolicyVersionedUpdate
+	rConfig.Versioning = models.CapabilityStatementResourceVersioningVersionedUpdate
 	rConfig.SearchIncludes = searchIncludes{
 		"Practitioner:location",
 		"*",
 	}
 	rConfig.SearchParams = []searchParam{
-		{Name: "_id", Type: models.SearchParamTypeToken},
-		{Name: "_lastUpdated", Type: models.SearchParamTypeDate},
-		{Name: "active", Type: models.SearchParamTypeToken},
-		{Name: "identifier", Type: models.SearchParamTypeToken},
-		{Name: "location", Type: models.SearchParamTypeReference},
-		{Name: "name", Type: models.SearchParamTypeString},
-		{Name: "telecom", Type: models.SearchParamTypeToken},
+		{Name: "_id", Type: models.SearchParameterTypeToken},
+		{Name: "_lastUpdated", Type: models.SearchParameterTypeDate},
+		{Name: "active", Type: models.SearchParameterTypeToken},
+		{Name: "identifier", Type: models.SearchParameterTypeToken},
+		{Name: "location", Type: models.SearchParameterTypeReference},
+		{Name: "name", Type: models.SearchParameterTypeString},
+		{Name: "telecom", Type: models.SearchParameterTypeToken},
 	}
 
 	collContract := appConfig.ObjectCollectionContracts["Practitioner"]

@@ -9,26 +9,26 @@ type searchIncludes []string
 type searchParam struct {
 	Name                       string
 	ObjectIndexContractAddress string
-	Type                       models.SearchParamType
+	Type                       models.SearchParameterType
 }
 
 // ResourceConfig ...
 type ResourceConfig struct {
 	ConditionalCreate bool
-	ConditionalDelete models.ConditionalDeleteStatus
+	ConditionalDelete models.CapabilityStatementResourceConditionalDelete
 	ConditionalUpdate bool
-	ConditionalRead   models.ConditionalReadStatus
+	ConditionalRead   models.CapabilityStatementResourceConditionalRead
 	SearchIncludes    searchIncludes
 	SearchParams      []searchParam
 	UpdateCreate      bool
-	Versioning        models.ResourceVersionPolicy
+	Versioning        models.CapabilityStatementResourceVersioning
 }
 
 // NewResourceConfig ...
 func NewResourceConfig() *ResourceConfig {
 	return &ResourceConfig{
-		ConditionalDelete: models.ConditionalDeleteStatusNotSupported,
-		ConditionalRead:   models.ConditionalReadStatusFullSupport,
-		Versioning:        models.ResourceVersionPolicyNoVersion,
+		ConditionalDelete: models.CapabilityStatementResourceConditionalDeleteNotSupported,
+		ConditionalRead:   models.CapabilityStatementResourceConditionalReadFullSupport,
+		Versioning:        models.CapabilityStatementResourceVersioningNoVersion,
 	}
 }
