@@ -4,7 +4,7 @@ package handlers
 
 import (
 	"net/http"
-	"net/http/pprof"
+	_ "net/http/pprof"
 
 	"github.com/SynapticHealthAlliance/fhir-api/handlers/resources"
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
@@ -44,12 +44,7 @@ func RegisterHealthCheckRoutes(r *mux.Router, log *logging.Logger) {
 // RegisterPProfRoutes ...
 func RegisterPProfRoutes(r *mux.Router, log *logging.Logger) {
 	log.Debug("executing RegisterPProfRoutes")
-
-	r.HandleFunc("/debug/pprof/", pprof.Index)
-	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
-	r.HandleFunc("/debug/pprof/profile", pprof.Profile)
-	r.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
-	r.HandleFunc("/debug/pprof/trace", pprof.Trace)
+	r.PathPrefix("/debug").Handler(http.DefaultServeMux)
 }
 
 func registerFHIRResourceRoutes(r *mux.Router, log *logging.Logger, rndr *render.Render, i interface{}) {
