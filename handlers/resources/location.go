@@ -61,11 +61,11 @@ func NewLocation(box *packr.Box) (*Location, error) {
 	config := NewResourceConfig()
 	config.SearchIncludes = searchIncludes{"*"}
 	config.SearchParams = []searchParam{
-		{Name: "_id", Type: models.SearchParamTypeToken},
-		{Name: "_lastUpdated", Type: models.SearchParamTypeDate},
-		{Name: "identifier", Type: models.SearchParamTypeToken},
-		{Name: "status", Type: models.SearchParamTypeToken},
-		{Name: "type", Type: models.SearchParamTypeToken},
+		{Name: "_id", Type: models.SearchParameterTypeToken},
+		{Name: "_lastUpdated", Type: models.SearchParameterTypeDate},
+		{Name: "identifier", Type: models.SearchParameterTypeToken},
+		{Name: "status", Type: models.SearchParameterTypeToken},
+		{Name: "type", Type: models.SearchParameterTypeToken},
 	}
 
 	return &Location{

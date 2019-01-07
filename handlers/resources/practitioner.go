@@ -64,13 +64,13 @@ func NewPractitioner(box *packr.Box) (*Practitioner, error) {
 		"*",
 	}
 	config.SearchParams = []searchParam{
-		{Name: "_id", Type: models.SearchParamTypeToken},
-		{Name: "_lastUpdated", Type: models.SearchParamTypeDate},
-		{Name: "active", Type: models.SearchParamTypeToken},
-		{Name: "identifier", Type: models.SearchParamTypeToken},
-		{Name: "location", Type: models.SearchParamTypeReference},
-		{Name: "name", Type: models.SearchParamTypeString},
-		{Name: "telecom", Type: models.SearchParamTypeToken},
+		{Name: "_id", Type: models.SearchParameterTypeToken},
+		{Name: "_lastUpdated", Type: models.SearchParameterTypeDate},
+		{Name: "active", Type: models.SearchParameterTypeToken},
+		{Name: "identifier", Type: models.SearchParameterTypeToken},
+		{Name: "location", Type: models.SearchParameterTypeReference},
+		{Name: "name", Type: models.SearchParameterTypeString},
+		{Name: "telecom", Type: models.SearchParameterTypeToken},
 	}
 
 	return &Practitioner{jsonValidator: v, config: config}, nil

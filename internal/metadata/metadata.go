@@ -1,17 +1,18 @@
 package metadata
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
 )
 
 type MetadataType struct {
-	AppName   string    `json:"app_name,omitempty"`
-	Commit    string    `json:"commit,omitempty"`
-	Branch    string    `json:"branch,omitempty"`
-	BuildTime time.Time `json:"build_time,omitempty"`
-	Version   string    `json:"version,omitempty"`
+	AppName   string `json:"app_name,omitempty"`
+	Commit    string `json:"commit,omitempty"`
+	Branch    string `json:"branch,omitempty"`
+	BuildTime string `json:"build_time,omitempty"`
+	Version   string `json:"version,omitempty"`
 }
 
 func (m *MetadataType) SetBuildTime(s string) error {
@@ -19,7 +20,7 @@ func (m *MetadataType) SetBuildTime(s string) error {
 	if err != nil {
 		return errors.Wrap(err, "could not parse build time")
 	}
-	m.BuildTime = t
+	m.BuildTime = t.Format(http.TimeFormat)
 	return nil
 }
 
