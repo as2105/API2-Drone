@@ -31,9 +31,10 @@ func (c *CapabilityConfig) AddResource(typeName string, i interface{}) error {
 		newR.ConditionalCreate = config.ConditionalCreate
 		newR.ConditionalDelete = string(config.ConditionalDelete)
 		newR.ConditionalUpdate = config.ConditionalUpdate
-		newR.Versioning = string(config.Versioning)
 		newR.SearchInclude = config.SearchIncludes
 		newR.SearchParam = c.getSearchParams(config.SearchParams)
+		newR.UpdateCreate = config.UpdateCreate
+		newR.Versioning = string(config.Versioning)
 	} else {
 		return errors.New("resource is not configurable")
 	}
@@ -100,9 +101,9 @@ func NewCapabilityConfig(registry ResourceRegistry, log *logging.Logger, box *pa
 	newCS.Description = metadata.Metadata.AppName
 	newCS.FhirVersion = models.FHIRVersion
 	newCS.Format = []string{string(models.MimeTypeJSON)}
-	newCS.PatchFormat = []string{"application/json-patch+json"}
 	newCS.Kind = string(models.CapabilityStatementKindInstance)
 	newCS.Name = metadata.Metadata.AppName
+	newCS.PatchFormat = []string{"application/json-patch+json"}
 	newCS.Status = string(models.PublicationStatusDraft)
 	newCS.Version = metadata.Metadata.Version
 	newCS.Rest = []*models.CapabilityStatement_Rest{

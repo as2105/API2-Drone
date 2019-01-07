@@ -1,6 +1,7 @@
 package resources
 
 import (
+	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
 	"net/http"
 
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
@@ -50,4 +51,9 @@ type ValidateableResource interface {
 // PatchableResource ...
 type PatchableResource interface {
 	Patch(log *logging.Logger, rndr *render.Render) http.Handler
+}
+
+type ethereumResource interface {
+	getAdapter() *ethereum.Adapter
+	getModel() interface{}
 }

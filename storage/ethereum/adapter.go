@@ -13,6 +13,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/pborman/uuid"
 	"github.com/pkg/errors"
+	"math/big"
 	"time"
 )
 
@@ -110,6 +111,15 @@ func (a *Adapter) ReadJSONResource(ctx context.Context, id uuid.UUID, resource i
 		return errors.Wrap(err, "failed to unmarshall JSON bytes")
 	}
 	return nil
+}
+
+// CurrentBlock ...
+func (a *Adapter) CurrentBlock(ctx context.Context) (*big.Int, error) {
+	h, err := a.connection.HeaderByNumber(ctx, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get current block number")
+	}
+	return h.Number, nil
 }
 
 // key creates a 32-byte index key from a JSON document using a JSON path

@@ -19,6 +19,7 @@ type ResourceConfig struct {
 	ConditionalUpdate bool
 	SearchIncludes    searchIncludes
 	SearchParams      []searchParam
+	UpdateCreate      bool
 	Versioning        models.ResourceVersionPolicy
 }
 

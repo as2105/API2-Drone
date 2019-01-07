@@ -18,6 +18,7 @@ import (
 )
 
 // Practitioner ...
+// TODO: This entire struct can be refactored to share code with other resource handlers
 type Practitioner struct {
 	jsonValidator *models.JSONValidator
 	adapter       *ethereum.Adapter
@@ -71,22 +72,89 @@ func (r *Practitioner) Read(log *logging.Logger, rndr *render.Render) http.Handl
 		if err := r.adapter.ReadJSONResource(req.Context(), resourceID, p); err != nil {
 			log.WithError(err).Panic("failed to read record")
 		}
-		// TODO: support deleted records, versioning
+		// TODO: support deleted records, versioning, conditional read
 		resourceRead(rndr, rw, http.StatusOK, p.Meta.VersionID, p.Meta.LastUpdated, p)
 	})
 }
 
 // Update ...
 func (r *Practitioner) Update(log *logging.Logger, rndr *render.Render) http.Handler {
-	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {})
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		resourceID, err := getResourceID(req)
+		if err != nil {
+			log.WithError(err).Error("invalid resource ID provided")
+			rw.WriteHeader(http.StatusBadRequest) // TODO: More verbose errors?
+			return
+		}
+
+		oldP := models.NewPractitioner()
+		if err := r.adapter.ReadJSONResource(req.Context(), resourceID, oldP); err != nil {
+			log.WithError(err).Panic("failed to read record")
+		}
+		oldTime, err := time.Parse(time.RFC3339, oldP.Meta.LastUpdated)
+		if err != nil {
+			log.WithError(err).Panic("failed to parse last updated timestamp on original resource")
+		}
+
+		// optimistic locking
+		expected := req.Header.Get("If-Match")
+		if expected == "" {
+			rw.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		if expected != generateETag(oldP.Meta.VersionID) {
+			rw.WriteHeader(http.StatusPreconditionFailed)
+			return
+		}
+
+		newP := models.NewPractitioner()
+		if err := loadResourceFromBody(newP, req, r.jsonValidator); err != nil {
+			log.WithError(err).Panic("failed to load resource")
+		}
+
+		now := time.Now().UTC()
+		uCount, err := getUpdateCountFromVersionID(oldP.Meta.VersionID)
+		if err != nil {
+			log.WithError(err).Panic("failed to get current update count")
+		}
+		curBlockNumber, err := r.adapter.CurrentBlock(req.Context())
+		if err != nil {
+			log.WithError(err).Panic("failed to get current block number")
+		}
+		newVersionID := generateResourceVersionID(uCount+1, curBlockNumber)
+
+		if newP.Meta == nil {
+			newP.Meta = &models.Meta{}
+		}
+		newP.Meta.VersionID = newVersionID
+		newP.Meta.LastUpdated = now.Format(time.RFC3339)
+
+		jsonBytes, err := json.Marshal(newP)
+		if err != nil {
+			log.WithError(err).Panic("failed to marshal object as JSON")
+		}
+
+		changeScore := uint8(0) // TODO
+
+		elemData := ethereum.NewObjectCollectionElementFHIRJSONData(jsonBytes)
+		if err := r.adapter.Update(req.Context(), resourceID, oldTime, elemData, changeScore); err != nil {
+			log.WithError(err).Panic("failed to save object to smart contract")
+		}
+
+		// TODO: support upsert
+
+		// TODO: Return 409 if contract failed due to timestamp change
+
+		resourceRead(rndr, rw, http.StatusOK, newP.Meta.VersionID, now, newP)
+	})
 }
 
 // Delete ...
 func (r *Practitioner) Delete(log *logging.Logger, rndr *render.Render) http.Handler {
-	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {})
+	return ethereumResourceDestroy(log, rndr, r)
 }
 
-// Search ...
+// Search ... (TODO)
 func (r *Practitioner) Search(log *logging.Logger, rndr *render.Render) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {})
 }
@@ -99,6 +167,15 @@ func (r *Practitioner) Validate(log *logging.Logger, rndr *render.Render) http.H
 // GetResourceConfig ...
 func (r *Practitioner) GetResourceConfig() *ResourceConfig {
 	return r.config
+}
+
+// GetAdapter ...
+func (r *Practitioner) getAdapter() *ethereum.Adapter {
+	return r.adapter
+}
+
+func (r *Practitioner) getModel() interface{} {
+	return models.NewPractitioner()
 }
 
 // NewPractitioner ...

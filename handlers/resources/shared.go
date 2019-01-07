@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/big"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
@@ -72,16 +75,20 @@ func resourceCreated(rndr *render.Render, rw http.ResponseWriter, resourceID uui
 	location := fmt.Sprintf("/fhir/%s/%s", utils.GetBaseTypeName(resource), resourceID.String())
 	if versionID != "" {
 		location = fmt.Sprintf("%s/_history/%s", location, versionID)
-		rw.Header().Add("Etag", fmt.Sprintf(`W/"%s"`, versionID))
+		rw.Header().Add("Etag", generateETag(versionID))
 	}
 	rw.Header().Add("Last-Modified", lastModified.Format(http.TimeFormat))
 	rw.Header().Add("Location", location)
 	rndr.JSON(rw, http.StatusCreated, resource)
 }
 
+func generateETag(versionID string) string {
+	return fmt.Sprintf(`W/"%s"`, versionID)
+}
+
 func resourceRead(rndr *render.Render, rw http.ResponseWriter, status int, versionID string, lastModified interface{}, resource interface{}) {
 	if versionID != "" {
-		rw.Header().Add("Etag", fmt.Sprintf(`W/"%s"`, versionID))
+		rw.Header().Add("Etag", generateETag(versionID))
 	}
 	var ts time.Time
 	switch t := lastModified.(type) {
@@ -97,6 +104,21 @@ func resourceRead(rndr *render.Render, rw http.ResponseWriter, status int, versi
 	}
 	rw.Header().Add("Last-Modified", ts.Format(http.TimeFormat))
 	rndr.JSON(rw, status, resource)
+}
+
+func ethereumResourceDestroy(log *logging.Logger, rndr *render.Render, resource ethereumResource) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		resourceID, err := getResourceID(req)
+		if err != nil {
+			log.WithError(err).Error("invalid resource ID provided")
+			rw.WriteHeader(http.StatusBadRequest) // TODO: More verbose errors?
+			return
+		}
+		if err := resource.getAdapter().Destroy(req.Context(), resourceID); err != nil {
+			log.WithError(err).Panic("failed to destroy object")
+		}
+		rw.WriteHeader(http.StatusNoContent)
+	})
 }
 
 func validateJSONResource(log *logging.Logger, rndr *render.Render, validator *models.JSONValidator) http.Handler {
@@ -136,6 +158,14 @@ func validateJSONResource(log *logging.Logger, rndr *render.Render, validator *m
 }
 
 // generateResourceVersionID creates a version string for a resource based on an update nonce and the block number of the previous version
-func generateResourceVersionID(updateCount uint, previousBlockNumber uint) string {
-	return fmt.Sprintf("%d:%d", updateCount, previousBlockNumber)
+func generateResourceVersionID(updateCount uint, previousBlockNumber *big.Int) string {
+	return fmt.Sprintf("%d:%s", updateCount, previousBlockNumber.String())
+}
+
+func getUpdateCountFromVersionID(versionID string) (uint, error) {
+	c, err := strconv.ParseUint(strings.Split(versionID, ":")[0], 10, 64)
+	if err != nil {
+		return 0, errors.Wrapf(err, "failed to parse update count from version string %q", versionID)
+	}
+	return uint(c), nil
 }
