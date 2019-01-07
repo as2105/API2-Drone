@@ -104,6 +104,16 @@ func NewCapabilityConfig(registry ResourceRegistry, log *logging.Logger, box *pa
 	newCS.Name = metadata.Metadata.AppName
 	newCS.Status = models.CapabilityStatementStatusDraft
 	newCS.Version = metadata.Metadata.Version
+	// newCS.Copyright = "Synaptic Health Alliance 2019"
+	// newCS.Publisher = "Synaptic Health Alliance"
+	// newCS.Purpose = "Synaptic Health Alliance"
+	// newCS.Title = "Synaptic Health Alliance PDX"
+	// newCS.UseContext = []*models.UsageContext{}
+	// newCS.Jurisdiction = []*models.CodeableConcept{}
+	// newCS.Format = []string{}
+	// newCS.PatchFormat = []string{}
+	// newCS.ImplementationGuide = []string{}
+
 	newCS.Rest = []*models.CapabilityStatement_Rest{
 		{Mode: models.CapabilityStatement_RestModeServer},
 	}
@@ -135,7 +145,7 @@ func NewCapabilityConfig(registry ResourceRegistry, log *logging.Logger, box *pa
 		for _, e := range vErrs {
 			log.Error(e.String())
 		}
-		log.Panic("generated capability statement is not valid")
+		log.Error("generated capability statement is not valid")
 	}
 	log.Debug("capability statement is valid")
 

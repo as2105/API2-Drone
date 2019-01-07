@@ -64,7 +64,7 @@ const (
 )
 
 var (
-	imports = []string{"regexp"}
+	imports = []string{"regexp", "encoding/json"}
 	outfile = os.Stdout
 )
 
@@ -224,7 +224,7 @@ func BuildType(typeName string, definition *JSONSchema) {
 			}
 			ftype := FHIRType(property)
 			if ftype == "const" {
-				constants[strings.Title(prop)] = property.Const
+				constants[prop] = property.Const
 				continue
 			} else if ftype == "enum" {
 				enums[strings.Title(prop)] = property.Enum
@@ -243,7 +243,20 @@ func BuildType(typeName string, definition *JSONSchema) {
 
 		fmt.Fprint(outfile, "}\n\n")
 		for k, _ := range constants {
-			fmt.Fprintf(outfile, "func (t *%s) %s() string {\n\treturn \"%s\"\n}\n", typeName, k, constants[k])
+			fmt.Fprintf(outfile, "func (t *%s) %s() string {\n\treturn \"%s\"\n}\n", typeName, strings.Title(k), constants[k])
+		}
+
+		// Generate MarshalJSON code
+		if len(constants) > 0 {
+			fmt.Fprintf(outfile, "func (t *%s) MarshalJSON() ([]byte, error) {\n\treturn json.Marshal(struct {\n\t\t%s\n", typeName, typeName)
+			for k, _ := range constants {
+				fmt.Fprintf(outfile, "\t\t%s string `json:\"%s\"`\n", strings.Title(k), k)
+			}
+			fmt.Fprintf(outfile, "\t}{\n\t\t%s: *t,\n", typeName)
+			for k, _ := range constants {
+				fmt.Fprintf(outfile, "\t\t%s: t.%s(),\n", strings.Title(k), strings.Title(k))
+			}
+			fmt.Fprint(outfile, "\t})\n}\n")
 		}
 
 		if len(enums) > 0 {
