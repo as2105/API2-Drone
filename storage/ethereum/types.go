@@ -2,11 +2,12 @@ package ethereum
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/vincent-petithory/dataurl"
 	"math/big"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
+	"github.com/vincent-petithory/dataurl"
 )
 
 const fhirJSONMediaType = "application/fhir+json"

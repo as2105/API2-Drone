@@ -243,18 +243,18 @@ func BuildType(typeName string, definition *JSONSchema) {
 		}
 
 		fmt.Fprint(outfile, "}\n\n")
-		for k, _ := range constants {
+		for k := range constants {
 			fmt.Fprintf(outfile, "// %[2]s ...\n\tfunc (t *%[1]s) %[2]s() string {\n\treturn \"%[3]s\"\n}\n", typeName, fieldName(k), constants[k])
 		}
 
 		// Generate MarshalJSON code
 		if len(constants) > 0 {
 			fmt.Fprintf(outfile, "// MarshalJSON ...\n\tfunc (t *%s) MarshalJSON() ([]byte, error) {\n\treturn json.Marshal(struct {\n\t\t%s\n", typeName, typeName)
-			for k, _ := range constants {
+			for k := range constants {
 				fmt.Fprintf(outfile, "\t\t%s string `json:\"%s\"`\n", fieldName(k), k)
 			}
 			fmt.Fprintf(outfile, "\t}{\n\t\t%s: *t,\n", typeName)
-			for k, _ := range constants {
+			for k := range constants {
 				fmt.Fprintf(outfile, "\t\t%s: t.%s(),\n", fieldName(k), fieldName(k))
 			}
 			fmt.Fprint(outfile, "\t})\n}\n")
@@ -262,7 +262,7 @@ func BuildType(typeName string, definition *JSONSchema) {
 
 		if len(enums) > 0 {
 			enumarr := []string{}
-			for k, _ := range enums {
+			for k := range enums {
 				vals := enums[k]
 
 				enumName := fmt.Sprintf("%s%s", typeName, k)
@@ -330,7 +330,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "has OneOf: %d\n", len(j.OneOf))
 	}
 
-	for typeName, _ := range j.Discriminator.Mapping {
+	for typeName := range j.Discriminator.Mapping {
 		definition := j.Definitions[typeName]
 		BuildType(typeName, definition)
 	}

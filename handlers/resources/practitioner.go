@@ -2,7 +2,6 @@ package resources
 
 import (
 	"encoding/json"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"net/http"
 	"time"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/SynapticHealthAlliance/fhir-api/models"
 	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/pborman/uuid"
 	"github.com/pkg/errors"

@@ -44,7 +44,7 @@ type Config struct {
 	Profile                   bool     `mapstructure:"profile"`
 	RPCURL                    string   `mapstructure:"rpc_url"`
 	TransactionsChannelBuffer uint     `mapstructure:"txns_buffer"`
-	Pprof                    bool              `mapstructure:"pprof"`
+	Pprof                     bool     `mapstructure:"pprof"`
 
 	OrganizationContract      common.Address
 	ObjectCollectionContracts map[string]*ObjectCollectionContract

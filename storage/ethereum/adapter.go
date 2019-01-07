@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/big"
+	"time"
+
 	"github.com/SynapticHealthAlliance/fhir-api/config"
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
 	"github.com/SynapticHealthAlliance/pdx-contracts/go/contracts"
@@ -13,8 +16,6 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/pborman/uuid"
 	"github.com/pkg/errors"
-	"math/big"
-	"time"
 )
 
 // Adapter ...

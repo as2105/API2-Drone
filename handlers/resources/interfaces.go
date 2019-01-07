@@ -1,10 +1,10 @@
 package resources
 
 import (
-	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
 	"net/http"
 
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
 	"github.com/unrolled/render"
 )
 

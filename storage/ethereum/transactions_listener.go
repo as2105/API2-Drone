@@ -2,13 +2,14 @@ package ethereum
 
 import (
 	"context"
+	"time"
+
 	"github.com/SynapticHealthAlliance/fhir-api/config"
 	"github.com/SynapticHealthAlliance/fhir-api/logging"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"go.uber.org/fx"
-	"time"
 )
 
 // TransactionsChannel ...
