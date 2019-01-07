@@ -64,13 +64,16 @@ func serveRun(cmd *cobra.Command, args []string) {
 			newRenderer,
 			newCORSMiddleware,
 			ethereum.NewConnection,
-			ethereum.NewTransactor,
+			ethereum.NewTransactOpts,
+			ethereum.NewTransactionsChannel,
+			ethereum.NewTransactionsListener,
 			database.NewConnection,
 			static.NewStaticFilesBox,
 		),
 		fx.Logger(logging.NewLogger()),
 		fx.Invoke(
 			configureRouter,
+			ethereum.StartTransactionsListener,
 		),
 	)
 

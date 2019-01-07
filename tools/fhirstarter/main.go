@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -106,7 +107,7 @@ func FHIRType(property *JSONSchema) string {
 				return "string"
 			}
 		default:
-			return typ
+			return fieldName(typ)
 		}
 	} else if len(property.Ref) > 0 {
 		switch property.Ref {
@@ -152,9 +153,9 @@ func FHIRType(property *JSONSchema) string {
 			t := property.Ref[strings.LastIndex(property.Ref, "/")+1:]
 			r, _ := utf8.DecodeRuneInString(t)
 			if unicode.IsUpper(r) {
-				return fmt.Sprintf("*%s", t)
+				return fmt.Sprintf("*%s", fieldName(t))
 			}
-			return fmt.Sprintf("%s", t)
+			return fmt.Sprintf("%s", fieldName(t))
 		}
 
 	} else if len(property.Const) > 0 {
@@ -193,12 +194,12 @@ func commentify(pre, s string) string {
 }
 
 func BuildType(typeName string, definition *JSONSchema) {
-
+	typeName = fieldName(typeName)
 	if len(definition.Pattern) > 0 && definition.TypeValue == "string" {
 		fmt.Fprintf(outfile, "// %s is %s\n", typeName, commentify("", definition.Description)[3:])
 		fmt.Fprintf(outfile, "type %s %s\n", typeName, definition.TypeValue)
-		fmt.Fprintf(outfile, "var %sPattern = regexp.MustCompile(`%s`)\n", typeName, definition.Pattern)
-		fmt.Fprintf(outfile, "func (t *%s) Validate() bool {\n\treturn %sPattern.MatchString(string(*t))\n}\n", typeName, typeName)
+		fmt.Fprintf(outfile, "// %[1]sPattern ...\n\tvar %[1]sPattern = regexp.MustCompile(`%[2]s`)\n", typeName, definition.Pattern)
+		fmt.Fprintf(outfile, "// Validate ...\n\tfunc (t *%s) Validate() bool {\n\treturn %sPattern.MatchString(string(*t))\n}\n", typeName, typeName)
 	} else {
 		constants := make(map[string]string)
 		enums := make(map[string][]string)
@@ -210,9 +211,9 @@ func BuildType(typeName string, definition *JSONSchema) {
 
 			var propertyString string
 			if prop[0] == '_' {
-				propertyString = fmt.Sprintf("\t%s_ext ", strings.Title(prop[1:]))
+				propertyString = fmt.Sprintf("\t%sExt ", fieldName(prop[1:]))
 			} else {
-				propertyString = fmt.Sprintf("\t%s ", strings.Title(prop))
+				propertyString = fmt.Sprintf("\t%s ", fieldName(prop))
 			}
 
 			omit := ""
@@ -227,11 +228,11 @@ func BuildType(typeName string, definition *JSONSchema) {
 				constants[prop] = property.Const
 				continue
 			} else if ftype == "enum" {
-				enums[strings.Title(prop)] = property.Enum
-				ftype = fmt.Sprintf("%s%s", typeName, strings.Title(prop))
+				enums[fieldName(prop)] = property.Enum
+				ftype = fmt.Sprintf("%s%s", typeName, fieldName(prop))
 			} else if ftype == "[]enum" {
-				enums[strings.Title(prop)] = property.Enum
-				ftype = fmt.Sprintf("[]%s%s", typeName, strings.Title(prop))
+				enums[fieldName(prop)] = property.Enum
+				ftype = fmt.Sprintf("[]%s%s", typeName, fieldName(prop))
 			}
 
 			fmt.Fprintln(outfile, commentify("\t", property.Description))
@@ -242,49 +243,56 @@ func BuildType(typeName string, definition *JSONSchema) {
 		}
 
 		fmt.Fprint(outfile, "}\n\n")
-		for k, _ := range constants {
-			fmt.Fprintf(outfile, "func (t *%s) %s() string {\n\treturn \"%s\"\n}\n", typeName, strings.Title(k), constants[k])
+		for k := range constants {
+			fmt.Fprintf(outfile, "// %[2]s ...\n\tfunc (t *%[1]s) %[2]s() string {\n\treturn \"%[3]s\"\n}\n", typeName, fieldName(k), constants[k])
 		}
 
 		// Generate MarshalJSON code
 		if len(constants) > 0 {
-			fmt.Fprintf(outfile, "func (t *%s) MarshalJSON() ([]byte, error) {\n\treturn json.Marshal(struct {\n\t\t%s\n", typeName, typeName)
-			for k, _ := range constants {
-				fmt.Fprintf(outfile, "\t\t%s string `json:\"%s\"`\n", strings.Title(k), k)
+			fmt.Fprintf(outfile, "// MarshalJSON ...\n\tfunc (t *%s) MarshalJSON() ([]byte, error) {\n\treturn json.Marshal(struct {\n\t\t%s\n", typeName, typeName)
+			for k := range constants {
+				fmt.Fprintf(outfile, "\t\t%s string `json:\"%s\"`\n", fieldName(k), k)
 			}
 			fmt.Fprintf(outfile, "\t}{\n\t\t%s: *t,\n", typeName)
-			for k, _ := range constants {
-				fmt.Fprintf(outfile, "\t\t%s: t.%s(),\n", strings.Title(k), strings.Title(k))
+			for k := range constants {
+				fmt.Fprintf(outfile, "\t\t%s: t.%s(),\n", fieldName(k), fieldName(k))
 			}
 			fmt.Fprint(outfile, "\t})\n}\n")
 		}
 
 		if len(enums) > 0 {
 			enumarr := []string{}
-			for k, _ := range enums {
+			for k := range enums {
 				vals := enums[k]
 
 				enumName := fmt.Sprintf("%s%s", typeName, k)
-				fmt.Fprintf(outfile, "type %s string\n", enumName)
+				fmt.Fprintf(outfile, "// %[1]s ...\n\ttype %[1]s string\n", enumName)
 
 				for i := range vals {
 					val := vals[i]
-					titleVal := strings.Title(val)
-					titleVal = strings.Replace(titleVal, "-", "", -1)
-					titleVal = strings.Replace(titleVal, "/", "", -1)
-					titleVal = strings.Replace(titleVal, ".", "_", -1)
-
-					titleVal = strings.Replace(titleVal, "<", "Lt", -1)
-					titleVal = strings.Replace(titleVal, ">", "Gt", -1)
-					titleVal = strings.Replace(titleVal, "=", "Eq", -1)
-					titleVal = strings.Replace(titleVal, "!", "Not", -1)
-
-					enumarr = append(enumarr, fmt.Sprintf("\t%s%s %s = \"%s\"", enumName, titleVal, enumName, val))
+					titleVal := fieldName(val)
+					enumarr = append(enumarr, fmt.Sprintf("// %[1]s%[2]s is a %[1]s value of \"%[3]s\"\n\t%[1]s%[2]s %[1]s = \"%[3]s\"", enumName, titleVal, val))
 				}
 			}
 			fmt.Fprintf(outfile, "const (\n %s\n)\n\n", strings.Join(enumarr, "\n"))
 		}
 	}
+}
+
+var (
+	replacer = strings.NewReplacer("Uuid", "UUID", "Uid", "UID", "Url", "URL", "Uri", "URI", "Xml", "XML",
+		"Json", "JSON", "_", "", "Html", "HTML", "-", "", "/", "", ".", "", "<", "Lt", ">", "Gt", "=", "Eq", "!", "Not")
+	idRegexp = regexp.MustCompile(`Id(\z|[A-Z])`)
+)
+
+func fieldName(in string) string {
+	if in == "base64Binary" {
+		return in
+	}
+	str := strings.Title(in)
+	str = replacer.Replace(str)
+	str = idRegexp.ReplaceAllString(str, "ID$2")
+	return str
 }
 
 func main() {
@@ -309,10 +317,10 @@ func main() {
 	}
 	fmt.Fprint(outfile, ")\n")
 
-	fmt.Fprintf(outfile, "const (\n\tFHIRVersion = \"%s\"\n)\n", j.ID()[strings.LastIndex(j.ID(), "/")+1:])
+	fmt.Fprintf(outfile, "// FHIRVersion is the current FHIR version\n\tconst (\n\tFHIRVersion = \"%s\"\n)\n", j.ID()[strings.LastIndex(j.ID(), "/")+1:])
 
-	fmt.Fprint(outfile, "type Resource interface {\n\tResourceType() string\n}\n")
-	fmt.Fprint(outfile, "type Validater interface {\n\tValidate() bool\n}\n")
+	fmt.Fprint(outfile, "// Resource ...\n\ttype Resource interface {\n\tResourceType() string\n}\n")
+	fmt.Fprint(outfile, "// Validator ...\n\ttype Validator interface {\n\tValidate() bool\n}\n")
 
 	if j.Discriminator != nil {
 		fmt.Fprintf(os.Stderr, "has Discriminator: %s (%d)\n", j.Discriminator.PropertyName, len(j.Discriminator.Mapping))
@@ -322,7 +330,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "has OneOf: %d\n", len(j.OneOf))
 	}
 
-	for typeName, _ := range j.Discriminator.Mapping {
+	for typeName := range j.Discriminator.Mapping {
 		definition := j.Definitions[typeName]
 		BuildType(typeName, definition)
 	}

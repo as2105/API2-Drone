@@ -15,17 +15,20 @@ type searchParam struct {
 // ResourceConfig ...
 type ResourceConfig struct {
 	ConditionalCreate bool
-	ConditionalDelete models.CapabilityStatement_ResourceConditionalDelete
+	ConditionalDelete models.CapabilityStatementResourceConditionalDelete
 	ConditionalUpdate bool
+	ConditionalRead   models.CapabilityStatementResourceConditionalRead
 	SearchIncludes    searchIncludes
 	SearchParams      []searchParam
-	Versioning        models.CapabilityStatement_ResourceVersioning
+	UpdateCreate      bool
+	Versioning        models.CapabilityStatementResourceVersioning
 }
 
 // NewResourceConfig ...
 func NewResourceConfig() *ResourceConfig {
 	return &ResourceConfig{
-		ConditionalDelete: models.CapabilityStatement_ResourceConditionalDeleteNotSupported,
-		Versioning:        models.CapabilityStatement_ResourceVersioningNoVersion,
+		ConditionalDelete: models.CapabilityStatementResourceConditionalDeleteNotSupported,
+		ConditionalRead:   models.CapabilityStatementResourceConditionalReadFullSupport,
+		Versioning:        models.CapabilityStatementResourceVersioningNoVersion,
 	}
 }

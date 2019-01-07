@@ -18,7 +18,7 @@ type CapabilityConfig struct {
 
 // AddResource ...
 func (c *CapabilityConfig) AddResource(typeName string, i interface{}) error {
-	newR := &models.CapabilityStatement_Resource{
+	newR := &models.CapabilityStatementResource{
 		Type:        typeName,
 		Interaction: c.getInteractions(i),
 	}
@@ -31,9 +31,11 @@ func (c *CapabilityConfig) AddResource(typeName string, i interface{}) error {
 		newR.ConditionalCreate = config.ConditionalCreate
 		newR.ConditionalDelete = config.ConditionalDelete
 		newR.ConditionalUpdate = config.ConditionalUpdate
-		newR.Versioning = config.Versioning
+		newR.ConditionalRead = config.ConditionalRead
 		newR.SearchInclude = config.SearchIncludes
 		newR.SearchParam = c.getSearchParams(config.SearchParams)
+		newR.UpdateCreate = config.UpdateCreate
+		newR.Versioning = config.Versioning
 	} else {
 		return errors.New("resource is not configurable")
 	}
@@ -44,48 +46,48 @@ func (c *CapabilityConfig) AddResource(typeName string, i interface{}) error {
 	return nil
 }
 
-func (c *CapabilityConfig) getSearchParams(params []searchParam) []*models.CapabilityStatement_SearchParam {
-	modelParams := []*models.CapabilityStatement_SearchParam{}
+func (c *CapabilityConfig) getSearchParams(params []searchParam) []*models.CapabilityStatementSearchParam {
+	modelParams := []*models.CapabilityStatementSearchParam{}
 	for _, p := range params {
-		modelParams = append(modelParams, &models.CapabilityStatement_SearchParam{
+		modelParams = append(modelParams, &models.CapabilityStatementSearchParam{
 			Name: p.Name,
-			Type: models.CapabilityStatement_SearchParamType(p.Type),
+			Type: models.CapabilityStatementSearchParamType(p.Type),
 		})
 	}
 	return modelParams
 }
 
-func (c *CapabilityConfig) getInteractions(i interface{}) []*models.CapabilityStatement_Interaction {
+func (c *CapabilityConfig) getInteractions(i interface{}) []*models.CapabilityStatementInteraction {
 	ints := c.getRestfulInteractionTypes(i)
-	mods := []*models.CapabilityStatement_Interaction{}
+	mods := []*models.CapabilityStatementInteraction{}
 	for _, i := range ints {
-		mods = append(mods, &models.CapabilityStatement_Interaction{Code: i})
+		mods = append(mods, &models.CapabilityStatementInteraction{Code: i})
 	}
 	return mods
 }
 
-func (c *CapabilityConfig) getRestfulInteractionTypes(i interface{}) []models.CapabilityStatement_InteractionCode {
-	ints := []models.CapabilityStatement_InteractionCode{}
+func (c *CapabilityConfig) getRestfulInteractionTypes(i interface{}) []models.CapabilityStatementInteractionCode {
+	ints := []models.CapabilityStatementInteractionCode{}
 	if _, ok := i.(CreateableResource); ok {
-		ints = append(ints, models.CapabilityStatement_InteractionCodeCreate)
+		ints = append(ints, models.CapabilityStatementInteractionCodeCreate)
 	}
 	if _, ok := i.(SearchableResource); ok {
-		ints = append(ints, models.CapabilityStatement_InteractionCodeSearchType)
+		ints = append(ints, models.CapabilityStatementInteractionCodeSearchType)
 	}
 	if _, ok := i.(UpdateableResource); ok {
-		ints = append(ints, models.CapabilityStatement_InteractionCodeUpdate)
+		ints = append(ints, models.CapabilityStatementInteractionCodeUpdate)
 	}
 	if _, ok := i.(DeleteableResource); ok {
-		ints = append(ints, models.CapabilityStatement_InteractionCodeDelete)
+		ints = append(ints, models.CapabilityStatementInteractionCodeDelete)
 	}
 	if _, ok := i.(ReadableResource); ok {
-		ints = append(ints, models.CapabilityStatement_InteractionCodeRead)
+		ints = append(ints, models.CapabilityStatementInteractionCodeRead)
 	}
 	if _, ok := i.(PatchableResource); ok {
-		ints = append(ints, models.CapabilityStatement_InteractionCodePatch)
+		ints = append(ints, models.CapabilityStatementInteractionCodePatch)
 	}
 	if _, ok := i.(VersionReadableResource); ok {
-		ints = append(ints, models.CapabilityStatement_InteractionCodeVread)
+		ints = append(ints, models.CapabilityStatementInteractionCodeVread)
 	}
 	return ints
 }
@@ -99,9 +101,9 @@ func NewCapabilityConfig(registry ResourceRegistry, log *logging.Logger, box *pa
 	newCS.Description = metadata.Metadata.AppName
 	newCS.FhirVersion = models.FHIRVersion
 	newCS.Format = []string{"json"}
-	newCS.PatchFormat = []string{"application/json-patch+json"}
 	newCS.Kind = models.CapabilityStatementKindInstance
 	newCS.Name = metadata.Metadata.AppName
+	newCS.PatchFormat = []string{"application/json-patch+json"}
 	newCS.Status = models.CapabilityStatementStatusDraft
 	newCS.Version = metadata.Metadata.Version
 	// newCS.Copyright = "Synaptic Health Alliance 2019"
@@ -114,8 +116,8 @@ func NewCapabilityConfig(registry ResourceRegistry, log *logging.Logger, box *pa
 	// newCS.PatchFormat = []string{}
 	// newCS.ImplementationGuide = []string{}
 
-	newCS.Rest = []*models.CapabilityStatement_Rest{
-		{Mode: models.CapabilityStatement_RestModeServer},
+	newCS.Rest = []*models.CapabilityStatementRest{
+		{Mode: models.CapabilityStatementRestModeServer},
 	}
 
 	newConfig := &CapabilityConfig{CapabilityStatement: newCS}

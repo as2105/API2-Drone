@@ -12,6 +12,9 @@ type Fields = logrus.Fields
 // Logger ...
 type Logger = logrus.Logger
 
+// FieldLogger is an interface to abstract usage against a Logger or Entry
+type FieldLogger = logrus.FieldLogger
+
 // DefaultLogger ...
 var DefaultLogger = logrus.StandardLogger()
 

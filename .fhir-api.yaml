@@ -1,2 +1,35 @@
+# Contract addresses with ganache key 10101
+
 address: 0.0.0.0:8080
+
 log_level: debug
+
+gas_limit: 2000000
+
+# EXAMPLE: don't share this
+private_key: "0xe0fe52592d406d1ab59ec390416a3d6795db899062c7560e3a395f253abdbfdb"
+
+contracts:
+  organization:
+    address: "0xEfC927089de2CFB25325C103C1616CA6C7BcD9D4"
+
+  collections:
+    - name: Practitioner
+      address: "0x6596907F5DB0df9330E1BC0d69C967909256A059"
+      indexes:
+        - name: Global NPI
+          address: "0xFB63317C64CB5A51442B0025668cEFd58d7C60d7"
+          path: $.identifier.value
+
+    - name: PractitionerRole
+      address: "0xa63d32B7956EdC4Bd45DcbeD92cc03bCC7b67c32"
+      indexes:
+        - name: Practitioner UUID
+          address: "0x32C1a3207C739B0182c59de92368273d1A57c601"
+          path: $.practitioner.reference
+        - name: Location UUID
+          address: "0x81C5cfbD7Fdd8F3D2D2687CC7FD18D1f68668Cb0"
+          path: $.location.reference
+
+    - name: Location
+      address: "0x5bE6979D573fFe9BEac82Abf13C67a1a5B1b7616"

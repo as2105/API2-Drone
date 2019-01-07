@@ -1,7 +1,12 @@
 package resources
 
 import (
+	"github.com/SynapticHealthAlliance/fhir-api/config"
+	"github.com/SynapticHealthAlliance/fhir-api/logging"
 	"github.com/SynapticHealthAlliance/fhir-api/storage/database"
+	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/gobuffalo/packr/v2"
 )
 
@@ -9,11 +14,19 @@ import (
 type ResourceRegistry []interface{}
 
 // NewResourceRegistry ...
-func NewResourceRegistry(box *packr.Box, db *database.DB) (ResourceRegistry, error) {
+func NewResourceRegistry(
+	box *packr.Box,
+	db *database.DB,
+	connection *ethclient.Client,
+	transactOpts *bind.TransactOpts,
+	appConfig *config.Config,
+	log *logging.Logger,
+	txnsChan ethereum.TransactionsChannel,
+) (ResourceRegistry, error) {
 	registry := ResourceRegistry{}
 
 	// Practitioner
-	practitioner, err := NewPractitioner(box)
+	practitioner, err := NewPractitioner(box, connection, transactOpts, appConfig, log, txnsChan)
 	if err != nil {
 		return registry, err
 	}

@@ -6,47 +6,50 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/pborman/uuid"
 	"github.com/pkg/errors"
 	"github.com/vincent-petithory/dataurl"
 )
 
-const FHIRJSONMediaType = "application/fhir+json"
+const fhirJSONMediaType = "application/fhir+json"
 
+// ObjectCollectionElementData ...
 type ObjectCollectionElementData interface {
 	URI() string
+	Bytes() ([]byte, error)
 }
 
-type StorageAdapter interface {
-	Create(data ObjectCollectionElementData) (uuid.UUID, error)
-	Update(id uuid.UUID, lastUpdatedAt time.Time, data ObjectCollectionElementData, changeScore uint8) error
-	Destroy(id uuid.UUID) error
-	Read(id uuid.UUID) (ObjectCollectionElementData, error)
-}
-
+// ObjectCollectionElementBytesData ...
 type ObjectCollectionElementBytesData struct {
 	data      []byte
 	mediaType string
 }
 
+// URI ...
 func (o *ObjectCollectionElementBytesData) URI() string {
 	uri := dataurl.New(o.data, o.mediaType)
 	return uri.String()
 }
 
+// Bytes ...
+func (o *ObjectCollectionElementBytesData) Bytes() ([]byte, error) {
+	return o.data, nil
+}
+
+// NewObjectCollectionElementFHIRJSONData ...
 func NewObjectCollectionElementFHIRJSONData(data []byte) *ObjectCollectionElementBytesData {
 	return &ObjectCollectionElementBytesData{
 		data:      data,
-		mediaType: FHIRJSONMediaType,
+		mediaType: fhirJSONMediaType,
 	}
 }
 
+// ObjectCollectionElementIPFSData ...
 type ObjectCollectionElementIPFSData struct {
 	address string
 	path    string
 }
 
+// URI ...
 func (o *ObjectCollectionElementIPFSData) URI() string {
 	s := fmt.Sprintf("ipfs:%s", o.address)
 	if o.path != "" {
@@ -55,20 +58,36 @@ func (o *ObjectCollectionElementIPFSData) URI() string {
 	return s
 }
 
+// Bytes ...
+func (o *ObjectCollectionElementIPFSData) Bytes() ([]byte, error) {
+	// TODO: fetch from IPFS
+	return []byte{}, nil
+}
+
+// ObjectCollectionElementURIData ...
 type ObjectCollectionElementURIData struct {
 	uri string
 }
 
+// URI ...
 func (o *ObjectCollectionElementURIData) URI() string {
 	return o.uri
 }
 
+// Bytes ...
+func (o *ObjectCollectionElementURIData) Bytes() ([]byte, error) {
+	// TODO: fetch?
+	return []byte{}, nil
+}
+
+// ObjectCollectionElement ...
 type ObjectCollectionElement struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Data      ObjectCollectionElementData
 }
 
+// NewObjectCollectionElement ...
 func NewObjectCollectionElement(uri string, createdAt, updatedAt *big.Int) (*ObjectCollectionElement, error) {
 	newObj := &ObjectCollectionElement{
 		CreatedAt: bigintToTime(createdAt),
@@ -86,7 +105,7 @@ func NewObjectCollectionElement(uri string, createdAt, updatedAt *big.Int) (*Obj
 			return nil, errors.Wrap(err, "unable to decode data uri")
 		}
 		switch u.MediaType.ContentType() {
-		case FHIRJSONMediaType:
+		case fhirJSONMediaType:
 			newObj.Data = NewObjectCollectionElementFHIRJSONData(u.Data)
 		default:
 			newObj.Data = &ObjectCollectionElementBytesData{u.Data, u.MediaType.ContentType()}
@@ -98,8 +117,4 @@ func NewObjectCollectionElement(uri string, createdAt, updatedAt *big.Int) (*Obj
 	return newObj, nil
 }
 
-type ObjectIndexKey = [32]byte
-
-type ObjectIndexPopulationFunc func(ObjectCollectionElementData) (ObjectIndexKey, error)
-
-type ObjectIndexCollection map[common.Address]ObjectIndexPopulationFunc
+type objectIndexKey = [32]byte
