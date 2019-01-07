@@ -31,6 +31,7 @@ func (c *CapabilityConfig) AddResource(typeName string, i interface{}) error {
 		newR.ConditionalCreate = config.ConditionalCreate
 		newR.ConditionalDelete = string(config.ConditionalDelete)
 		newR.ConditionalUpdate = config.ConditionalUpdate
+		newR.ConditionalRead = string(config.ConditionalRead)
 		newR.SearchInclude = config.SearchIncludes
 		newR.SearchParam = c.getSearchParams(config.SearchParams)
 		newR.UpdateCreate = config.UpdateCreate

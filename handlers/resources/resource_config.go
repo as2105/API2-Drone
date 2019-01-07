@@ -17,6 +17,7 @@ type ResourceConfig struct {
 	ConditionalCreate bool
 	ConditionalDelete models.ConditionalDeleteStatus
 	ConditionalUpdate bool
+	ConditionalRead   models.ConditionalReadStatus
 	SearchIncludes    searchIncludes
 	SearchParams      []searchParam
 	UpdateCreate      bool
@@ -27,6 +28,7 @@ type ResourceConfig struct {
 func NewResourceConfig() *ResourceConfig {
 	return &ResourceConfig{
 		ConditionalDelete: models.ConditionalDeleteStatusNotSupported,
+		ConditionalRead:   models.ConditionalReadStatusFullSupport,
 		Versioning:        models.ResourceVersionPolicyNoVersion,
 	}
 }

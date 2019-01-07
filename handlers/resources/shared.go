@@ -86,10 +86,7 @@ func generateETag(versionID string) string {
 	return fmt.Sprintf(`W/"%s"`, versionID)
 }
 
-func resourceRead(rndr *render.Render, rw http.ResponseWriter, status int, versionID string, lastModified interface{}, resource interface{}) {
-	if versionID != "" {
-		rw.Header().Add("Etag", generateETag(versionID))
-	}
+func resourceRead(rndr *render.Render, rw http.ResponseWriter, req *http.Request, status int, versionID string, lastModified interface{}, resource interface{}, conditional bool) error {
 	var ts time.Time
 	switch t := lastModified.(type) {
 	case time.Time:
@@ -102,8 +99,33 @@ func resourceRead(rndr *render.Render, rw http.ResponseWriter, status int, versi
 			ts = parsedTS
 		}
 	}
+	skip := false
+	if conditional {
+		if since := req.Header.Get("If-Modified-Since"); since != "" {
+			sinceTs, err := time.Parse(http.TimeFormat, since)
+			if err != nil {
+				return errors.Wrap(err, "unable to parse If-Modified-Since timestamp")
+			}
+			if ts.Equal(sinceTs) || ts.Before(sinceTs) {
+				skip = true
+			}
+		}
+		if etag := req.Header.Get("If-None-Match"); etag != "" && versionID != "" {
+			if etag == generateETag(versionID) {
+				skip = true
+			}
+		}
+	}
+	if skip {
+		rw.WriteHeader(http.StatusNotModified)
+		return nil
+	}
+	if versionID != "" {
+		rw.Header().Add("Etag", generateETag(versionID))
+	}
 	rw.Header().Add("Last-Modified", ts.Format(http.TimeFormat))
 	rndr.JSON(rw, status, resource)
+	return nil
 }
 
 func ethereumResourceDestroy(log *logging.Logger, rndr *render.Render, resource ethereumResource) http.Handler {

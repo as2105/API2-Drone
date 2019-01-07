@@ -97,7 +97,7 @@ func (s *Subscription) Read(log *logging.Logger, rndr *render.Render) http.Handl
 		if err := json.Unmarshal(dbRec.Data, newSub); err != nil {
 			log.WithError(err).Panic("failed to unmarshal data")
 		}
-		resourceRead(rndr, rw, http.StatusOK, "", dbRec.UpdatedAt, newSub)
+		resourceRead(rndr, rw, req, http.StatusOK, "", dbRec.UpdatedAt, newSub, true)
 	})
 }
 
@@ -164,7 +164,7 @@ func (s *Subscription) Update(log *logging.Logger, rndr *render.Render) http.Han
 			log.WithError(err).Panic("failed to update record in database")
 		}
 
-		resourceRead(rndr, rw, status, "", dbRec.UpdatedAt, newSub)
+		resourceRead(rndr, rw, req, status, "", dbRec.UpdatedAt, newSub, false)
 	})
 }
 

@@ -72,8 +72,8 @@ func (r *Practitioner) Read(log *logging.Logger, rndr *render.Render) http.Handl
 		if err := r.adapter.ReadJSONResource(req.Context(), resourceID, p); err != nil {
 			log.WithError(err).Panic("failed to read record")
 		}
-		// TODO: support deleted records, versioning, conditional read
-		resourceRead(rndr, rw, http.StatusOK, p.Meta.VersionID, p.Meta.LastUpdated, p)
+		// TODO: support deleted records, versioning
+		resourceRead(rndr, rw, req, http.StatusOK, p.Meta.VersionID, p.Meta.LastUpdated, p, true)
 	})
 }
 
@@ -145,7 +145,7 @@ func (r *Practitioner) Update(log *logging.Logger, rndr *render.Render) http.Han
 
 		// TODO: Return 409 if contract failed due to timestamp change
 
-		resourceRead(rndr, rw, http.StatusOK, newP.Meta.VersionID, now, newP)
+		resourceRead(rndr, rw, req, http.StatusOK, newP.Meta.VersionID, now, newP, false)
 	})
 }
 
@@ -193,6 +193,7 @@ func NewPractitioner(
 	}
 
 	rConfig := NewResourceConfig()
+	rConfig.Versioning = models.ResourceVersionPolicyVersionedUpdate
 	rConfig.SearchIncludes = searchIncludes{
 		"Practitioner:location",
 		"*",
