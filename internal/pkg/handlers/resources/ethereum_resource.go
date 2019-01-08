@@ -170,10 +170,22 @@ func (h *EthereumResource) Delete() http.Handler {
 
 // Validate ...
 func (h *EthereumResource) Validate() http.Handler {
-	return validateJSONResource(h.log, h.renderer, h.jsonValidator)
+	return validateJSONResource(h)
 }
 
 // GetResourceConfig ...
 func (h *EthereumResource) GetResourceConfig() *ResourceConfig {
 	return h.config
+}
+
+func (h *EthereumResource) getJSONValidator() *models.JSONValidator {
+	return h.jsonValidator
+}
+
+func (h *EthereumResource) getLogger() *logging.Logger {
+	return h.log
+}
+
+func (h *EthereumResource) getRenderer() *render.Render {
+	return h.renderer
 }

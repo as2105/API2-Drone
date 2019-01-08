@@ -2,6 +2,10 @@ package resources
 
 import (
 	"net/http"
+
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/pkg/models"
+	"github.com/unrolled/render"
 )
 
 // ConfiguredResource ...
@@ -47,4 +51,10 @@ type ValidateableResource interface {
 // PatchableResource ...
 type PatchableResource interface {
 	Patch() http.Handler
+}
+
+type resourceHandler interface {
+	getJSONValidator() *models.JSONValidator
+	getLogger() *logging.Logger
+	getRenderer() *render.Render
 }

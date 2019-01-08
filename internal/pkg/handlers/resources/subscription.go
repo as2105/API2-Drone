@@ -183,12 +183,24 @@ func (h *Subscription) Delete() http.Handler {
 
 // Validate ...
 func (h *Subscription) Validate() http.Handler {
-	return validateJSONResource(h.log, h.renderer, h.jsonValidator)
+	return validateJSONResource(h)
 }
 
 // GetResourceConfig ...
 func (h *Subscription) GetResourceConfig() *ResourceConfig {
 	return h.config
+}
+
+func (h *Subscription) getJSONValidator() *models.JSONValidator {
+	return h.jsonValidator
+}
+
+func (h *Subscription) getLogger() *logging.Logger {
+	return h.log
+}
+
+func (h *Subscription) getRenderer() *render.Render {
+	return h.renderer
 }
 
 // NewSubscription ...

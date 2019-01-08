@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/logging"
 	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/utils"
 	"github.com/SynapticHealthAlliance/fhir-api/pkg/models"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gorilla/mux"
 	"github.com/pborman/uuid"
 	"github.com/pkg/errors"
@@ -36,18 +36,20 @@ func getResourceID(req *http.Request) (uuid.UUID, error) {
 	return uuidObj, nil
 }
 
-func getRequestParameters(req *http.Request) (*models.Parameters, error) {
+func getRequestParameters(req *http.Request, h resourceHandler) (*models.Parameters, error) {
+	log := h.getLogger()
 	params := &models.Parameters{}
 	decoder := json.NewDecoder(req.Body)
 	if err := decoder.Decode(params); err != nil {
 		return nil, err
 	}
+	log.Debug(spew.Sdump(params))
 	return params, nil
 }
 
 // TODO: support mode, profile
-func getValidationParameters(req *http.Request) (interface{}, error) {
-	params, err := getRequestParameters(req)
+func getValidationParameters(req *http.Request, h resourceHandler) (interface{}, error) {
+	params, err := getRequestParameters(req, h)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not get validation parameters")
 	}
@@ -147,9 +149,13 @@ func resourceRead(
 	return nil
 }
 
-func validateJSONResource(log *logging.Logger, rndr *render.Render, validator *models.JSONValidator) http.Handler {
+func validateJSONResource(h resourceHandler) http.Handler {
+	log := h.getLogger()
+	rndr := h.getRenderer()
+	validator := h.getJSONValidator()
+
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		resource, err := getValidationParameters(req)
+		resource, err := getValidationParameters(req, h)
 		if err != nil {
 			log.WithError(err).Panic("could not get validation parameters")
 		}

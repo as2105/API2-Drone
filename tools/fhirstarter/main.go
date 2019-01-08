@@ -227,11 +227,10 @@ func BuildType(typeName string, definition *JSONSchema) {
 			} else {
 				propertyString = fmt.Sprintf("%s ", fieldName(prop))
 			}
-
-			omit := ""
+			omit := ",omitempty"
 			for _, req := range definition.Required {
 				if prop == req {
-					omit = ",omitempty"
+					omit = ""
 					break
 				}
 			}
@@ -399,7 +398,10 @@ func main() {
 
 		GetID() string
 		SetID(string)
-	}`)
+	}
+
+	type ResourceList interface{}
+	`)
 
 	fmt.Fprint(outfile, `
 	// Validator is an interface for interacting with resource field validators
@@ -447,6 +449,7 @@ func main() {
 		"instant":  true,
 		//======
 		"base64Binary": false,
+		"ResourceList": true,
 	}
 
 	for p := range j.Definitions {
