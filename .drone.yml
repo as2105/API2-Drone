@@ -1,0 +1,57 @@
+docker_options: &docker_options
+  image: plugins/docker
+  repo: synhadev.azurecr.io/fhir-api
+  registry: synhadev.azurecr.io
+  secrets: [docker_username, docker_password, github_username, github_token]
+  auto_tag: true
+  build_args_from_env: [github_username, github_token]
+
+workspace:
+  base: /go
+  path: src/github.com/SynapticHealthAlliance/fhir-api
+
+build_options: &build_options
+  image: synhadev.azurecr.io/golang-dep-libtool:1.11.4
+  environment:
+    - GO111MODULE=on
+  when:
+    event:
+      - push
+      - tag
+
+pipeline:
+  build:
+    <<: *build_options
+    commands:
+      - make
+
+  review:
+    <<: *build_options
+    commands:
+      - |
+        gometalinter \
+          --vendor \
+          --vendored-linters \
+          --config=metalinter.json \
+          --deadline=10m \
+          --checkstyle \
+          --enable-gc \
+          ./... | \
+        reviewdog -f=checkstyle -reporter=github-pr-review
+    secrets:
+      - reviewdog_github_api_token
+    when:
+      event:
+        - pull_request
+
+  test:
+    <<: *build_options
+    commands:
+      - make coverage_test
+      - make test
+
+  push-container:
+    <<: *docker_options
+    when:
+      event:
+        - tag
