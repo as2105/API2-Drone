@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/SynapticHealthAlliance/fhir-api/cmd"
-	"github.com/SynapticHealthAlliance/fhir-api/internal/metadata"
-	"github.com/SynapticHealthAlliance/fhir-api/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/metadata"
 )
 
 var (
@@ -12,10 +12,10 @@ var (
 )
 
 func main() {
-	metadata.Metadata.Commit = commit
-	metadata.Metadata.Branch = branch
-	metadata.Metadata.Version = version
-	if err := metadata.Metadata.SetBuildTime(buildTime); err != nil {
+	metadata.Data.Commit = commit
+	metadata.Data.Branch = branch
+	metadata.Data.Version = version
+	if err := metadata.Data.SetBuildTime(buildTime); err != nil {
 		log.WithError(err).Warn("could not parse build time")
 	}
 

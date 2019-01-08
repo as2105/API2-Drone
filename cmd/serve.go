@@ -9,16 +9,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SynapticHealthAlliance/fhir-api/config"
-	"github.com/SynapticHealthAlliance/fhir-api/handlers"
-	"github.com/SynapticHealthAlliance/fhir-api/handlers/resources"
-	"github.com/SynapticHealthAlliance/fhir-api/internal/metadata"
-	"github.com/SynapticHealthAlliance/fhir-api/logging"
-	"github.com/SynapticHealthAlliance/fhir-api/models"
-	"github.com/SynapticHealthAlliance/fhir-api/static"
-	"github.com/SynapticHealthAlliance/fhir-api/storage/database"
-	"github.com/SynapticHealthAlliance/fhir-api/storage/ethereum"
-	"github.com/SynapticHealthAlliance/fhir-api/utils"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/config"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/handlers"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/handlers/resources"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/metadata"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/static"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/storage/database"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/storage/ethereum"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/utils"
+	"github.com/SynapticHealthAlliance/fhir-api/pkg/models"
 	"github.com/gorilla/mux"
 	nLog "github.com/meatballhat/negroni-logrus"
 	"github.com/phyber/negroni-gzip/gzip"
@@ -50,7 +50,7 @@ func initServe() {
 }
 
 func serveRun(cmd *cobra.Command, args []string) {
-	log.WithFields(utils.StructToMap(metadata.Metadata)).Info("build information")
+	log.WithFields(utils.StructToMap(metadata.Data)).Info("build information")
 
 	config.BindFlags(serveCmd)
 
@@ -60,7 +60,7 @@ func serveRun(cmd *cobra.Command, args []string) {
 			config.NewConfig,
 			NewRouter,
 			resources.NewCapabilityConfig,
-			resources.NewResourceRegistry,
+			resources.NewRegistry,
 			newRenderer,
 			newCORSMiddleware,
 			ethereum.NewConnection,
@@ -151,7 +151,14 @@ func NewRouter(lc fx.Lifecycle, log *logging.Logger, config *config.Config, cors
 	return r
 }
 
-func configureRouter(r *mux.Router, log *logging.Logger, cConfig *resources.CapabilityConfig, rndr *render.Render, registry resources.ResourceRegistry, config *config.Config) {
+func configureRouter(
+	r *mux.Router,
+	log *logging.Logger,
+	cConfig *resources.CapabilityConfig,
+	rndr *render.Render,
+	registry *resources.Registry,
+	config *config.Config,
+) {
 	log.Debug("executing configureRouter")
 
 	fhirRouter := r.PathPrefix("/fhir").Subrouter()

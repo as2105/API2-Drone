@@ -94,3 +94,6 @@ version:
 	for f in "VERSION README.md sonar-project.properties"; do \
 		sed -i '' 's/$(shell echo ${old} | sed 's/\./\\./g')/$(new)/g' $$f; \
 	done
+
+pkg/models/generated.go: api/fhir.schema.json tools/fhirstarter/main.go
+	cd tools/fhirstarter && go run main.go | gofmt -s > ../../pkg/models/generated.go

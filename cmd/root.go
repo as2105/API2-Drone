@@ -3,8 +3,8 @@
 package cmd
 
 import (
-	"github.com/SynapticHealthAlliance/fhir-api/config"
-	"github.com/SynapticHealthAlliance/fhir-api/logging"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/config"
+	"github.com/SynapticHealthAlliance/fhir-api/internal/pkg/logging"
 	"github.com/spf13/cobra"
 )
 
