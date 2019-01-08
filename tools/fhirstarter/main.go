@@ -219,9 +219,9 @@ func BuildType(typeName string, definition *JSONSchema) {
 			omit := ""
 			for _, req := range definition.Required {
 				if prop == req {
-					omit = ",omitempty"
 					break
 				}
+				omit = ",omitempty"
 			}
 			ftype := FHIRType(property)
 			if ftype == "const" {
