@@ -2,6 +2,7 @@ module github.com/SynapticHealthAlliance/fhir-api
 
 require (
 	github.com/SynapticHealthAlliance/pdx-contracts v0.0.0-20181217212122-c4c34dbad973
+	github.com/davecgh/go-spew v1.1.1
 	github.com/denisenkom/go-mssqldb v0.0.0-20181014144952-4e0d7dc8888f // indirect
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect

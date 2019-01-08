@@ -12,13 +12,16 @@ import (
 	"unicode/utf8"
 )
 
+// JSONSchemaArray ...
 type JSONSchemaArray []*JSONSchema
 
+// JSONDiscriminator ...
 type JSONDiscriminator struct {
 	PropertyName string            `json:"propertyName"`
 	Mapping      map[string]string `json:"mapping"`
 }
 
+// JSONSchema ...
 type JSONSchema struct {
 	Schema string `json:"$schema"`
 	ID04   string `json:"id,omitempty"`
@@ -61,7 +64,7 @@ func (s *JSONSchema) ID() string {
 
 const (
 	packagename = "models"
-	fname       = "../../api/fhir.schema.r4.json"
+	fname       = "../../api/fhir.schema.json"
 )
 
 var (
@@ -69,8 +72,8 @@ var (
 	outfile = os.Stdout
 )
 
+// FHIRType ...
 func FHIRType(property *JSONSchema) string {
-
 	if typ, ok := property.TypeValue.(string); ok {
 		switch typ {
 		case "array":
@@ -193,13 +196,22 @@ func commentify(pre, s string) string {
 	return strings.Join(comments, "\n")
 }
 
+// BuildType ...
 func BuildType(typeName string, definition *JSONSchema) {
 	typeName = fieldName(typeName)
 	if len(definition.Pattern) > 0 && definition.TypeValue == "string" {
 		fmt.Fprintf(outfile, "// %s is %s\n", typeName, commentify("", definition.Description)[3:])
 		fmt.Fprintf(outfile, "type %s %s\n", typeName, definition.TypeValue)
-		fmt.Fprintf(outfile, "// %[1]sPattern ...\n\tvar %[1]sPattern = regexp.MustCompile(`%[2]s`)\n", typeName, definition.Pattern)
-		fmt.Fprintf(outfile, "// Validate ...\n\tfunc (t *%s) Validate() bool {\n\treturn %sPattern.MatchString(string(*t))\n}\n", typeName, typeName)
+		fmt.Fprintf(outfile, `
+		// %[1]sPattern ...
+		var %[1]sPattern = regexp.MustCompile(`+"`%[2]s`"+`)
+		`, typeName, definition.Pattern)
+		fmt.Fprintf(outfile, `
+		// Validate ...
+		func (t *%s) Validate() bool {
+			return %sPattern.MatchString(string(*t))
+		}
+		`, typeName, typeName)
 	} else {
 		constants := make(map[string]string)
 		enums := make(map[string][]string)
@@ -211,17 +223,16 @@ func BuildType(typeName string, definition *JSONSchema) {
 
 			var propertyString string
 			if prop[0] == '_' {
-				propertyString = fmt.Sprintf("\t%sExt ", fieldName(prop[1:]))
+				propertyString = fmt.Sprintf("%sExt ", fieldName(prop[1:]))
 			} else {
-				propertyString = fmt.Sprintf("\t%s ", fieldName(prop))
+				propertyString = fmt.Sprintf("%s ", fieldName(prop))
 			}
-
-			omit := ""
+			omit := ",omitempty"
 			for _, req := range definition.Required {
 				if prop == req {
+					omit = ""
 					break
 				}
-				omit = ",omitempty"
 			}
 			ftype := FHIRType(property)
 			if ftype == "const" {
@@ -237,27 +248,57 @@ func BuildType(typeName string, definition *JSONSchema) {
 
 			fmt.Fprintln(outfile, commentify("\t", property.Description))
 			if len(property.Pattern) > 0 {
-				fmt.Fprintf(outfile, "\t// pattern %s\n", property.Pattern)
+				fmt.Fprintf(outfile, "// pattern %s\n", property.Pattern)
 			}
 			fmt.Fprintf(outfile, "%s %s `json:\"%s%s\"`\n", propertyString, ftype, prop, omit)
 		}
 
 		fmt.Fprint(outfile, "}\n\n")
 		for k := range constants {
-			fmt.Fprintf(outfile, "// %[2]s ...\n\tfunc (t *%[1]s) %[2]s() string {\n\treturn \"%[3]s\"\n}\n", typeName, fieldName(k), constants[k])
+			fmt.Fprintf(outfile, `
+			// %[2]s returns the value "%[3]s"
+			func (t *%[1]s) %[2]s() string {
+				return "%[3]s"
+			}
+			`, typeName, fieldName(k), constants[k])
+		}
+
+		for _, n := range []string{"meta", "id"} {
+			if prop, ok := definition.Properties[n]; ok {
+				fName := fieldName(n)
+				fType := FHIRType(prop)
+				gName := fmt.Sprintf("Get%s", fName)
+				sName := fmt.Sprintf("Set%s", fName)
+				fmt.Fprintf(outfile, `
+				// %[4]s returns the value from %[2]s
+				func (t *%[1]s) %[4]s() %[3]s {
+					return t.%[2]s
+				}
+
+				// %[5]s sets the value for %[2]s
+				func (t *%[1]s) %[5]s(val %[3]s) {
+					t.%[2]s = val
+				}
+				`, typeName, fName, fType, gName, sName)
+			}
 		}
 
 		// Generate MarshalJSON code
 		if len(constants) > 0 {
-			fmt.Fprintf(outfile, "// MarshalJSON ...\n\tfunc (t *%s) MarshalJSON() ([]byte, error) {\n\treturn json.Marshal(struct {\n\t\t%s\n", typeName, typeName)
+			fmt.Fprintf(outfile, `
+			// MarshalJSON ...
+			func (t *%s) MarshalJSON() ([]byte, error) {
+				return json.Marshal(struct {
+					%s
+			`, typeName, typeName)
 			for k := range constants {
-				fmt.Fprintf(outfile, "\t\t%s string `json:\"%s\"`\n", fieldName(k), k)
+				fmt.Fprintf(outfile, "%s string `json:\"%s\"`\n", fieldName(k), k)
 			}
-			fmt.Fprintf(outfile, "\t}{\n\t\t%s: *t,\n", typeName)
+			fmt.Fprintf(outfile, "}{%s: *t,\n", typeName)
 			for k := range constants {
-				fmt.Fprintf(outfile, "\t\t%s: t.%s(),\n", fieldName(k), fieldName(k))
+				fmt.Fprintf(outfile, "%s: t.%s(),\n", fieldName(k), fieldName(k))
 			}
-			fmt.Fprint(outfile, "\t})\n}\n")
+			fmt.Fprint(outfile, "})}\n")
 		}
 
 		if len(enums) > 0 {
@@ -266,22 +307,43 @@ func BuildType(typeName string, definition *JSONSchema) {
 				vals := enums[k]
 
 				enumName := fmt.Sprintf("%s%s", typeName, k)
-				fmt.Fprintf(outfile, "// %[1]s ...\n\ttype %[1]s string\n", enumName)
+				fmt.Fprintf(outfile, `
+				// %[1]s ...
+				type %[1]s string
+				`, enumName)
 
 				for i := range vals {
 					val := vals[i]
 					titleVal := fieldName(val)
-					enumarr = append(enumarr, fmt.Sprintf("// %[1]s%[2]s is a %[1]s value of \"%[3]s\"\n\t%[1]s%[2]s %[1]s = \"%[3]s\"", enumName, titleVal, val))
+					enumarr = append(enumarr, fmt.Sprintf(`
+					// %[1]s%[2]s is a %[1]s value of "%[3]s"
+					%[1]s%[2]s %[1]s = "%[3]s"
+					`, enumName, titleVal, val))
 				}
 			}
-			fmt.Fprintf(outfile, "const (\n %s\n)\n\n", strings.Join(enumarr, "\n"))
+			fmt.Fprintf(outfile, "const (%s)\n", strings.Join(enumarr, "\n"))
 		}
 	}
 }
 
 var (
-	replacer = strings.NewReplacer("Uuid", "UUID", "Uid", "UID", "Url", "URL", "Uri", "URI", "Xml", "XML",
-		"Json", "JSON", "_", "", "Html", "HTML", "-", "", "/", "", ".", "", "<", "Lt", ">", "Gt", "=", "Eq", "!", "Not")
+	replacer = strings.NewReplacer(
+		"_", "",
+		"-", "",
+		"!", "Not",
+		".", "",
+		"/", "",
+		"<", "Lt",
+		"=", "Eq",
+		">", "Gt",
+		"Html", "HTML",
+		"Json", "JSON",
+		"Uid", "UID",
+		"Uri", "URI",
+		"Url", "URL",
+		"Uuid", "UUID",
+		"Xml", "XML",
+	)
 	idRegexp = regexp.MustCompile(`Id(\z|[A-Z])`)
 )
 
@@ -308,7 +370,11 @@ func main() {
 	var j JSONSchema
 	json.Unmarshal([]byte(byteValue), &j)
 
-	fmt.Fprintf(outfile, "package %s\n", packagename)
+	fmt.Fprintf(outfile, `
+	// Code generated by tools/fhirstarter; DO NOT EDIT.
+
+	package %s
+	`, packagename)
 	fmt.Fprintln(outfile, commentify("", j.Description))
 	fmt.Fprintf(outfile, "// Schema: %s\n", j.Schema)
 	fmt.Fprint(outfile, "import (\n")
@@ -317,10 +383,32 @@ func main() {
 	}
 	fmt.Fprint(outfile, ")\n")
 
-	fmt.Fprintf(outfile, "// FHIRVersion is the current FHIR version\n\tconst (\n\tFHIRVersion = \"%s\"\n)\n", j.ID()[strings.LastIndex(j.ID(), "/")+1:])
+	fmt.Fprintf(outfile, `
+	// FHIRVersion is the FHIR version as shown in the JSON schema file from which this package was generated
+	const FHIRVersion = "%s"
+	`, j.ID()[strings.LastIndex(j.ID(), "/")+1:])
 
-	fmt.Fprint(outfile, "// Resource ...\n\ttype Resource interface {\n\tResourceType() string\n}\n")
-	fmt.Fprint(outfile, "// Validator ...\n\ttype Validator interface {\n\tValidate() bool\n}\n")
+	fmt.Fprint(outfile, `
+	// Resource is an interface for interacting with multiple types of resources
+	type Resource interface {
+		ResourceType() string
+
+		GetMeta() *Meta
+		SetMeta(*Meta)
+
+		GetID() string
+		SetID(string)
+	}
+
+	type ResourceList interface{}
+	`)
+
+	fmt.Fprint(outfile, `
+	// Validator is an interface for interacting with resource field validators
+	type Validator interface {
+		Validate() bool
+	}
+	`)
 
 	if j.Discriminator != nil {
 		fmt.Fprintf(os.Stderr, "has Discriminator: %s (%d)\n", j.Discriminator.PropertyName, len(j.Discriminator.Mapping))
@@ -361,6 +449,7 @@ func main() {
 		"instant":  true,
 		//======
 		"base64Binary": false,
+		"ResourceList": true,
 	}
 
 	for p := range j.Definitions {
