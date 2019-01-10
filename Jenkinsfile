@@ -7,7 +7,7 @@ pipeline {
   }
 
   environment {
-    GOLANG_VERSION = '1.11'
+    GOLANG_VERSION = '1.11.4'
     GOPATH = "/home/jenkins/workspace/go"
   }
 
