@@ -25,33 +25,9 @@ pipeline:
     commands:
       - make
 
-  review:
-    <<: *build_options
-    commands:
-      - |
-        gometalinter \
-          --vendor \
-          --vendored-linters \
-          --config=metalinter.json \
-          --deadline=10m \
-          --checkstyle \
-          --enable-gc \
-          ./... | \
-        reviewdog -f=checkstyle -reporter=github-pr-review
-    secrets:
-      - reviewdog_github_api_token
-    when:
-      event:
-        - pull_request
-
   test:
     <<: *build_options
     commands:
-      - make coverage_test
-      - make test
-
-  push-container:
-    <<: *docker_options
-    when:
-      event:
-        - tag
+      - bundle install
+      - bundle exec rake -T
+      - bundle exec rake crucible:execute[http://fhirtest.uhn.ca/baseDstu3,stu3,ArgonautProviderConnectathonTest]
